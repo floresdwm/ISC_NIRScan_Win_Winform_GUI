@@ -1,4 +1,4 @@
-# ISC_NIRScan_Win_WPF_GUI
+# ISC_NIRScan_Win_Winform_GUI
 
 # v1.0.4 Change Logs
 

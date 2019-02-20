@@ -1,6 +1,13 @@
 # ISC_NIRScan_Win_WPF_GUI
 
+# v1.0.4 Change Logs
 
+1. Reduce c# language version to 7.0.
+2. Update ISC libraries.
+3. Optimised Tiva FW update with Tiva DFU checking. Remove "Tiva is empty" checking item.
+4. Modify Tiva reset to wait background worker completed.
+5. Fixed scan config editing behavior.
+6. Minor bugs fixed.
 
 # License - InnoSpectra Corp.
 

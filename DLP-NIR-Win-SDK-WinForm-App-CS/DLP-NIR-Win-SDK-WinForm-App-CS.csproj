@@ -7,7 +7,7 @@
     <ProjectGuid>{40AFD57C-9180-4070-BCF3-FF08C67F348E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>DLP_NIR_Win_SDK_WinForm_App_CS</RootNamespace>
-    <AssemblyName>DLP-NIR-Win-SDK-WinForm-App-CS</AssemblyName>
+    <AssemblyName>ISC-NIRScan-Win-Winform-GUI</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

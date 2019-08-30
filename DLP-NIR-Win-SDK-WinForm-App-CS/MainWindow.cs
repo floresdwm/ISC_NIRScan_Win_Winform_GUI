@@ -14,6 +14,8 @@ using LiveCharts.Wpf;
 using LiveCharts.Configurations;
 using System.Threading;
 using System.Timers;
+using LiveCharts.Geared;
+using System.Xml.Serialization;
 
 namespace DLP_NIR_Win_SDK_WinForm_App_CS
 {
@@ -23,7 +25,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private const Int32 MIN_WAVELENGTH = 900;
         private const Int32 MAX_WAVELENGTH = 1700;
         private const Int32 MAX_CFG_SECTION = 5;
-        private bool IsOldTivaFW = false;
 
         private List<ScanConfig.SlewScanConfig> LocalConfig = new List<ScanConfig.SlewScanConfig>();
         private List<ComboBox> ComboBox_CfgScanType = new List<ComboBox>();
@@ -36,16 +37,20 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
        
         private Int32 TargetCfg_SelIndex = -1;       // Rocord device selected config
         private Int32 TargetCfg_Last_SelIndex = -1;  // Rocord last device selected config
+        private Boolean SelCfg_IsTarget = false;     // Record target config or local config
+        private Int32 LocalCfg_SelIndex = -1;        // Record local selected config
+        private Int32 LocalCfg_Last_SelIndex = -1;   // Rocord last local selected config
         Boolean NewConfig = false;                   // Record new config or existed config
         Boolean EditConfig = false;
         private Int32 DevCurCfg_Index = -1;          // Record current config which set to device
+        int EditSelectIndex = -1;                    // Record edit select index   
 
         private BackgroundWorker bwDLPCUpdate;
         private BackgroundWorker bwTivaUpdate;
 
         private String Display_Dir = String.Empty;
         private String Scan_Dir = String.Empty;
-        private String ConfigDir = String.Empty;
+        public static String ConfigDir = String.Empty;
         private Int32 ScanFile_Formats = 0;
 
        // Saved Scans
@@ -55,6 +60,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         List<Label> Label_SavedWidth = new List<Label>();
         List<Label> Label_SavedDigRes = new List<Label>();
         List<Label> Label_SavedExposure = new List<Label>();
+        private String OneScanFileName = String.Empty;
 
         public bool IsActivated { get { if (Device.GetActivationResult() == 1) return true; else return false; } }
         private ConfigurationData scan_Params;
@@ -69,8 +75,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private static UInt32 LampStableTime = 625;
         private Scan.SCAN_REF_TYPE ReferenceSelect = Scan.SCAN_REF_TYPE.SCAN_REF_NEW;
         private BackgroundWorker bwScan;
-    
 
+        private Boolean DevCurCfg_IsTarget = false;
         public static class GlobalData
         {
             public static int RepeatedScanCountDown = 0;
@@ -79,9 +85,28 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             public static bool UserCancelRepeatedScan = false;
         }
 
+        public enum FW_LEVEL
+        {
+            LEVEL_0,
+            LEVEL_1,
+            LEVEL_2,
+            LEVEL_3,
+            LEVEL_4,
+        };
+        public enum ScanConfigMode
+        {
+            INITIAL,
+            NEW,
+            EDIT,
+            DELETE,
+            SAVE,
+            CANCEL,
+        };
+
         public MainWindow()
         {
             InitializeComponent();
+            Label_ContScan.Text = "";
             this.FormClosing += Form1_FormClosing;
             CheckForIllegalCrossThreadCalls = false;//solve across thread is invalid
             MainWindow_Loaded();
@@ -89,13 +114,17 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             initChart();
             this.Text = string.Format("ISC NIRScan GUI SDK WinForm v{0}", Assembly.GetExecutingAssembly().GetName().Version.ToString().Substring(0, 5));
             UI_no_connection();
+            Label_CurrentConfig.ForeColor = System.Drawing.Color.OrangeRed;
+            //load save scan 
+            LoadSavedScanList();
+            CheckScanDirPath();
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // do something
             String HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(0, 1) : String.Empty;
-            if ((HWRev != "B" && HWRev != String.Empty && Device.ChkBleExist() == 1) || HWRev == "B" || HWRev == String.Empty)
+            if ((GetFW_LEVEL() >= FW_LEVEL.LEVEL_2 && Device.ChkBleExist() == 1) || HWRev == String.Empty)
                 Device.SetBluetooth(true);
+            SaveSettings();
         }
         private void initBackgroundWorker()
         {
@@ -138,6 +167,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             SDK.OnDeviceConnected += new Action<string>(Device_Connected_Handler);
             SDK.OnDeviceFound += new Action(Device_Found_Handler);
             SDK.OnDeviceError += new Action<string>(Device_Error_Handler);
+            SDK.OnButtonScan += new Action(StartButtonScan);
             SDK.OnErrorStatusFound += new Action(RefreshErrorStatus);
             SDK.OnBeginConnectingDevice += new Action(Connecting_Device);
             SDK.OnBeginScan += new Action(BeginScan);
@@ -152,8 +182,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             LoadScanPageSetting();
             TextBox_SaveDirPath.Text = Scan_Dir;
             TextBox_DisplayDirPath.Text = Display_Dir;
-            //load save scan 
-            LoadSavedScanList();          
         }
         #region Error 
         private void RefreshErrorStatus()
@@ -290,39 +318,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
 
         private void Device_Error_Handler(string error)
         {
-            tivaVerChk();
-            if(IsOldTivaFW)
-            {
-              
-            }
-            else
-            {
-                ShowWarning(error);
-            }
-            
-        }
-        private void closeItem()
-        {
-            splitContainer1.Enabled = false;
-            GroupBox_ModelName.Enabled = false;
-            GroupBox_SerialNumber.Enabled = false;
-            GroupBox_DateTime.Enabled = false;
-            GroupBox_Sensors.Enabled = false;
-            GroupBox_DLPC150FWUpdate.Enabled = false;
-            GroupBox_CalibCoeffs.Enabled = false;
-            groupBox_Device.Enabled = false;
-        }
-
-        private void openItem()
-        {
-            splitContainer1.Enabled = true;
-            GroupBox_ModelName.Enabled = true;
-            GroupBox_SerialNumber.Enabled = true;
-            GroupBox_DateTime.Enabled = true;
-            GroupBox_Sensors.Enabled = true;
-            GroupBox_DLPC150FWUpdate.Enabled = true;
-            GroupBox_CalibCoeffs.Enabled = true;
-            groupBox_Device.Enabled = true;
+            if(GetFW_LEVEL() >= FW_LEVEL.LEVEL_2)
+                ShowWarning(error);  // Device Information, Calibration Coefficients, Configuration Lists
         }
 
         public  void ShowWarning(String Text)
@@ -337,6 +334,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         {
             toolStripStatus_DeviceStatus.Image = Properties.Resources.Led_R;
             toolStripStatus_DeviceStatus.Text = "Device disconnect!";
+            ClearScanPlotsUI();
             if (error)
             {
                 DBG.WriteLine("Device disconnected abnormally !");
@@ -367,9 +365,30 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             {
                 DBG.WriteLine("Device <{0}> connected successfullly !", SerialNumber);
             }
+            int count = 0;
+            while (!Device.IsConnected())//wait device connect 
+            {
+                count++;
+                if(count>30)//avoid loop
+                {
+                    return;
+                }
+                Thread.Sleep(200);
+            }
+			
+            UI_on_connection();//已經連線，會開啟GUI使用
+
+            if (GetFW_LEVEL() == FW_LEVEL.LEVEL_1)
+            {
+                ShowWarning("The version is too old.\nPlease updte your TIVA FW.");
+            }
+            else if(GetFW_LEVEL() == FW_LEVEL.LEVEL_0)
+            {
+                ShowWarning("The device is not ISC product. Functions may be abnormal!");
+            }
 
             String HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(0, 1) : String.Empty;
-            if ((HWRev == "D" && Device.ChkBleExist() == 1) || HWRev == "B" || HWRev == String.Empty)
+            if ((GetFW_LEVEL() >= FW_LEVEL.LEVEL_2 && Device.ChkBleExist() == 1) || HWRev == String.Empty)
                 Device.SetBluetooth(false);
 
             // Sync device date time
@@ -385,27 +404,14 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
                 Second = Current.Second
             };
             Device.SetDateTime(DevDateTime);
-
-            tivaVerChk();
-            if (IsOldTivaFW)
-            {
-                ShowWarning("The version is too old.\nPlease updte your TIVA FW.");
-                closeItem();
-            }
-            else
-            {
-                openItem();
-            }
-
-            UI_on_connection();
-
-            toolStripStatus_DeviceStatus.Image = Properties.Resources.Led_G;
-            toolStripStatus_DeviceStatus.Text = "Device connected!";
+       
             RefreshErrorStatus();
             GetDeviceInfo();
             // Scan Config
+            LoadLocalCfgList();
             PopulateCfgDetailItems();
             RefreshTargetCfgList();  // Only refresh UI because target config list has been loaded after device opened
+            
             GetActivationKeyStatus();
             DisableCfgItem();
 
@@ -414,18 +420,25 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             Button_CalWriteGenCoeffs.Enabled = false;
             Button_CalRestoreDefaultCoeffs.Enabled = false;
 
-            tivaVerChk();
-            if(IsOldTivaFW)
+            if(GetFW_LEVEL() < FW_LEVEL.LEVEL_2)
             {
+                GroupBox_LampUsage.Enabled = false;
                 groupBox_ActivationKey.Enabled = false;
+            }
+
+            if (GetFW_LEVEL() < FW_LEVEL.LEVEL_1)
+            {
+                GroupBox_ModelName.Enabled = false;
             }
 
             // Scan Plot Area
             Int32 ActiveIndex = ScanConfig.GetTargetActiveScanIndex();
+            ListBox_TargetCfgs.SelectedIndex = ActiveIndex;
             if (ActiveIndex >= 0)
             {
-                SetScanConfig(ScanConfig.TargetConfig[ActiveIndex], ActiveIndex,true);
+                SetScanConfig(ScanConfig.TargetConfig[ActiveIndex],true, ActiveIndex);
             }
+
             // Scan Setting
             scan_Params.ScanAvg = ScanConfig.TargetConfig[ActiveIndex].head.num_repeats;
             scan_Params.PGAGain = 64;
@@ -437,6 +450,37 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             CheckBox_AutoGain.Checked = true;
             CheckBox_AutoGain.Enabled = true;
             ComboBox_PGAGain.Enabled = false;
+
+            if (GetFW_LEVEL() >= FW_LEVEL.LEVEL_4)
+            {
+                for (int i = 0; i < ScanConfig.TargetConfig[ActiveIndex].head.num_sections; i++)
+                {
+                    if(ScanConfig.TargetConfig[ActiveIndex].section[i].section_scan_type == 0 && ScanConfig.TargetConfig[ActiveIndex].section[i].exposure_time == 0)
+                        CheckBox_GlitchFilter.Enabled = true;
+                }
+            }
+            else
+                CheckBox_GlitchFilter.Enabled = false;
+
+            //Device status
+            toolStripStatus_DeviceStatus.Image = Properties.Resources.Led_G;
+            if (GetFW_LEVEL() >= FW_LEVEL.LEVEL_2 && !IsActivated) 
+            {
+                toolStripStatus_DeviceStatus.Text = "Device " + Device.DevInfo.ModelName + " (" + Device.DevInfo.SerialNumber + ") connected but advanced functions locked!";
+            }
+            else
+            {
+                toolStripStatus_DeviceStatus.Text = "Device " + Device.DevInfo.ModelName + " (" + Device.DevInfo.SerialNumber + ") connected!";
+            }
+            OpenColseScanConfigButton(nameof(ScanConfigMode.INITIAL));
+        }
+        private void StartButtonScan()
+        { 
+            BeginInvoke((Action)(() => //Invoke at UI thread
+            { //run in UI thread
+                RadioButton_RefFac.Checked = true;
+                Button_Scan_Click(null, null);
+            }), null);
         }
         #endregion
 
@@ -680,6 +724,10 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             {
                 Button_Scan.Text = "Reference Scan";
                 ReferenceSelect = Scan.SCAN_REF_TYPE.SCAN_REF_NEW;
+                Check_Overlay.Checked = false;
+                groupBox2.Enabled = false;
+                Check_Overlay.Enabled = false;
+                CheckBox_SaveOneCSV.Enabled = false;
             }
         }
 
@@ -690,6 +738,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             {
                 Button_Scan.Text = "Scan";
                 ReferenceSelect = Scan.SCAN_REF_TYPE.SCAN_REF_PREV;
+                groupBox2.Enabled = true;
+                Check_Overlay.Enabled = true;
+                Text_ContScan_TextChanged(null, null);
             }
         }
 
@@ -700,6 +751,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             {
                 Button_Scan.Text = "Scan";
                 ReferenceSelect = Scan.SCAN_REF_TYPE.SCAN_REF_BUILT_IN;
+                groupBox2.Enabled = true;
+                Check_Overlay.Enabled = true;
+                Text_ContScan_TextChanged(null, null);
             }
         }
 
@@ -714,11 +768,14 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
                 return;
             }
             ScanConfig.SetTargetActiveScanIndex(TargetCfg_SelIndex);
-            SetScanConfig(ScanConfig.TargetConfig[TargetCfg_SelIndex], TargetCfg_SelIndex,true);
+            SetScanConfig(ScanConfig.TargetConfig[TargetCfg_SelIndex],true, TargetCfg_SelIndex);
+            int bufindex = TargetCfg_SelIndex;
             RefreshTargetCfgList();
+            ListBox_TargetCfgs.SelectedIndex = bufindex;
         }
-        private void SetScanConfig(ScanConfig.SlewScanConfig Config, Int32 index, Boolean setActive)
+        private void SetScanConfig(ScanConfig.SlewScanConfig Config,Boolean IsTarget , Int32 index)
         {
+            ClearScanPlotsUI();
             if (ScanConfig.SetScanConfig(Config) == SDK.FAIL)
             {
                 String text = "Device config (" + Config.head.config_name + ") is not correct, please check it again!";
@@ -727,12 +784,13 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             else
             {
                 DevCurCfg_Index = index;
+                DevCurCfg_IsTarget = IsTarget;
 
-                Label_CurrentConfig.Text =  Config.head.config_name;
-                if(setActive)
-                {
-                    label_ActiveConfig.Text = Config.head.config_name;
-                }
+                if (IsTarget)
+                    Label_CurrentConfig.Text = "Device Config: " + Config.head.config_name;
+                else
+                    Label_CurrentConfig.Text = "Local Config: " + Config.head.config_name;
+
                 textBox_ScanAvg.Text = Config.head.num_repeats.ToString();
                 Double ScanTime = Scan.GetEstimatedScanTime();
                 if (ScanTime > 0)
@@ -751,15 +809,20 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
                 Button_CfgCancel_Click(this, e);
             }
             TargetCfg_Last_SelIndex = TargetCfg_SelIndex;
-            TargetCfg_SelIndex = ListBox_DeviceScanConfig.SelectedIndex;
+            TargetCfg_SelIndex = ListBox_TargetCfgs.SelectedIndex;
             if (TargetCfg_SelIndex < 0 || ScanConfig.TargetConfig.Count == 0)
                 return;
+            SelCfg_IsTarget = true;
             FillCfgDetailsContent();
+            OpenColseScanConfigButton(nameof(ScanConfigMode.INITIAL));
+            // Clear target listbox index after local config data refreshed.
+            if (ListBox_LocalCfgs.SelectedIndex != -1)
+                ListBox_LocalCfgs.SelectedIndex = -1;
         }
         private void ListBox_DeviceScanConfig_MouseDoubleClick(object sender, EventArgs e)
         {
-            SetScanConfig(ScanConfig.TargetConfig[TargetCfg_SelIndex], TargetCfg_SelIndex, false);
-            TargetCfg_SelIndex = ListBox_DeviceScanConfig.SelectedIndex;    
+            SetScanConfig(ScanConfig.TargetConfig[TargetCfg_SelIndex],true, TargetCfg_SelIndex);
+            TargetCfg_SelIndex = ListBox_TargetCfgs.SelectedIndex;    
         }
 
         private void FillCfgDetailsContent()
@@ -771,8 +834,11 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             };
 
             InitCfgDetailsContent();
+            if (SelCfg_IsTarget == true)
+                CurConfig = ScanConfig.TargetConfig[TargetCfg_SelIndex];
+            else
+                CurConfig = LocalConfig[LocalCfg_SelIndex];
 
-            CurConfig = ScanConfig.TargetConfig[TargetCfg_SelIndex];
 
             NumSection = CurConfig.head.num_sections;
 
@@ -796,12 +862,12 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             TargetCfg_SelIndex = -1;
             Int32 ActiveIndex = ScanConfig.GetTargetActiveScanIndex();
 
-            ListBox_DeviceScanConfig.Items.Clear();
+            ListBox_TargetCfgs.Items.Clear();
             if (ScanConfig.TargetConfig.Count > 0)
             {
                 for (Int32 i = 0; i < ScanConfig.TargetConfig.Count; i++)
                 {
-                    ListBox_DeviceScanConfig.Items.Add(ScanConfig.TargetConfig[i].head.config_name);
+                    ListBox_TargetCfgs.Items.Add(ScanConfig.TargetConfig[i].head.config_name);
                 }
                 label_ActiveConfig.Text = ScanConfig.TargetConfig[ActiveIndex].head.config_name;
             }
@@ -809,41 +875,63 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
 
         private void Button_CfgNew_Click(object sender, EventArgs e)
         {
-            if (ScanConfig.TargetConfig.Count < 20)
-            {
-                ListBox_DeviceScanConfig.ClearSelected();
-                InitCfgDetailsContent();
-                EnableCfgItem();
-                NewConfig = true;
-                comboBox_cfgNumSec.SelectedItem = "1";
-                Button_CfgEdit.Enabled = false;
-                Button_CfgDelete.Enabled = false;
-            }
-            else
-            {
-                String text = "Configuration counts exceeds 20, can't add anymore!";
-                MessageBox.Show(text, "Error");
-            }
+            // Clear listbox index before someone set focus.
+            if (ListBox_LocalCfgs.SelectedIndex != -1)
+                ListBox_LocalCfgs.SelectedIndex = -1;
+            if (ListBox_TargetCfgs.SelectedIndex != -1)
+                ListBox_TargetCfgs.SelectedIndex = -1;
 
+            InitCfgDetailsContent();
+            EnableCfgItem();
+            NewConfig = true;
+            comboBox_cfgNumSec.SelectedItem = "1";
+            OpenColseScanConfigButton(nameof(ScanConfigMode.NEW));
+            TextBox_CfgName.Focus();
         }
 
         private void Button_CfgCancel_Click(object sender, EventArgs e)
         {
+            OpenColseScanConfigButton(nameof(ScanConfigMode.CANCEL));
             if (NewConfig || EditConfig)
             {
-                int bufindex = TargetCfg_SelIndex;
-                InitCfgDetailsContent();
-                DisableCfgItem();
-
-                if (EditConfig)
-                { 
-                    ListBox_DeviceScanConfig.ClearSelected();
-                    ListBox_DeviceScanConfig.SelectedIndex = bufindex;
+                int bufindex = 0;
+                if (SelCfg_IsTarget == true)
+                {
+                    bufindex = TargetCfg_SelIndex;
                 }
                 else
                 {
-                    ListBox_DeviceScanConfig.ClearSelected();
-                    ListBox_DeviceScanConfig.SelectedIndex = TargetCfg_Last_SelIndex;
+                    bufindex = LocalCfg_SelIndex;
+                }
+                InitCfgDetailsContent();
+                DisableCfgItem();
+
+                if (EditConfig)//Edit config
+                {
+                    if (SelCfg_IsTarget == true)
+                    {
+                        ListBox_TargetCfgs.ClearSelected();
+                        ListBox_TargetCfgs.SelectedIndex = bufindex;
+                    }
+                    else
+                    {
+                        ListBox_LocalCfgs.ClearSelected();
+                        ListBox_LocalCfgs.SelectedIndex = bufindex;
+                    }
+                        
+                }
+                else//New config
+                {
+                    if (SelCfg_IsTarget == true)
+                    {
+                        ListBox_TargetCfgs.ClearSelected();
+                        ListBox_TargetCfgs.SelectedIndex = TargetCfg_Last_SelIndex;
+                    }
+                    else
+                    {
+                        ListBox_LocalCfgs.ClearSelected();
+                        ListBox_LocalCfgs.SelectedIndex = LocalCfg_Last_SelIndex;
+                    }
                 }
 
                 Button_CfgEdit.Enabled = true;
@@ -857,29 +945,63 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private void Button_CfgSave_Click(object sender, EventArgs e)
         {
             DisableCfgItem();
-            if (IsCfgLegal() == SDK.FAIL)
+            OpenColseScanConfigButton(nameof(ScanConfigMode.SAVE));
+            if (IsCfgLegal(true) == SDK.FAIL)
             {
-                String text = "Error configuration data can't be saved!";
-                MessageBox.Show(text, "Error");
+                Message.ShowError("Error configuration data can't be saved!");
                 EnableCfgItem();
                 return;
             }
             if(NewConfig == true)
             {
-                SaveCfgToList(true);
-                NewConfig = false;
+                String title = "Do you want to save this configuration to Device?\n\n" +
+                       "Yes,\t save to Device;\n" +
+                       "No,\t save to Local;\n" +
+                       "Cancel,\t not to save now.";
+                DialogResult Result = Message.ShowQuestion(title, null ,MessageBoxButtons.YesNoCancel);
+                switch(Result)
+                {
+                    case DialogResult.Yes:
+                        SaveCfgToList(true, true);//target and new
+                        NewConfig = false;
+                        break;
+                    case DialogResult.No:
+                        SaveCfgToList(false, true);//Local and new
+                        NewConfig = false;
+                        break;
+                    case DialogResult.Cancel:
+                        EnableCfgItem();
+                        NewConfig = true;
+                        if(DevCurCfg_IsTarget)
+                        {
+                            ListBox_TargetCfgs.SelectedIndex = DevCurCfg_Index;
+                        }
+                        else
+                        {
+                            ListBox_LocalCfgs.SelectedIndex = DevCurCfg_Index;
+                        }
+                        break;
+                }
             }
             else if(EditConfig == true)
             {
-                SaveCfgToList(false);
-                EditConfig = false;
+                if (SelCfg_IsTarget == true)
+                {
+                    SaveCfgToList(true,false);//target and edit
+                    EditConfig = false;
+                }
+                else
+                {
+                    SaveCfgToList(false, false);//Local and edit
+                    EditConfig = false;
+                }
             }
             Button_CfgEdit.Enabled = true;
             Button_CfgDelete.Enabled = true;
             Button_CfgNew.Enabled = true;
         }
 
-        private Int32 SaveCfgToList( Boolean IsNew)
+        private Int32 SaveCfgToList(Boolean IsTarget, Boolean IsNew)
         {
             ScanConfig.SlewScanConfig CurConfig = new ScanConfig.SlewScanConfig
             {
@@ -903,41 +1025,62 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
 
             if ( IsNew == true)
             {
-                ScanConfig.TargetConfig.Add(CurConfig);
+                if(IsTarget)
+                {
+                    ScanConfig.TargetConfig.Add(CurConfig);
+                    RefreshTargetCfgList();
+                }
+                else
+                {
+                    LocalConfig.Add(CurConfig);
+                    RefreshLocalCfgList();
+                }
             }
             else
             {
-                ScanConfig.TargetConfig.RemoveAt(TargetCfg_SelIndex);
-                ScanConfig.TargetConfig.Insert(TargetCfg_SelIndex, CurConfig);
+                if(IsTarget)
+                {
+                    ScanConfig.TargetConfig.RemoveAt(TargetCfg_SelIndex);
+                    ScanConfig.TargetConfig.Insert(TargetCfg_SelIndex, CurConfig);
+                    RefreshTargetCfgList();
+                }
+                else
+                {
+                    LocalConfig.RemoveAt(LocalCfg_SelIndex);
+                    LocalConfig.Insert(LocalCfg_SelIndex, CurConfig);
+                    RefreshLocalCfgList();
+                }
             }
-
-            RefreshTargetCfgList();
-
-            return SaveCfgToLocalOrDevice();
-        }
-
-        private Int32 SaveCfgToLocalOrDevice()
-        {
-            Int32 ret = SDK.FAIL;
-            if ((ret = ScanConfig.SetConfigList()) == 0)
-            {
-                String text = "Device Config List Update Success!";
-                MessageBox.Show(text, "Success");
-            }            
-            else
-            {
-                String text = "Device Config List Update Failed!";
-                MessageBox.Show(text, "Warning");
-            }
-             
-            return ret;
+            return SaveCfgToLocalOrDevice(IsTarget);
         }
 
         private void Button_CfgDelete_Click(object sender, EventArgs e)
         {
-            if (ScanConfig.TargetConfig.Count > 1)
+            if (SelCfg_IsTarget == true)
             {
-                Int32 ActiveIndex = ScanConfig.GetTargetActiveScanIndex();
+                if (TargetCfg_SelIndex < 0)
+                {
+                    Message.ShowError("No item selected.");
+                    return;
+                }
+                else if (TargetCfg_SelIndex == 0)
+                {
+                    Message.ShowError("The built-in default configuration cannot be deleted.");
+                    return;
+                }
+            }
+            else
+            {
+                if (LocalCfg_SelIndex < 0)
+                {
+                    Message.ShowError("No item selected.");
+                    return;
+                }
+            }
+            OpenColseScanConfigButton(nameof(ScanConfigMode.DELETE));
+            Int32 ActiveIndex = ScanConfig.GetTargetActiveScanIndex();
+            if (ScanConfig.TargetConfig.Count > 1 && SelCfg_IsTarget)
+            {                
                 ScanConfig.TargetConfig.RemoveAt(TargetCfg_SelIndex);
                 if (TargetCfg_SelIndex == ActiveIndex)
                 {
@@ -949,43 +1092,72 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
                     ActiveIndex--;
                     ScanConfig.SetTargetActiveScanIndex(ActiveIndex);
                 }
-                if (TargetCfg_SelIndex == DevCurCfg_Index)
+                Boolean deletecurrentconfig = false;
+                if (TargetCfg_SelIndex == DevCurCfg_Index)//刪到current config,因此將current config 換成機器的active config
                 {
-                    SetScanConfig(ScanConfig.TargetConfig[ActiveIndex], ActiveIndex, false);
+                    SetScanConfig(ScanConfig.TargetConfig[ActiveIndex],true, ActiveIndex);
+                    deletecurrentconfig = true;
                 }
                 RefreshTargetCfgList();
-                SaveCfgToLocalOrDevice();
+                SaveCfgToLocalOrDevice(true);
+                if (deletecurrentconfig)//刪到current config,因此將current config 換成機器的active config
+                {
+                    ListBox_TargetCfgs.SelectedIndex = ActiveIndex;
+                }
                 DBG.WriteLine("Delete this Device configuration");
             }
             else
             {
-                String text = "At least one configuration needed in the device!";
-                MessageBox.Show(text, "Error");
+                LocalConfig.RemoveAt(LocalCfg_SelIndex);
+                Boolean deletecurrentconfig = false;
+                if (LocalCfg_SelIndex == DevCurCfg_Index)//刪到current config,因此將current config 換成機器的active config
+                {
+                    SetScanConfig(ScanConfig.TargetConfig[ActiveIndex], true, ActiveIndex);
+                    deletecurrentconfig = true;
+                }
+                RefreshLocalCfgList();
+                SaveCfgToLocalOrDevice(false);
+                if (deletecurrentconfig)//刪到current config,因此將current config 換成機器的active config
+                {
+                    ListBox_TargetCfgs.SelectedIndex = ActiveIndex;
+                }
             }
         }
 
         private void Button_CfgEdit_Click(object sender, EventArgs e)
         {
-            if (TargetCfg_SelIndex < 0)
+            if (SelCfg_IsTarget == true)
             {
-                String text = "No item selected.";
-                MessageBox.Show(text, "Warning");
-                return;
+                if (TargetCfg_SelIndex < 0)
+                {
+                    Message.ShowWarning("No item selected!");
+                    return;
+                }
+                EditSelectIndex = ListBox_TargetCfgs.SelectedIndex;
+            }
+            else
+            {
+                if (LocalCfg_SelIndex < 0)
+                {
+                    Message.ShowWarning("No item selected!");
+                    return;
+                }
+                EditSelectIndex = ListBox_LocalCfgs.SelectedIndex;
             }
             EnableCfgItem();
             NewConfig = false;
             EditConfig = true;
-            Button_CfgNew.Enabled = false;
-            Button_CfgDelete.Enabled = false;
+            OpenColseScanConfigButton(nameof(ScanConfigMode.EDIT));
+            TextBox_CfgName.Focus();
         }
 
         private void CfgDetails_TextChanged(object sender, EventArgs e)
         {
-            IsCfgLegal();
+            IsCfgLegal(false);
         }
         private void CfgDetails_SelectionChanged(object sender, EventArgs e)
         {
-            IsCfgLegal();
+            IsCfgLegal(false);
         }
 
         private void CfgSection_SelectionChanged(object sender, EventArgs e)
@@ -1021,7 +1193,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             }
         }
 
-        private Int32 IsCfgLegal()
+        private Int32 IsCfgLegal(Boolean IsColored)
         {
             Int32 ret = SDK.PASS;
             Int32 TotalPatterns = 0;
@@ -1034,17 +1206,24 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // Config Name
             if (TextBox_CfgName.Text == String.Empty)
             {
+                if (IsColored) TextBox_CfgName.BackColor = System.Drawing.Color.LightPink;
                 ret = SDK.FAIL;
             }
             else
             {
+                if (IsColored) TextBox_CfgName.BackColor = System.Drawing.Color.White;
                 CurConfig.head.config_name = Helper.CheckRegex(TextBox_CfgName.Text);
             }
 
             // Num Scans to Average
             if (UInt16.TryParse(TextBox_CfgAvg.Text, out CurConfig.head.num_repeats) == false || CurConfig.head.num_repeats == 0)
             {
+                if (IsColored) TextBox_CfgAvg.BackColor = System.Drawing.Color.LightPink;
                 ret = SDK.FAIL;
+            }
+            else
+            {
+                if (IsColored) TextBox_CfgAvg.BackColor = System.Drawing.Color.White;
             }
             CurConfig.head.num_sections = byte.Parse(comboBox_cfgNumSec.SelectedItem.ToString());
             for (Byte i = 0; i < CurConfig.head.num_sections; i++)
@@ -1057,18 +1236,29 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
                 if (UInt16.TryParse(TextBox_CfgRangeStart[i].Text, out CurConfig.section[i].wavelength_start_nm) == false ||
                     CurConfig.section[i].wavelength_start_nm < MIN_WAVELENGTH)
                 {
+                    if (IsColored) TextBox_CfgRangeStart[i].BackColor = System.Drawing.Color.LightPink;
                     ret = SDK.FAIL;
+                }
+                else
+                {
+                    if (IsColored) TextBox_CfgRangeStart[i].BackColor = System.Drawing.Color.White;
                 }
 
                 // End nm
                 if (UInt16.TryParse(TextBox_CfgRangeEnd[i].Text, out CurConfig.section[i].wavelength_end_nm) == false ||
-                    CurConfig.section[i].wavelength_end_nm > MAX_WAVELENGTH)
+                    CurConfig.section[i].wavelength_end_nm > MAX_WAVELENGTH || CurConfig.section[i].wavelength_end_nm < MIN_WAVELENGTH)
                 {
+                    if (IsColored) TextBox_CfgRangeEnd[i].BackColor = System.Drawing.Color.LightPink;
                     ret = SDK.FAIL;
                 }
-
+                else
+                {
+                    if (IsColored) TextBox_CfgRangeEnd[i].BackColor = System.Drawing.Color.White;
+                }
                 if (CurConfig.section[i].wavelength_start_nm >= CurConfig.section[i].wavelength_end_nm)
                 {
+                    if (IsColored) TextBox_CfgRangeStart[i].BackColor = System.Drawing.Color.LightPink;
+                    if (IsColored) TextBox_CfgRangeEnd[i].BackColor = System.Drawing.Color.LightPink;
                     ret = SDK.FAIL;
                 }
 
@@ -1080,8 +1270,13 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
                     (CurConfig.section[i].num_patterns > MaxPattern) ||
                     (MaxPattern <= 0))
                 {
+                    if (IsColored) TextBox_CfgDigRes[i].BackColor = System.Drawing.Color.LightPink;
                     if (MaxPattern < 0) MaxPattern = 0;
                     ret = SDK.FAIL;
+                }
+                else
+                {
+                    if (IsColored) TextBox_CfgDigRes[i].BackColor = System.Drawing.Color.White;
                 }
 
                 Label_CfgDigRes[i].Text = CurConfig.section[i].num_patterns.ToString() + "/" + MaxPattern.ToString();
@@ -1092,8 +1287,18 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             if (TotalPatterns > 624)
             {
                 String text = "Total number of patterns " + TotalPatterns.ToString() + " exceeds 624!";
-                MessageBox.Show(text, "Warning");
+                Message.ShowWarning(text);
                 ret = SDK.FAIL;
+            }
+
+            CheckBox_GlitchFilter.Enabled = false;
+            if (GetFW_LEVEL() >= FW_LEVEL.LEVEL_4)
+            {
+                for (int i = 0; i < CurConfig.head.num_sections; i++)
+                {
+                    if (CurConfig.section[i].section_scan_type == 0 && CurConfig.section[i].exposure_time == 0)
+                        CheckBox_GlitchFilter.Enabled = true;
+                }
             }
 
             return ret;
@@ -1108,8 +1313,34 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             {
                 listBox_SavedData.Items.Add(FileName);
             }
-        }
+            if (!LoadFileSuccess)
+            {
+                LoadFileSuccess = true;
+                String FilePath = Path.Combine(ConfigDir, "ScanPageSettings.xml");
+                File.Delete(FilePath);
+                LoadScanPageSetting();
+                SaveSettings();
+                String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                Scan_Dir = Path.Combine(path, "InnoSpectra\\Scan Results");
 
+                Display_Dir = Scan_Dir;
+                TextBox_DisplayDirPath.Text = Scan_Dir;
+                TextBox_SaveDirPath.Text = Scan_Dir;
+                LoadSavedScanList();
+                //ClearSavedScanCfgItems();              
+            }
+        }
+        private void CheckScanDirPath()
+        {
+            if (!Directory.Exists(TextBox_SaveDirPath.Text))
+            {
+                Message.ShowError("The scan directory is not exist, will set to default path.");
+                String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                Scan_Dir = Path.Combine(path, "InnoSpectra\\Scan Results");
+                TextBox_SaveDirPath.Text = Scan_Dir;
+            }
+        }
+        Boolean LoadFileSuccess = true;
         private List<String> EnumerateFiles(String SearchPattern)
         {
             List<String> ListFiles = new List<String>();
@@ -1126,7 +1357,11 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             }
             catch (UnauthorizedAccessException UAEx) { DBG.WriteLine(UAEx.Message); }
             catch (PathTooLongException PathEx) { DBG.WriteLine(PathEx.Message); }
-
+            catch (Exception e)
+            {
+                Message.ShowWarning("The display directory has not exist. Will rewrite default setting.");
+                LoadFileSuccess = false;
+            }
             return ListFiles;
         }
         //--------------------------------------------------------------------------------
@@ -1211,18 +1446,22 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
                                                    MyChart.ChartLegend = null;
                                                    MyChart.DataTooltip = null;
                                                    MyChart.Zoom = ZoomingOptions.None;*/
-            scan_Params.ZoomButtonTitle = " Zoom & Pan Disabled ";
-            scan_Params.ZoomButtonBackground = "#7FCCCCCC";
-            scan_Params.DataTooltipButtonTitle = " Data Tooltip Disabled ";
-            scan_Params.DataTooltipButtonBackground = "#7FCCCCCC";
+            MyChart.DataTooltip = null;
+            MyChart.Zoom = ZoomingOptions.None;
         }
         private void SpectrumPlot()
         {
-            if(MyChart.Series.Count>0)
+            if (MyChart.Series.Count > 0)
             {
-                int seriesCount = MyChart.Series.Count;
-                for (int i = 0; i < seriesCount; i++)
-                    MyChart.Series.RemoveAt(0);
+                if (!Check_Overlay.Checked)
+                    MyChart.Series.Clear();
+                else
+                {
+                    if (ContScanCountTarget == ContScanCountDown + 1)//做continuous scan,掃描第一次要移除第一筆serious,Y軸的圖才會有精確度 
+                    {
+                        MyChart.Series.RemoveAt(0);
+                    }
+                }
             }
 
             double[] valY = new double[Scan.ScanDataLen];
@@ -1253,30 +1492,69 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
                 valY = doubleList.ToArray();
                 label = "Reference";
             }
+            MyChart.AxisX.Clear();
+            MyChart.AxisY.Clear();
+            if(Scan.ScanConfigData.section!=null)
+            {
+                int section = Scan.ScanConfigData.head.num_sections;
+                MyChart.AxisX.Add(new Axis { Title = "Wavelength (nm)", MinValue = Scan.ScanConfigData.section[0].wavelength_start_nm, MaxValue = Scan.ScanConfigData.section[section-1].wavelength_end_nm });
+            }
+            else
+            {
+                MyChart.AxisX.Add(new Axis { Title = "Wavelength (nm)", MinValue = MIN_WAVELENGTH, MaxValue = MAX_WAVELENGTH });
+            }          
+            MyChart.AxisY.Add(new Axis { Title = label });
 
             for (int i = 0; i < Scan.ScanDataLen; i++)
             {
                 if (Double.IsNaN(valY[i]) || Double.IsInfinity(valY[i]))
                     valY[i] = 0;
             }
-            for (int i = 0; i < Scan.ScanConfigData.head.num_sections; i++)
+            if (Check_Overlay.Checked)
             {
-                var chartValues = new ChartValues<ObservablePoint>();
-                for (int j = 0; j < Scan.ScanConfigData.section[i].num_patterns; j++)
-                    chartValues.Add(new ObservablePoint(valX[j + dataCount], valY[j + dataCount]));
-
-                dataCount += Scan.ScanConfigData.section[i].num_patterns;
-                MyChart.Series.Add(new LineSeries
+                for (int i = 0; i < Scan.ScanConfigData.head.num_sections; i++)
                 {
-                    Values = chartValues,
-                    Title = Scan.ScanConfigData.head.num_sections == 1 ? string.Format("{0}", label) : string.Format("{0}\nsection[{1}]", label, i),
-                    StrokeThickness = 1,
-                    Fill = null,
-                    LineSmoothness = 0,
-                    PointGeometry = null,
-                    PointGeometrySize = 0,
-                });
+                    var ChartValues = new ChartValues<ObservablePoint>();
+                    for (int j = 0; j < Scan.ScanConfigData.section[i].num_patterns; j++)
+                        ChartValues.Add(new ObservablePoint(valX[j + dataCount], valY[j + dataCount]));
+
+                    dataCount += Scan.ScanConfigData.section[i].num_patterns;
+                    MyChart.Series.Add(new LineSeries
+                    {
+                        Values = ChartValues,
+                        Title = Scan.ScanConfigData.head.num_sections > 1
+                        ? string.Format("#{0}->[{1}]", MyChart.Series.Count / Scan.ScanConfigData.head.num_sections + 1, i)
+                        : string.Format("#{0}", MyChart.Series.Count + 1),
+                        StrokeThickness = 1,
+                        Fill = System.Windows.Media.Brushes.Transparent,
+                        LineSmoothness = 0,
+                        PointGeometry = null,
+                        PointGeometrySize = 0,
+                    });
+                }
             }
+            else
+            {
+                for (int i = 0; i < Scan.ScanConfigData.head.num_sections; i++)
+                {
+                    var chartValues = new ChartValues<ObservablePoint>();
+                    for (int j = 0; j < Scan.ScanConfigData.section[i].num_patterns; j++)
+                        chartValues.Add(new ObservablePoint(valX[j + dataCount], valY[j + dataCount]));
+
+                    dataCount += Scan.ScanConfigData.section[i].num_patterns;
+                    MyChart.Series.Add(new LineSeries
+                    {
+                        Values = chartValues,
+                        Title = Scan.ScanConfigData.head.num_sections == 1 ? string.Format("{0}", label) : string.Format("{0}\nsection[{1}]", label, i),
+                        StrokeThickness = 1,
+                        Fill = null,
+                        LineSmoothness = 0,
+                        PointGeometry = null,
+                        PointGeometrySize = 0,
+                    });
+                }
+            }
+            
 
             // For initial the chart to avoid the crazy axis numbers
             if (Scan.ScanConfigData.head.num_sections == 0)
@@ -1292,21 +1570,37 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         }
         private void RadioButton_Reflectance_CheckedChanged(object sender, EventArgs e)
         {
+            if (Check_Overlay.Checked)//清除overlay的資料
+            {
+                MyChart.Series.Clear();
+            }
             SpectrumPlot();
         }
 
         private void RadioButton_Absorbance_CheckedChanged(object sender, EventArgs e)
         {
+            if (Check_Overlay.Checked)//清除overlay的資料
+            {
+                MyChart.Series.Clear();
+            }
             SpectrumPlot();
         }
 
         private void RadioButton_Intensity_CheckedChanged(object sender, EventArgs e)
         {
+            if (Check_Overlay.Checked)//清除overlay的資料
+            {
+                MyChart.Series.Clear();
+            }
             SpectrumPlot();
         }
 
         private void RadioButton_Reference_CheckedChanged(object sender, EventArgs e)
         {
+            if (Check_Overlay.Checked)//清除overlay的資料
+            {
+                MyChart.Series.Clear();
+            }
             SpectrumPlot();
         }
         #endregion
@@ -1335,9 +1629,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             if (Device.IsConnected())
                 HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(0, 1) : String.Empty;
 
-            tivaVerChk();
             //GetActivationKeyStatus();
-            if (IsOldTivaFW || label_ActivateStatus.Text.Equals("Activated!") == false || HWRev == "B" || HWRev == String.Empty)
+            if (GetFW_LEVEL() < FW_LEVEL.LEVEL_2 || label_ActivateStatus.Text.Equals("Activated!") == false)
             {
                 CheckBox_AutoGain.Checked = false;
                 CheckBox_AutoGain.Enabled = false;
@@ -1352,16 +1645,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             if (ScanTime > 0)
                 Label_EstimatedScanTime.Text = "Est. Device Scan Time: " + String.Format("{0:0.000}", ScanTime) + " secs.";
         }
-        private void tivaVerChk()
-        {
-            int lastVer, curVer;
-            Byte[] latetestVerCode = { Convert.ToByte(2), Convert.ToByte(1), Convert.ToByte(0), Convert.ToByte(42) };
-            lastVer = BitConverter.ToInt32(latetestVerCode, 0);
-            curVer = BitConverter.ToInt32(Device.DevInfo.TivaRev, 0);
-
-            if (curVer < lastVer)
-                IsOldTivaFW = true;
-        }
 
         private void RadioButton_LampOff_CheckedChanged(object sender, EventArgs e)
         {
@@ -1369,8 +1652,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             if (Device.IsConnected())
                 HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(0, 1) : String.Empty;
 
-            tivaVerChk();
-            if (IsOldTivaFW || label_ActivateStatus.Text.Equals("Activated!") == false || HWRev == "B" || HWRev == String.Empty)
+            if (GetFW_LEVEL() < FW_LEVEL.LEVEL_2 || label_ActivateStatus.Text.Equals("Activated!") == false)
             {
                 CheckBox_AutoGain.Checked = false;
                 CheckBox_AutoGain.Enabled = false;
@@ -1458,43 +1740,47 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             {
                 case (int)MainWindow.GUI_State.KEY_ACTIVATE:
                 {
-                        GroupBox_LampUsage.Enabled = true;
+                    GroupBox_LampUsage.Enabled = true;
 
-                        CheckBox_LampOn.Visible =false;
-                        RadioButton_LampOn.Visible =true;
+                    CheckBox_LampOn.Visible =false;
+                    RadioButton_LampOn.Visible =true;
 
-                        RadioButton_LampOff.Visible = true;
-                        RadioButton_LampStableTime.Visible = true;
-                        TextBox_LampStableTime.Visible = true;
+                    RadioButton_LampOff.Visible = true;
+                    RadioButton_LampStableTime.Visible = true;
+                    TextBox_LampStableTime.Visible = true;
 
-                        RadioButton_LampOff.Enabled = true;
-                        RadioButton_LampStableTime.Enabled = true;
-                        TextBox_LampStableTime.Enabled = true;
+                    RadioButton_LampOff.Enabled = true;
+                    RadioButton_LampStableTime.Enabled = true;
+                    TextBox_LampStableTime.Enabled = true;
 
-                        RadioButton_LampStableTime.Checked = true;
-                        break;
+                    RadioButton_LampStableTime.Checked = true;
+
+                    toolStripStatus_DeviceStatus.Text = "Device " + Device.DevInfo.ModelName + " (" + Device.DevInfo.SerialNumber + ") connected!";
+                    break;
                 }
                 case (int)MainWindow.GUI_State.KEY_NOT_ACTIVATE:
-                    {
-                        GroupBox_LampUsage.Enabled = false;
-                        String HWRev = String.Empty;
-                        if (Device.IsConnected())
-                            HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(0, 1) : String.Empty;
+                {
+                    GroupBox_LampUsage.Enabled = false;
+                    String HWRev = String.Empty;
+                    if (Device.IsConnected())
+                        HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(0, 1) : String.Empty;
 
-                        CheckBox_LampOn.Visible = true;
-                        RadioButton_LampOn.Visible = false;
+                    CheckBox_LampOn.Visible = true;
+                    RadioButton_LampOn.Visible = false;
 
-                        RadioButton_LampOff.Visible = false;
-                        RadioButton_LampStableTime.Visible = false;
-                        TextBox_LampStableTime.Visible = false;
+                    RadioButton_LampOff.Visible = false;
+                    RadioButton_LampStableTime.Visible = false;
+                    TextBox_LampStableTime.Visible = false;
 
-                        RadioButton_LampStableTime.Checked = false;
+                    RadioButton_LampStableTime.Checked = false;
 
-                        CheckBox_LampOn.Checked = false;
-                        RadioButton_LampOn.Checked = false;
-                        RadioButton_LampOff.Checked = false;
-                        break;
-                    }
+                    CheckBox_LampOn.Checked = false;
+                    RadioButton_LampOn.Checked = false;
+                    RadioButton_LampOff.Checked = false;
+
+                    toolStripStatus_DeviceStatus.Text = "Device " + Device.DevInfo.ModelName + " (" + Device.DevInfo.SerialNumber + ") connected but advanced functions locked!";
+                    break;
+                }
                 default:
                     break;
             }
@@ -1504,8 +1790,68 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private void SaveToFiles()
         {
             String FileName = String.Empty;
-            FileName = Path.Combine(Scan_Dir, Scan.ScanConfigData.head.config_name + "_" + TimeScanStart.ToString("yyyyMMdd_HHmmss"));
+            if (CheckBox_FileNamePrefix.Checked == true)
+            {
+                String Prefix = Helper.CheckRegex_Chinese(TextBox_FileNamePrefix.Text);
+                if (Prefix.Length > 50)
+                {
+                    Prefix = Prefix.Substring(0, 50);
+                    TextBox_FileNamePrefix.Text = Prefix;
+                    Message.ShowWarning("File name prefix is too long, only catch the first 50 characters.");
+                }
+                FileName = Path.Combine(Scan_Dir, Prefix + Scan.ScanConfigData.head.config_name + "_" + TimeScanStart.ToString("yyyyMMdd_HHmmss"));
+            }
+            else
+            {
+                FileName = Path.Combine(Scan_Dir, Scan.ScanConfigData.head.config_name + "_" + TimeScanStart.ToString("yyyyMMdd_HHmmss"));
+            }
+
+            //check path
+            String dirpath = Path.GetDirectoryName(FileName);
+            String file = Path.GetFileName(FileName);
+            if (!Directory.Exists(dirpath))
+            {
+                DialogResult result = Message.ShowQuestion("The directory has not exit. Do you want to create?\n    Yes,              create directroy.\n    No,              save to default directory.\n    Cancel,       not create and save.", null, MessageBoxButtons.YesNoCancel);
+                if (result == DialogResult.Yes)
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(dirpath);
+                        TextBox_SaveDirPath.Text = dirpath;
+                    }
+                    catch (Exception e)
+                    {
+                        Message.ShowError("Create directroy failed!");
+                        return;
+                    };
+                }
+                else if (result == DialogResult.No)
+                {
+                    try
+                    {
+                        String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                        String defpath = Path.Combine(path, "InnoSpectra\\Scan Results");
+                        if (!Directory.Exists(defpath))
+                        {
+                            Directory.CreateDirectory(defpath);
+                        }
+                        TextBox_SaveDirPath.Text = defpath;
+                        FileName = defpath + "\\" + file;
+                    }
+                    catch (Exception e)
+                    {
+                        Message.ShowError("Create directroy failed!");
+                        return;
+                    };
+                }
+                else
+                {
+                    return;
+                }
+            }
+
             SaveToCSV(FileName + ".csv");
+            SaveToJCAMP(FileName + ".jdx");
 
             if (CheckBox_SaveDAT.Checked == true)
                 Scan.SaveScanResultToBinFile(FileName + ".dat");  // For populating saved scan
@@ -1527,7 +1873,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
                 }
 
                 sw.Flush();  // Clear buffer
-                sw.Close();  // Close file stream
+                sw.Close();  // Close file stream 
             }
 
             if (CheckBox_SaveICSV.Checked == true)
@@ -1580,10 +1926,111 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
                 sw.Flush();  // Clear buffer
                 sw.Close();  // Close file stream
             }
-        }
+            if (CheckBox_SaveOneCSV.Checked == true)
+            {
+                if (CheckBox_SaveOneCSV.Checked == true && OneScanFileName == String.Empty)
+                    OneScanFileName = FileName;
 
-        private void SaveHeader_CSV(StreamWriter sw)
+                String FileName_one = OneScanFileName.Insert(OneScanFileName.LastIndexOf("_", OneScanFileName.Length - 20), "_one");
+
+                using (FileStream fs = new FileStream(FileName_one, FileMode.Append, FileAccess.Write))
+                {
+                    using (StreamWriter sw = new StreamWriter(fs, System.Text.Encoding.UTF8))
+                    {
+                        if (fs.Length == 0)
+                        {
+                            SaveHeader_CSV(sw);
+
+                            sw.Write("Wavelength (nm),");
+                            for (Int32 i = 0; i < Scan.ScanDataLen; i++)
+                                sw.Write(Scan.WaveLength[i] + ",");
+                            sw.Write("\n");
+
+                            sw.Write("Reference Signal (unitless),");
+                            for (Int32 i = 0; i < Scan.ScanDataLen; i++)
+                                sw.Write(Scan.ReferenceIntensity[i] + ",");
+                            sw.Write("\n");
+                        }
+
+                        sw.Write("Sample Signal (unitless),");
+                        for (Int32 i = 0; i < Scan.ScanDataLen; i++)
+                            sw.Write(Scan.Intensity[i] + ",");
+                        sw.Write("\n");
+                    }
+                }
+            }
+        }
+        private void SaveToJCAMP(String FileName)
         {
+            if (CheckBox_SaveIJDX.Checked == true)
+            {
+                String FileName_i = FileName.Insert(FileName.LastIndexOf("_", FileName.Length - 20), "_i");
+                FileStream fs = new FileStream(FileName_i, FileMode.Create);
+                SaveHeader(fs, out StreamWriter sw, true);
+
+                sw.WriteLine("##XUNITS=Wavelength(nm)");
+                sw.WriteLine("##YUNITS=Intensity");
+                sw.WriteLine("##FIRSTX=" + Scan.WaveLength[0]);
+                sw.WriteLine("##LASTX=" + Scan.WaveLength[Scan.ScanDataLen - 1]);
+                sw.WriteLine("##PEAK TABLE=X+(Y..Y)");
+                for (Int32 i = 0; i < Scan.ScanDataLen; i++)
+                {
+                    sw.WriteLine(Scan.WaveLength[i] + "," + Scan.Intensity[i]);
+                }
+                sw.WriteLine("##END=");
+
+                sw.Flush();  // Clear buffer
+                sw.Close();  // Close file stream 
+            }
+
+            if (CheckBox_SaveAJDX.Checked == true)
+            {
+                String FileName_a = FileName.Insert(FileName.LastIndexOf("_", FileName.Length - 20), "_a");
+                FileStream fs = new FileStream(FileName_a, FileMode.Create);
+                SaveHeader(fs, out StreamWriter sw, true);
+
+                sw.WriteLine("##XUNITS=Wavelength(nm)");
+                sw.WriteLine("##YUNITS=Absorbance(AU)");
+                sw.WriteLine("##FIRSTX=" + Scan.WaveLength[0]);
+                sw.WriteLine("##LASTX=" + Scan.WaveLength[Scan.ScanDataLen - 1]);
+                sw.WriteLine("##PEAK TABLE=X+(Y..Y)");
+                for (Int32 i = 0; i < Scan.ScanDataLen; i++)
+                {
+                    sw.WriteLine(Scan.WaveLength[i] + "," + Scan.Absorbance[i]);
+                }
+                sw.WriteLine("##END=");
+
+                sw.Flush();  // Clear buffer
+                sw.Close();  // Close file stream 
+            }
+
+            if (CheckBox_SaveRJDX.Checked == true)
+            {
+                String FileName_r = FileName.Insert(FileName.LastIndexOf("_", FileName.Length - 20), "_r");
+                FileStream fs = new FileStream(FileName_r, FileMode.Create);
+                SaveHeader(fs, out StreamWriter sw, true);
+
+                sw.WriteLine("##XUNITS=Wavelength(nm)");
+                sw.WriteLine("##YUNITS=Reflectance(AU)");
+                sw.WriteLine("##FIRSTX=" + Scan.WaveLength[0]);
+                sw.WriteLine("##LASTX=" + Scan.WaveLength[Scan.ScanDataLen - 1]);
+                sw.WriteLine("##PEAK TABLE=X+(Y..Y)");
+                for (Int32 i = 0; i < Scan.ScanDataLen; i++)
+                {
+                    sw.WriteLine(Scan.WaveLength[i] + "," + Scan.Reflectance[i]);
+                }
+                sw.WriteLine("##END=");
+
+                sw.Flush();  // Clear buffer
+                sw.Close();  // Close file stream 
+            }
+        }
+        private void SaveHeader(FileStream fs, out StreamWriter sw, Boolean ifJCAMP)
+        {
+            sw = new StreamWriter(fs, System.Text.Encoding.UTF8);
+            String TmpStrScan = String.Empty, TmpStrRef = String.Empty, PreStr = String.Empty;
+            UInt16 TotalScanPtns = 0, TotalRefPtns = 0;
+
             String ModelName = Device.DevInfo.ModelName;
             String TivaRev = Device.DevInfo.TivaRev[0].ToString() + "."
                            + Device.DevInfo.TivaRev[1].ToString() + "."
@@ -1592,9 +2039,167 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             String DLPCRev = Device.DevInfo.DLPCRev[0].ToString() + "."
                            + Device.DevInfo.DLPCRev[1].ToString() + "."
                            + Device.DevInfo.DLPCRev[2].ToString();
-            String SpecLibRev = Device.DevInfo.SpecLibRev[0].ToString() + "."
-                           + Device.DevInfo.SpecLibRev[1].ToString() + "."
-                           + Device.DevInfo.SpecLibRev[2].ToString();
+            String UUID = BitConverter.ToString(Device.DevInfo.DeviceUUID).Replace("-", ":");
+            String HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(0, 1) : String.Empty;
+
+            if (ifJCAMP == true)
+            {
+                PreStr = "##";
+
+                sw.WriteLine("##TITLE=" + Scan.ScanConfigData.head.config_name);
+                sw.WriteLine("##JCAMP-DX=4.24");
+                sw.WriteLine("##DATA TYPE=INFRARED SPECTRUM");
+            }
+            else
+            {
+                PreStr = String.Empty;
+            }
+
+            TmpStrScan = Scan.ScanConfigData.head.config_name;
+            TmpStrRef = (RadioButton_RefFac.Checked == true) ? "Built-In Reference" : "User Reference";
+            sw.WriteLine(PreStr + "Method:," + TmpStrScan + "," + TmpStrRef + ",,,Model Name," + ModelName);
+
+            TmpStrScan = Scan.ScanDateTime[2] + "/" + Scan.ScanDateTime[1] + "/" + Scan.ScanDateTime[0] + " @ " +
+                         Scan.ScanDateTime[3] + ":" + Scan.ScanDateTime[4] + ":" + Scan.ScanDateTime[5];
+            TmpStrRef = Scan.ReferenceScanDateTime[2] + "/" + Scan.ReferenceScanDateTime[1] + "/" + Scan.ReferenceScanDateTime[0] + " @ " +
+                        Scan.ReferenceScanDateTime[3] + ":" + Scan.ReferenceScanDateTime[4] + ":" + Scan.ReferenceScanDateTime[5];
+            sw.WriteLine(PreStr + "Host Date-Time:," + TmpStrScan + "," + TmpStrRef + ",,,GUI Version," + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
+
+            sw.WriteLine(PreStr + "Header Version:," + Scan.ScanDataVersion + "," + Scan.ReferenceScanDataVersion + ",,,Tiva Version," + TivaRev);
+
+            sw.WriteLine(PreStr + "System Temp (C):," + Scan.SensorData[0] + "," + Scan.ReferenceSensorData[0] + ",,,DLPC Version," + DLPCRev);
+
+            sw.WriteLine(PreStr + "Detector Temp (C)," + Scan.SensorData[1] + "," + Scan.ReferenceSensorData[1] + ",,,UUID," + UUID);
+
+            sw.WriteLine(PreStr + "Humidity (%):," + Scan.SensorData[2] + "," + Scan.ReferenceSensorData[2] + ",,,Main Board Version," + HWRev);
+
+            sw.WriteLine(PreStr + "Lamp PD:," + Scan.SensorData[3] + "," + Scan.ReferenceSensorData[3]);
+
+            sw.WriteLine(PreStr + "Shift Vector Coefficients:," + Device.Calib_Coeffs.ShiftVectorCoeffs[0] + "," +
+                                                                  Device.Calib_Coeffs.ShiftVectorCoeffs[1] + "," +
+                                                                  Device.Calib_Coeffs.ShiftVectorCoeffs[2]);
+
+            sw.WriteLine(PreStr + "Pixel to Wavelength Coefficients:," + Device.Calib_Coeffs.PixelToWavelengthCoeffs[0] + "," +
+                                                                         Device.Calib_Coeffs.PixelToWavelengthCoeffs[1] + "," +
+                                                                         Device.Calib_Coeffs.PixelToWavelengthCoeffs[2]);
+
+            sw.WriteLine(PreStr + "Serial Number:," + Scan.ScanConfigData.head.ScanConfig_serial_number + "," +
+                                                      Scan.ReferenceScanConfigData.head.ScanConfig_serial_number);
+
+            sw.WriteLine(PreStr + "Scan Config Name:," + Scan.ScanConfigData.head.config_name + "," +
+                                                         Scan.ReferenceScanConfigData.head.config_name);
+
+            if (Scan.ScanConfigData.head.num_sections == 1)
+            {
+                TmpStrScan = Helper.ScanTypeIndexToMode(Scan.ScanConfigData.section[0].section_scan_type);
+                TmpStrRef = Helper.ScanTypeIndexToMode(Scan.ReferenceScanConfigData.section[0].section_scan_type);
+            }
+            else
+            {
+                TmpStrScan = Helper.ScanTypeIndexToMode(Scan.ScanConfigData.head.scan_type);
+                TmpStrRef = Helper.ScanTypeIndexToMode(Scan.ReferenceScanConfigData.head.scan_type);
+            }
+            sw.WriteLine(PreStr + "Scan Config Type:," + TmpStrScan + "," + TmpStrRef);
+
+            for (Int32 i = 0; i < Scan.ScanConfigData.head.num_sections; i++)
+            {
+                if (Scan.ScanConfigData.head.num_sections > 1)
+                {
+                    TmpStrScan = Helper.ScanTypeIndexToMode(Scan.ScanConfigData.section[i].section_scan_type);
+                    TmpStrRef = (Scan.ReferenceScanConfigData.head.num_sections > 1 || i == 0) ? Helper.ScanTypeIndexToMode(Scan.ReferenceScanConfigData.section[i].section_scan_type) : String.Empty;
+                    sw.WriteLine(PreStr + "Section " + (i + 1) + "," + TmpStrScan + "," + TmpStrRef);
+                }
+
+                TmpStrScan = Scan.ScanConfigData.section[i].wavelength_start_nm.ToString();
+                TmpStrRef = (Scan.ReferenceScanConfigData.head.num_sections > 1 || i == 0) ? Scan.ReferenceScanConfigData.section[i].wavelength_start_nm.ToString() : String.Empty;
+                sw.WriteLine(PreStr + "Start wavelength (nm):," + TmpStrScan + "," + TmpStrRef);
+
+                TmpStrScan = Scan.ScanConfigData.section[i].wavelength_end_nm.ToString();
+                TmpStrRef = (Scan.ReferenceScanConfigData.head.num_sections > 1 || i == 0) ? Scan.ReferenceScanConfigData.section[i].wavelength_end_nm.ToString() : String.Empty;
+                sw.WriteLine(PreStr + "End wavelength (nm):," + TmpStrScan + "," + TmpStrRef);
+
+                TmpStrScan = Math.Round(Helper.CfgWidthPixelToNM(Scan.ScanConfigData.section[i].width_px), 2).ToString();
+                TmpStrRef = (Scan.ReferenceScanConfigData.head.num_sections > 1 || i == 0) ? Math.Round(Helper.CfgWidthPixelToNM(Scan.ReferenceScanConfigData.section[i].width_px), 2).ToString() : String.Empty;
+                sw.WriteLine(PreStr + "Pattern Pixel Width (nm):," + TmpStrScan + "," + TmpStrRef);
+
+                TmpStrScan = Helper.CfgExpIndexToTime(Scan.ScanConfigData.section[i].exposure_time).ToString();
+                TmpStrRef = (Scan.ReferenceScanConfigData.head.num_sections > 1 || i == 0) ? Helper.CfgExpIndexToTime(Scan.ReferenceScanConfigData.section[i].exposure_time).ToString() : String.Empty;
+                sw.WriteLine(PreStr + "Exposure (ms):," + TmpStrScan + "," + TmpStrRef);
+
+                TmpStrScan = Scan.ScanConfigData.section[i].num_patterns.ToString();
+                TmpStrRef = (Scan.ReferenceScanConfigData.head.num_sections > 1 || i == 0) ? Scan.ReferenceScanConfigData.section[i].num_patterns.ToString() : String.Empty;
+                sw.WriteLine(PreStr + "Digital Resolution:," + TmpStrScan + "," + TmpStrRef);
+            }
+
+            for (Int32 i = 0; i < Scan.ScanConfigData.head.num_sections; i++)
+            {
+                TotalScanPtns += Scan.ScanConfigData.section[i].num_patterns;
+            }
+            for (Int32 i = 0; i < Scan.ReferenceScanConfigData.head.num_sections; i++)
+            {
+                TotalRefPtns += Scan.ReferenceScanConfigData.section[i].num_patterns;
+            }
+            if (ifJCAMP == true)
+            {
+                sw.WriteLine("##NPOINTS=" + TotalScanPtns);
+            }
+            else
+            {
+                sw.WriteLine("Total Digital Resolution:," + TotalScanPtns + "," + TotalRefPtns);
+            }
+
+            sw.WriteLine(PreStr + "Num Repeats:," + Scan.ScanConfigData.head.num_repeats + "," + Scan.ReferenceScanConfigData.head.num_repeats);
+
+            sw.WriteLine(PreStr + "PGA Gain:," + Scan.PGA + "," + Scan.ReferencePGA);
+
+            TimeSpan ts = new TimeSpan(TimeScanEnd.Ticks - TimeScanStart.Ticks);
+            sw.WriteLine(PreStr + "Total Measurement Time in sec:," + ts.TotalSeconds);
+        }
+        private void SaveHeader_CSV(StreamWriter sw)
+        {
+            String ModelName = Device.DevInfo.ModelName;
+            String TivaRev = String.Empty;
+            String DLPCRev = String.Empty;
+            String SpecLibRev = String.Empty;
+            if (GetFW_LEVEL() >= FW_LEVEL.LEVEL_3)
+            {
+                TivaRev = Device.DevInfo.TivaRev[0].ToString() + "."
+                        + Device.DevInfo.TivaRev[1].ToString() + "."
+                        + Device.DevInfo.TivaRev[2].ToString();
+            }
+            else
+            {
+                TivaRev = Device.DevInfo.TivaRev[0].ToString() + "."
+                        + Device.DevInfo.TivaRev[1].ToString() + "."
+                        + Device.DevInfo.TivaRev[2].ToString() + "."
+                        + Device.DevInfo.TivaRev[3].ToString();
+            }
+            if(Device.DevInfo.DLPCRev.Length == 3)
+            {
+                DLPCRev = Device.DevInfo.DLPCRev[0].ToString() + "."
+                          + Device.DevInfo.DLPCRev[1].ToString() + "."
+                          + Device.DevInfo.DLPCRev[2].ToString();
+            }
+            else
+            {
+                DLPCRev = Device.DevInfo.DLPCRev[0].ToString() + "."
+                          + Device.DevInfo.DLPCRev[1].ToString() + "."
+                          + Device.DevInfo.DLPCRev[2].ToString() + "."
+                          + Device.DevInfo.DLPCRev[3].ToString();
+            }
+            if (Device.DevInfo.SpecLibRev[3].ToString() == "0")
+            {
+                SpecLibRev = Device.DevInfo.SpecLibRev[0].ToString() + "."
+                         + Device.DevInfo.SpecLibRev[1].ToString() + "."
+                         + Device.DevInfo.SpecLibRev[2].ToString();
+            }
+            else
+            {
+                SpecLibRev = Device.DevInfo.SpecLibRev[0].ToString() + "."
+                        + Device.DevInfo.SpecLibRev[1].ToString() + "."
+                        + Device.DevInfo.SpecLibRev[2].ToString() + "."
+                        + Device.DevInfo.SpecLibRev[3].ToString();
+            }
             String UUID = BitConverter.ToString(Device.DevInfo.DeviceUUID).Replace("-", ":");
             String HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(0, 1) : String.Empty;
             String Detector_Board_HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(2, 1) : String.Empty;
@@ -1734,10 +2339,12 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             CSV[18, 0] = "Model Name:,";
             CSV[18, 1] = ModelName + ",";
             CSV[19, 0] = "Serial Number:,";
-            CSV[19, 1] = Scan.ScanConfigData.head.ScanConfig_serial_number + ",";
+            CSV[19, 1] = Device.DevInfo.SerialNumber + ",";
             CSV[19, 2] = "(" + Manufacturing_SerNum + "),";
             CSV[20, 0] = "GUI Version:,";
-            CSV[20, 1] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + ",";
+            String GUIRev = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            GUIRev = (GUIRev.Length != 0) ? GUIRev.Substring(0, 5) : String.Empty;
+            CSV[20, 1] = GUIRev;
             CSV[21, 0] = "TIVA Version:,";
             CSV[21, 1] = TivaRev + ",";
             CSV[22, 0] = "DLPC Version:,";
@@ -1772,31 +2379,44 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             Button_CfgCancel_Click(this, e);
             if (Device.IsConnected())
             {
+                CancelContScan = !CancelContScan;
+                if (CancelContScan)
+                    return;
+                else
+                    Button_Scan.Text = "Stop Scan";
+
+                ContScanCountTarget = int.Parse(Text_ContScan.Text);
+                if (RadioButton_RefNew.Checked || ContScanCountTarget == 0) ContScanCountTarget = 1;
+                ContScanCountDown = ContScanCountTarget;
+                Text_ContScan.Text = ContScanCountDown.ToString();
+
                 scan_Params.scanedCounts = 0;
                 scan_Params.scanCountsTarget = scan_Params.RepeatedScanCountDown;
                 
                 Scan.SetScanNumRepeats(ushort.Parse(textBox_ScanAvg.Text.ToString()));
 
-                tivaVerChk();
                 scan_Params.PGAGain = GetPGA();
                 if (CheckBox_AutoGain.Checked == false)
                 {                    
-                    if (IsOldTivaFW && CheckBox_LampOn.Checked == true)
-                    {
+                    if (GetFW_LEVEL() < FW_LEVEL.LEVEL_2 && CheckBox_LampOn.Checked == true)
                         Scan.SetPGAGain(scan_Params.PGAGain);
-                    }
                     else
-                    {
                         Scan.SetFixedPGAGain(true, scan_Params.PGAGain);
-                    }
                 }
-
                 else
                 {
-                    if (IsOldTivaFW)
+                    if (GetFW_LEVEL() < FW_LEVEL.LEVEL_2)
                         Scan.SetFixedPGAGain(false, scan_Params.PGAGain);
                     else
                         Scan.SetFixedPGAGain(true, 0); // This is set to auto PGA
+                }
+
+                if (GetFW_LEVEL() >= FW_LEVEL.LEVEL_4)
+                {
+                    if (CheckBox_GlitchFilter.Checked == true)
+                        Scan.EnableGlitchFilter(true);
+                    else
+                        Scan.EnableGlitchFilter(false);
                 }
 
                 if (scan_Params.RepeatedScanCountDown == 0)
@@ -1809,6 +2429,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
                     String text = "Scanning in progress...\n\nPlease wait!";
                     MessageBox.Show(text, "Wait");
                 }
+                Label_ContScan.Text = string.Empty;
+                Chart_Refresh();
             }
             else
             {
@@ -1849,7 +2471,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             }
             return pga;
         }
-
+        private bool CancelContScan { get; set; } = true;
+        private int ContScanCountDown { get; set; } = 0;
+        private int ContScanCountTarget { get; set; } = 0;
         private void bwScan_DoScan(object sender, DoWorkEventArgs e)
         {
             DBG.WriteLine("Performing scan... Remained scans: {0}", scan_Params.RepeatedScanCountDown - 1);
@@ -1883,6 +2507,11 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             string result = (string)arguments[0];
             TimeSpan ts = (TimeSpan)arguments[1];
             Byte pga = Scan.PGA;
+
+            ContScanCountDown--;
+            Text_ContScan.Text = ContScanCountDown.ToString();
+            Label_ContScan.Text = "(" + (ContScanCountTarget - ContScanCountDown).ToString() + "/" + ContScanCountTarget.ToString() + ")";
+
             if (result != "failed")
             {
                 SpectrumPlot();
@@ -1906,6 +2535,35 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
                     scan_Params.RepeatedScanCountDown = 0;
                 }
                 scan_Params.ScanInterval = 0;
+
+                if (ContScanCountDown > 0 && !CancelContScan)
+                {
+                    Thread.Sleep(int.Parse(Text_ContDelay.Text) * 1000);
+
+                    if (CheckBox_AutoGain.Checked == false)
+                    {
+                        if (GetFW_LEVEL() < FW_LEVEL.LEVEL_2 && CheckBox_LampOn.Checked == true)
+                            Scan.SetPGAGain(scan_Params.PGAGain);
+                        else
+                            Scan.SetFixedPGAGain(true, scan_Params.PGAGain);
+                    }
+                    else
+                    {
+                        if (GetFW_LEVEL() < FW_LEVEL.LEVEL_2)
+                            Scan.SetFixedPGAGain(false, scan_Params.PGAGain);
+                        else
+                            Scan.SetFixedPGAGain(true, 0); // This is set to auto PGA
+                    }
+
+                    bwScan.RunWorkerAsync();
+                }
+                else
+                {
+                    CancelContScan = true;
+                    ContScanCountDown = 0;
+                    Button_Scan.Text = "Scan";
+                    Text_ContScan.Text = ContScanCountDown.ToString();
+                }
             }
             else
             {
@@ -1932,38 +2590,44 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
 
         private void Button_ModelNameSet_Click(object sender, EventArgs e)
         {
-            if (Device.SetModelName(Helper.CheckRegex(TextBox_ModelName.Text)) == 0)
+            DialogResult result = Message.ShowQuestion("Do you want to write it?","Model Name",MessageBoxButtons.YesNo);
+            if(result == DialogResult.Yes)
             {
-                if (Device.Information() != 0)
-                    DBG.WriteLine("Device Information read failed!");
-                GetDeviceInfo();
-                if (!String.IsNullOrEmpty(Device.DevInfo.ModelName))
-                    TextBox_ModelName.Text = Device.DevInfo.ModelName;
+                if (Device.SetModelName(Helper.CheckRegex(TextBox_ModelName.Text)) == 0)
+                {
+                    if (Device.Information() != 0)
+                        DBG.WriteLine("Device Information read failed!");
+                    GetDeviceInfo();
+                    if (!String.IsNullOrEmpty(Device.DevInfo.ModelName))
+                        TextBox_ModelName.Text = Device.DevInfo.ModelName;
+                    else
+                        TextBox_ModelName.Text = "Read Failed!";
+                }
                 else
-                    TextBox_ModelName.Text = "Read Failed!";
+                    TextBox_ModelName.Text = "Write Failed!";
             }
-            else
-                TextBox_ModelName.Text = "Write Failed!";
         }
         #endregion
         #region Serial Number
         //Serial Number
         private void Button_SerialNumberSet_Click(object sender, EventArgs e)
         {
-            String OldSerNum = Device.DevInfo.SerialNumber;
-
-            if (Device.SetSerialNumber(Helper.CheckRegex(TextBox_SerialNumber.Text)) == 0)
+            DialogResult result = Message.ShowQuestion("Do you want to write it?", "Serial Number", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
             {
-                if (Device.Information() != 0)
-                    DBG.WriteLine("Device Information read failed!");
-                GetDeviceInfo();
-                if (!String.IsNullOrEmpty(Device.DevInfo.SerialNumber))
-                    TextBox_SerialNumber.Text = Device.DevInfo.SerialNumber;
+                if (Device.SetSerialNumber(Helper.CheckRegex(TextBox_SerialNumber.Text)) == 0)
+                {
+                    if (Device.Information() != 0)
+                        DBG.WriteLine("Device Information read failed!");
+                    GetDeviceInfo();
+                    if (!String.IsNullOrEmpty(Device.DevInfo.SerialNumber))
+                        TextBox_SerialNumber.Text = Device.DevInfo.SerialNumber;
+                    else
+                        TextBox_SerialNumber.Text = "Read Failed!";
+                }
                 else
-                    TextBox_SerialNumber.Text = "Read Failed!";
-            }
-            else
-                TextBox_SerialNumber.Text = "Write Failed!";
+                    TextBox_SerialNumber.Text = "Write Failed!";
+            }  
         }
 
         private void Button_SerialNumberGet_Click(object sender, EventArgs e)
@@ -1982,21 +2646,25 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         //Date and Time
         private void Button_DateTimeSync_Click(object sender, EventArgs e)
         {
-            Device.DeviceDateTime DevDateTime = new Device.DeviceDateTime();
-            DateTime Current = DateTime.Now;
+            DialogResult result = Message.ShowQuestion("Do you want to sync. it?", "Date and Time", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                Device.DeviceDateTime DevDateTime = new Device.DeviceDateTime();
+                DateTime Current = DateTime.Now;
 
-            DevDateTime.Year = Current.Year;
-            DevDateTime.Month = Current.Month;
-            DevDateTime.Day = Current.Day;
-            DevDateTime.DayOfWeek = (Int32)Current.DayOfWeek;
-            DevDateTime.Hour = Current.Hour;
-            DevDateTime.Minute = Current.Minute;
-            DevDateTime.Second = Current.Second;
+                DevDateTime.Year = Current.Year;
+                DevDateTime.Month = Current.Month;
+                DevDateTime.Day = Current.Day;
+                DevDateTime.DayOfWeek = (Int32)Current.DayOfWeek;
+                DevDateTime.Hour = Current.Hour;
+                DevDateTime.Minute = Current.Minute;
+                DevDateTime.Second = Current.Second;
 
-            if (Device.SetDateTime(DevDateTime) == 0)
-                TextBox_DateTime.Text = Current.ToString("yyyy/M/d  H:m:s");
-            else
-                TextBox_DateTime.Text = "Sync Failed!";
+                if (Device.SetDateTime(DevDateTime) == 0)
+                    TextBox_DateTime.Text = Current.ToString("yyyy/M/d  H:m:s");
+                else
+                    TextBox_DateTime.Text = "Sync Failed!";
+            }
         }
 
         private void Button_DateTimeGet_Click(object sender, EventArgs e)
@@ -2042,17 +2710,21 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
 
         private void Button_LampUsageSet_Click(object sender, EventArgs e)
         {
-            if (Double.TryParse(TextBox_LampUsage.Text, out Double LampUsage) == false)
+            DialogResult result = Message.ShowQuestion("Do you want to write it?", "Lamp Usage", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
             {
-                TextBox_LampUsage.Text = "Not Numeric!";
-                return;
-            }
+                if (Double.TryParse(TextBox_LampUsage.Text, out Double LampUsage) == false)
+                {
+                    TextBox_LampUsage.Text = "Not Numeric!";
+                    return;
+                }
 
-            if (Device.WriteLampUsage((UInt64)(LampUsage * 3600000)) == 0)  // hour to milliseconds
-                Button_LampUsageGet_Click(sender, e);
-            else
-                TextBox_LampUsage.Text = "Write Failed!";
-            GetDeviceInfo();
+                if (Device.WriteLampUsage((UInt64)(LampUsage * 3600000)) == 0)  // hour to milliseconds
+                    Button_LampUsageGet_Click(sender, e);
+                else
+                    TextBox_LampUsage.Text = "Write Failed!";
+                GetDeviceInfo();
+            }
         }
 
         private void Button_LampUsageGet_Click(object sender, EventArgs e)
@@ -2120,9 +2792,13 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             {
                 int Ret = SDK.PASS;
                 int retry = 0;
+                TimerCallback callback = new TimerCallback(TimerTask);
+                TivaUpdateTime = 1;
+                timer = new System.Threading.Timer(callback, null, 1000, 1000);
 
                 ProgressBar_TivaFWUpdateStatus.Value = 10;
-                Device.Set_Tiva_To_Bootloader();
+                if (Device.ReadDeviceStatus() == 0 && (Device.DeviceStatus & 0x00000001) == 1 && (Device.DeviceStatus & 0x00000002) == 0)
+                    Device.Set_Tiva_To_Bootloader();
 
                 while (!Device.IsDFUConnected())
                 {
@@ -2146,6 +2822,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
                     MessageBox.Show("Can not find \"Tiva DFU\"!", "Error");
                     SDK.IsConnectionChecking = true;
                     ProgressBar_TivaFWUpdateStatus.Value = 0;
+                    timer.Dispose();
                 }
 
             }
@@ -2208,12 +2885,14 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
 
             if (ret == 0)
             {
+                timer.Dispose();
                 String text = "Tiva FW updated successfully!";
                 MessageBox.Show(text, "Success");
                 Device.ResetTiva(true);  // Only reconnect the device
             }
             else
             {
+                timer.Dispose();
                 switch (ret)
                 {
                     case -1:
@@ -2382,17 +3061,17 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         //Calibration Coefficients
         private void Button_CalWriteGenCoeffs_Click(object sender, EventArgs e)
         {
-            if (Device.SetGenericCalibStruct() == SDK.PASS)
-                Button_CalReadCoeffs_Click(sender, e);
-            else
+            DialogResult result = Message.ShowQuestion("Do you want to write it?", "Generic Coefficients", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
             {
-                TextBox_P2WCoeff0.Text = "Write Failed!";
-                TextBox_P2WCoeff1.Text = "Write Failed!";
-                TextBox_P2WCoeff2.Text = "Write Failed!";
-                TextBox_ShiftVectCoeff0.Text = "Write Failed!";
-                TextBox_ShiftVectCoeff1.Text = "Write Failed!";
-                TextBox_ShiftVectCoeff2.Text = "Write Failed!";
+                if (Device.SetGenericCalibStruct() == SDK.PASS)
+                    Button_CalReadCoeffs_Click(sender, e);
+                else
+                {
+                    Message.ShowError("Write Failed!");
+                }
             }
+           
         }
 
         private void Button_CalReadCoeffs_Click(object sender, EventArgs e)
@@ -2425,54 +3104,53 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
 
         private void Button_CalRestoreDefaultCoeffs_Click(object sender, EventArgs e)
         {
-            if (Device.RestoreDefaultCalibStruct() == 0)
-                Button_CalReadCoeffs_Click(sender, e);
-            else
+            DialogResult result = Message.ShowQuestion("Do you want to restore it?", "Coefficient", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
             {
-                TextBox_P2WCoeff0.Text = "Restore Failed!";
-                TextBox_P2WCoeff1.Text = "Restore Failed!";
-                TextBox_P2WCoeff2.Text = "Restore Failed!";
-                TextBox_ShiftVectCoeff0.Text = "Restore Failed!";
-                TextBox_ShiftVectCoeff1.Text = "Restore Failed!";
-                TextBox_ShiftVectCoeff2.Text = "Restore Failed!";
-            }
+                int ret = Device.RestoreDefaultCalibStruct();
+                if (ret == 0)
+                    Button_CalReadCoeffs_Click(sender, e);
+                else if (ret == -4)
+                {
+                    Message.ShowError("Device does not have backup data!");
+                }
+                else
+                {
+                    Message.ShowError("Restore Failed!");
+                }
+            }  
         }
 
         private void Button_CalWriteCoeffs_Click(object sender, EventArgs e)
         {
-            Device.CalibCoeffs Calib_Coeffs = new Device.CalibCoeffs
+            DialogResult result = Message.ShowQuestion("Do you want to write it?", "Coefficient", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
             {
-                PixelToWavelengthCoeffs = new Double[3],
-                ShiftVectorCoeffs = new Double[3]
-            };
+                Device.CalibCoeffs Calib_Coeffs = new Device.CalibCoeffs
+                {
+                    PixelToWavelengthCoeffs = new Double[3],
+                    ShiftVectorCoeffs = new Double[3]
+                };
 
-            if ((Double.TryParse(TextBox_P2WCoeff0.Text, out Calib_Coeffs.PixelToWavelengthCoeffs[0]) == false) ||
-                (Double.TryParse(TextBox_P2WCoeff1.Text, out Calib_Coeffs.PixelToWavelengthCoeffs[1]) == false) ||
-                (Double.TryParse(TextBox_P2WCoeff2.Text, out Calib_Coeffs.PixelToWavelengthCoeffs[2]) == false) ||
-                (Double.TryParse(TextBox_ShiftVectCoeff0.Text, out Calib_Coeffs.ShiftVectorCoeffs[0]) == false) ||
-                (Double.TryParse(TextBox_ShiftVectCoeff1.Text, out Calib_Coeffs.ShiftVectorCoeffs[1]) == false) ||
-                (Double.TryParse(TextBox_ShiftVectCoeff2.Text, out Calib_Coeffs.ShiftVectorCoeffs[2]) == false))
-            {
-                TextBox_P2WCoeff0.Text = "Not Numeric!";
-                TextBox_P2WCoeff1.Text = "Not Numeric!";
-                TextBox_P2WCoeff2.Text = "Not Numeric!";
-                TextBox_ShiftVectCoeff0.Text = "Not Numeric!";
-                TextBox_ShiftVectCoeff1.Text = "Not Numeric!";
-                TextBox_ShiftVectCoeff2.Text = "Not Numeric!";
-                return;
-            }
+                if ((Double.TryParse(TextBox_P2WCoeff0.Text, out Calib_Coeffs.PixelToWavelengthCoeffs[0]) == false) ||
+                    (Double.TryParse(TextBox_P2WCoeff1.Text, out Calib_Coeffs.PixelToWavelengthCoeffs[1]) == false) ||
+                    (Double.TryParse(TextBox_P2WCoeff2.Text, out Calib_Coeffs.PixelToWavelengthCoeffs[2]) == false) ||
+                    (Double.TryParse(TextBox_ShiftVectCoeff0.Text, out Calib_Coeffs.ShiftVectorCoeffs[0]) == false) ||
+                    (Double.TryParse(TextBox_ShiftVectCoeff1.Text, out Calib_Coeffs.ShiftVectorCoeffs[1]) == false) ||
+                    (Double.TryParse(TextBox_ShiftVectCoeff2.Text, out Calib_Coeffs.ShiftVectorCoeffs[2]) == false))
+                {
+                    Message.ShowError("Not Numeric!");
+                    return;
+                }
 
-            if (Device.SendCalibStruct(Calib_Coeffs) == SDK.PASS)
-                Button_CalReadCoeffs_Click(sender, e);
-            else
-            {
-                TextBox_P2WCoeff0.Text = "Write Failed!";
-                TextBox_P2WCoeff1.Text = "Write Failed!";
-                TextBox_P2WCoeff2.Text = "Write Failed!";
-                TextBox_ShiftVectCoeff0.Text = "Write Failed!";
-                TextBox_ShiftVectCoeff1.Text = "Write Failed!";
-                TextBox_ShiftVectCoeff2.Text = "Write Failed!";
+                if (Device.SendCalibStruct(Calib_Coeffs) == SDK.PASS)
+                    Button_CalReadCoeffs_Click(sender, e);
+                else
+                {
+                    Message.ShowError("Write Failed!");
+                }
             }
+              
         }
 
         private void CheckBox_CalWriteEnable_CheckedChanged(object sender, EventArgs e)
@@ -2481,7 +3159,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             {
                 Button_CalWriteCoeffs.Enabled = true;
                 Button_CalWriteGenCoeffs.Enabled = true;
-                if (IsActivated)
+                if (IsActivated && GetFW_LEVEL() >= FW_LEVEL.LEVEL_2)
                     Button_CalRestoreDefaultCoeffs.Enabled = true;
                 else
                     Button_CalRestoreDefaultCoeffs.Enabled = false;
@@ -2501,71 +3179,113 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             if (!Device.IsConnected())
                 return;
 
-            String UUID = BitConverter.ToString(Device.DevInfo.DeviceUUID).Replace("-", ":");
-            String HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(0, 1) : String.Empty;
-            String TivaRev = Device.DevInfo.TivaRev[0].ToString() + "."
-                           + Device.DevInfo.TivaRev[1].ToString() + "."
-                           + Device.DevInfo.TivaRev[2].ToString() + "."
-                           + Device.DevInfo.TivaRev[3].ToString();
+            String GUIRev = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            GUIRev = (GUIRev.Length != 0) ? GUIRev.Substring(0, 5) : String.Empty;
             String DLPCRev = Device.DevInfo.DLPCRev[0].ToString() + "."
                            + Device.DevInfo.DLPCRev[1].ToString() + "."
                            + Device.DevInfo.DLPCRev[2].ToString();
-            String SpecLibRev = Device.DevInfo.SpecLibRev[0].ToString() + "."
+            String SpecLibRev = String.Empty;
+            if (Device.DevInfo.SpecLibRev[3].ToString() == "0")
+            {
+                SpecLibRev = Device.DevInfo.SpecLibRev[0].ToString() + "."
                               + Device.DevInfo.SpecLibRev[1].ToString() + "."
-                              + Device.DevInfo.SpecLibRev[2].ToString() + "."
-                              + Device.DevInfo.SpecLibRev[3].ToString();
-            String GUIRev = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            if(GUIRev.Length!=0)
-            {
-                GUIRev = GUIRev.Substring(0, 5);
-            }
-            String Detector_Board_HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(2, 1) : String.Empty;
-            String Lamp_Usage = "";
-            if (Device.ReadLampUsage() == 0)
-            {
-                Lamp_Usage = GetLampUsage();
+                              + Device.DevInfo.SpecLibRev[2].ToString();
             }
             else
-                Lamp_Usage = "NA";
-            //-------------------------------------------------------------
+            {
+                SpecLibRev = Device.DevInfo.SpecLibRev[0].ToString() + "."
+                            + Device.DevInfo.SpecLibRev[1].ToString() + "."
+                            + Device.DevInfo.SpecLibRev[2].ToString() + "."
+                            + Device.DevInfo.SpecLibRev[3].ToString();
+            }
+            String HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(0, 1) : String.Empty;
+            String Detector_Board_HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(2, 1) : String.Empty;
+
             label_DevInfoGUIVer.Text = GUIRev;
-            label_DevInfoTivaSWVer.Text = TivaRev;
             label_DevInfoDLPCVer.Text = DLPCRev;
             label_DevInfoSpecLibVer.Text = SpecLibRev;
             label_DevInfoMainBoardVer.Text = HWRev;
             label_DevInfoDetectorBoardVer.Text = Detector_Board_HWRev;
             label_DevInfoModelName.Text = Device.DevInfo.ModelName;
             label_DevInfoDevSerNum.Text = Device.DevInfo.SerialNumber;
-            label_DevInfoManfacSerNUm.Text = Device.DevInfo.Manufacturing_SerialNumber;
-            label_DevInfoUUID.Text = UUID;
-            label_DevInfoLampUsage.Text = Lamp_Usage;
+
+            String TivaRev = String.Empty;
+            if (GetFW_LEVEL() >= FW_LEVEL.LEVEL_3)
+            {
+                TivaRev = Device.DevInfo.TivaRev[0].ToString() + "."
+                        + Device.DevInfo.TivaRev[1].ToString() + "."
+                        + Device.DevInfo.TivaRev[2].ToString();
+            }
+            else
+            {
+                TivaRev = Device.DevInfo.TivaRev[0].ToString() + "."
+                        + Device.DevInfo.TivaRev[1].ToString() + "."
+                        + Device.DevInfo.TivaRev[2].ToString() + "."
+                        + Device.DevInfo.TivaRev[3].ToString();
+            }
+            label_DevInfoTivaSWVer.Text = TivaRev;
+
+            if (GetFW_LEVEL() >= FW_LEVEL.LEVEL_2)
+            {
+                String Manu_Seri_Num = Device.DevInfo.Manufacturing_SerialNumber;
+                if (!Manu_Seri_Num.Contains("70UB1") && !Manu_Seri_Num.Contains("95UB1"))
+                    Manu_Seri_Num = "NA";
+                label_DevInfoManfacSerNum.Text = Manu_Seri_Num;
+
+                String Lamp_Usage = "";
+                if (Device.ReadLampUsage() == 0)
+                    Lamp_Usage = GetLampUsage();
+                else
+                    Lamp_Usage = "NA";
+                label_DevInfoLampUsage.Text = Lamp_Usage;
+            }
+            else
+            {
+                label_DevInfoManfacSerNum.Text = String.Empty;
+                label_DevInfoLampUsage.Text = String.Empty;
+            }
+
+            if (GetFW_LEVEL() >= FW_LEVEL.LEVEL_1)
+            {
+                String UUID = BitConverter.ToString(Device.DevInfo.DeviceUUID).Replace("-", ":");
+                label_DevInfoUUID.Text = UUID;
+            }
+            else
+            {
+                label_DevInfoUUID.Text = String.Empty;
+            }
+
         }
         #endregion
         #region Activation Key
         //Activation Key
         private void button_KeySet_Click(object sender, EventArgs e)
         {
-            String[] StrKey = textBox_Key.Text.Split(new char[] { ' ', ':', ';', '-', '_' });
-            Byte[] ByteKey = new Byte[12];
+            DialogResult result = Message.ShowQuestion("Do you want to set it?", "Key", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                String[] StrKey = textBox_Key.Text.Split(new char[] { ' ', ':', ';', '-', '_' });
+                Byte[] ByteKey = new Byte[12];
 
-            for (int i = 0; i < StrKey.Length; i++)
-            {
-                try { ByteKey[i] = Convert.ToByte(StrKey[i], 16); }
-                catch { ByteKey[i] = 0; }
-            }
+                for (int i = 0; i < StrKey.Length; i++)
+                {
+                    try { ByteKey[i] = Convert.ToByte(StrKey[i], 16); }
+                    catch { ByteKey[i] = 0; }
+                }
 
-            Device.SetActivationKey(ByteKey);
-           
-            if (IsActivated)
-            {
-                label_ActivateStatus.Text = "Activated!";
-                GUI_Handler((int)MainWindow.GUI_State.KEY_ACTIVATE);
-            }
-            else
-            {
-                label_ActivateStatus.Text = "Not activated!";
-                GUI_Handler((int)MainWindow.GUI_State.KEY_NOT_ACTIVATE);
-            }
+                Device.SetActivationKey(ByteKey);
+
+                if (IsActivated)
+                {
+                    label_ActivateStatus.Text = "Activated!";
+                    GUI_Handler((int)MainWindow.GUI_State.KEY_ACTIVATE);
+                }
+                else
+                {
+                    label_ActivateStatus.Text = "Not activated!";
+                    GUI_Handler((int)MainWindow.GUI_State.KEY_NOT_ACTIVATE);
+                }
+            }        
         }
         private void GetActivationKeyStatus()
         {
@@ -2613,19 +3333,23 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         //Reset Device
         private void button_DeviceResetSys_Click(object sender, EventArgs e)
         {
-            if (!Device.IsConnected())
-                return;
-
-            bwTivaReset = new BackgroundWorker
+            DialogResult result = Message.ShowQuestion("Do you want to reset it?", "Reset System", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
             {
-                WorkerReportsProgress = false,
-                WorkerSupportsCancellation = true
-            };
-            bwTivaReset.DoWork += new DoWorkEventHandler(bwTivaReset_DoWork);
-            bwTivaReset.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bwTivaReset_DoWorkCompleted);
+                if (!Device.IsConnected())
+                    return;
 
-            SDK.IsConnectionChecking = false;
-            bwTivaReset.RunWorkerAsync();
+                bwTivaReset = new BackgroundWorker
+                {
+                    WorkerReportsProgress = false,
+                    WorkerSupportsCancellation = true
+                };
+                bwTivaReset.DoWork += new DoWorkEventHandler(bwTivaReset_DoWork);
+                bwTivaReset.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bwTivaReset_DoWorkCompleted);
+
+                SDK.IsConnectionChecking = false;
+                bwTivaReset.RunWorkerAsync();
+            }         
         }
         private BackgroundWorker bwTivaReset;
         private static void bwTivaReset_DoWork(object sender, DoWorkEventArgs e)
@@ -2643,14 +3367,55 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         {
             if (Device.IsConnected())
             {
-                bwRefScanProgress = new BackgroundWorker
+                DialogResult result = Message.ShowQuestion("IMPORTANT!!!\n\nThis will REPLACE your FACTORY REFERENCE DATA \nand could NOT be REVERTED.\n\nAre you sure you want to do this ? ",null, MessageBoxButtons.YesNo);
+                if(result == DialogResult.Yes)
                 {
-                    WorkerReportsProgress = false,
-                    WorkerSupportsCancellation = true
-                };
-                bwRefScanProgress.DoWork += new DoWorkEventHandler(bwRefScanProgress_DoWork);
-                bwRefScanProgress.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bwRefScanProgress_DoWorkCompleted);
-                bwRefScanProgress.RunWorkerAsync();
+                    result = Message.ShowQuestion("User Agreements:\n\n" +
+                    "1. I am well aware of the purpose of factory reference data\n" +
+                    "    and have been well trained to replace it.\n" +
+                    "2. I fully understand that the factory reference data can be replaced\n" +
+                    "    but not revertible.\n" +
+                    "3. I agree to pay extra fee to recover the factory reference data\n" +
+                    "    if I make anything wrong.\n\n" +
+                    "I agree with above terms and would like to continue the process.\n"
+                    ,null, MessageBoxButtons.YesNo);
+                    if (result == DialogResult.Yes)
+                    {
+                        result = Message.ShowQuestion("IMPORTANT!!!\n\nPlease confirm again with this process.\n\nDo you still want to do this?",null, MessageBoxButtons.YesNo);
+                        if (result == DialogResult.Yes)
+                        {
+                            result = Message.ShowQuestion("Please place the reference sample and press 'OK' to start the reference scan...",null, MessageBoxButtons.OKCancel);
+                            if (result == DialogResult.OK)
+                            {
+                                bwRefScanProgress = new BackgroundWorker
+                                {
+                                    WorkerReportsProgress = false,
+                                    WorkerSupportsCancellation = true
+                                };
+                                bwRefScanProgress.DoWork += new DoWorkEventHandler(bwRefScanProgress_DoWork);
+                                bwRefScanProgress.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bwRefScanProgress_DoWorkCompleted);
+                                bwRefScanProgress.RunWorkerAsync();
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+                
             }
             else
             {
@@ -2732,94 +3497,104 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         //Back up factory reference
         private void button_DeviceBackUpFacRef_Click(object sender, EventArgs e)
         {
-            if (Device.IsConnected())
+            DialogResult result = Message.ShowQuestion("Do you want to backup it?", "Backup Factory Reference", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
             {
-                int ret;
-                string serNum = Device.DevInfo.SerialNumber.ToString();
-                ret = Device.Backup_Factory_Reference(serNum);
-                if (ret < 0)
+                if (Device.IsConnected())
                 {
-                    switch (ret)
+                    int ret;
+                    string serNum = Device.DevInfo.SerialNumber.ToString();
+                    ret = Device.Backup_Factory_Reference(serNum);
+                    if (ret < 0)
                     {
-                        case -1:
-                            String text = "Factory reference data backup FAILED!\n\nOut of memory.";
-                            MessageBox.Show(text, "Error");
-                            break;
-                        case -2:
-                            text = "Factory reference data backup FAILED!\n\nSystem I/O error";
-                            MessageBox.Show(text, "Error");
-                            break;
-                        case -3:
-                            text = "Factory reference data backup FAILED!\n\nDevice communcation error";
-                            MessageBox.Show(text, "Error");
-                            break;
-                        case -4:
-                            text = "Factory reference data backup FAILED!\n\nDevice does not have the original factory reference data";
-                            MessageBox.Show(text, "Error");
-                            break;
+                        switch (ret)
+                        {
+                            case -1:
+                                String text = "Factory reference data backup FAILED!\n\nOut of memory.";
+                                MessageBox.Show(text, "Error");
+                                break;
+                            case -2:
+                                text = "Factory reference data backup FAILED!\n\nSystem I/O error";
+                                MessageBox.Show(text, "Error");
+                                break;
+                            case -3:
+                                text = "Factory reference data backup FAILED!\n\nDevice communcation error";
+                                MessageBox.Show(text, "Error");
+                                break;
+                            case -4:
+                                text = "Factory reference data backup FAILED!\n\nDevice does not have the original factory reference data";
+                                MessageBox.Show(text, "Error");
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        String text = "Factory reference data has been saved in local storage successfully!";
+                        MessageBox.Show(text, "Success");
                     }
                 }
                 else
                 {
-                    String text = "Factory reference data has been saved in local storage successfully!";
-                    MessageBox.Show(text, "Success");
+                    String text = "No device connected for backup factory reference!";
+                    MessageBox.Show(text, "Warning");
                 }
             }
-            else
-            {
-                String text = "No device connected for backup factory reference!";
-                MessageBox.Show(text, "Warning");
-            }
+               
         }
         private void button_DeviceRestoreFacRef_Click(object sender, EventArgs e)
         {
-            if (Device.IsConnected())
+            DialogResult result = Message.ShowQuestion("Do you want to restore it?", "Restore Factory Reference", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
             {
-                int ret;
-                string serNum = Device.DevInfo.SerialNumber.ToString();
-                ret = Device.Restore_Factory_Reference(serNum);
-                if (ret < 0)
+                if (Device.IsConnected())
                 {
-                    switch (ret)
+                    int ret;
+                    string serNum = Device.DevInfo.SerialNumber.ToString();
+                    ret = Device.Restore_Factory_Reference(serNum);
+                    if (ret < 0)
                     {
-                        case -1:
-                            String text = "Factory reference data restore FAILED!\n\nOut of memory.";
-                            MessageBox.Show(text, "Error");
-                            break;
-                        case -2:
-                            text = "Factory reference data restore FAILED!\n\nBackup directory not found";
-                            MessageBox.Show(text, "Error");
-                            break;
-                        case -3:
-                            text = "Factory reference data restore FAILED!\n\nRead file error";
-                            MessageBox.Show(text, "Error");
-                            break;
-                        case -4:
-                            text = "Factory reference data restore FAILED!\n\nReference data currupted";
-                            MessageBox.Show(text, "Error");
-                            break;
-                        case -5:
-                            text = "Factory reference data restore FAILED!\n\nDevice communcation error";
-                            MessageBox.Show(text, "Error");
-                            break;
-                        case -6:
-                            text = "Factory reference data restore FAILED!\n\nData was NOT the original factory reference data";
-                            MessageBox.Show(text, "Error");
-                            break;
+                        switch (ret)
+                        {
+                            case -1:
+                                String text = "Factory reference data restore FAILED!\n\nOut of memory.";
+                                MessageBox.Show(text, "Error");
+                                break;
+                            case -2:
+                                text = "Factory reference data restore FAILED!\n\nBackup directory not found";
+                                MessageBox.Show(text, "Error");
+                                break;
+                            case -3:
+                                text = "Factory reference data restore FAILED!\n\nRead file error";
+                                MessageBox.Show(text, "Error");
+                                break;
+                            case -4:
+                                text = "Factory reference data restore FAILED!\n\nReference data currupted";
+                                MessageBox.Show(text, "Error");
+                                break;
+                            case -5:
+                                text = "Factory reference data restore FAILED!\n\nDevice communcation error";
+                                MessageBox.Show(text, "Error");
+                                break;
+                            case -6:
+                                text = "Factory reference data restore FAILED!\n\nData was NOT the original factory reference data";
+                                MessageBox.Show(text, "Error");
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        String text = "Factory reference data has been restored successfully!\n\nPlease start a new scan to check the result.";
+                        MessageBox.Show(text, "Success");
+                        //ClearScanPlotsEvent();
                     }
                 }
                 else
                 {
-                    String text = "Factory reference data has been restored successfully!\n\nPlease start a new scan to check the result.";
-                    MessageBox.Show(text, "Success");
-                    //ClearScanPlotsEvent();
+                    String text = "No device connected for restoring factory reference!";
+                    MessageBox.Show(text, "Warning");
                 }
             }
-            else
-            {
-                String text = "No device connected for restoring factory reference!";
-                MessageBox.Show(text, "Warning");
-            }
+               
         }
         #endregion
         #region About
@@ -2882,6 +3657,19 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private void UI_on_connection()
         {
             ControlAllControls(this, true);
+            if (RadioButton_RefNew.Checked)
+            {
+                groupBox2.Enabled = false;
+                Check_Overlay.Enabled = false;
+            }
+            if(!RadioButton_RefNew.Checked &&(int.TryParse(Text_ContScan.Text, out int repeat) && repeat > 1) )
+            {
+                CheckBox_SaveOneCSV.Enabled = true;
+            }
+            else
+            {
+                CheckBox_SaveOneCSV.Enabled = false;
+            }
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -2912,6 +3700,519 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             foreach (Control ctrl in panel.Controls)
             {
                 ctrl.Enabled = enabled;
+            }
+        }
+        #region TIVA FW update timer
+        private static int TivaUpdateTime = 1;
+        static System.Threading.Timer timer;
+        private static void TimerTask(object obj)
+        {
+            TivaUpdateTime++;
+            if (TivaUpdateTime >= 30)
+            {
+                timer.Dispose();
+                if (Device.IsConnected())
+                    Device.ResetTiva(true);
+                else
+                    Device.ResetTiva(null);
+                MessageBox.Show("Tiva FW Update timeout!", "Tiva FW Update");
+            }
+        }
+        #endregion
+
+        private void Check_Overlay_CheckedChanged(object sender, EventArgs e)
+        {
+            if (Check_Overlay.Checked)
+                MyChart.DisableAnimations = true;
+            else
+                MyChart.DisableAnimations = false;
+
+            Chart_Refresh();
+            SpectrumPlot();
+        }
+        private void Chart_Refresh()
+        {
+            MyChart.Series.Clear();
+            MyChart.AxisX.Clear();
+            MyChart.AxisY.Clear();
+
+            MyChart.Series.Add(new LineSeries
+            {
+                Values = new ChartValues<ObservablePoint>(),
+                Title = "Intensity",
+                StrokeThickness = 1,
+                Fill = null,
+                LineSmoothness = 0,
+                PointGeometry = null,
+                PointGeometrySize = 0,
+            });
+
+            MyChart.AxisX.Add(new Axis { Title = "Wavelength (nm)" });
+            MyChart.AxisY.Add(new Axis { Title = "Intensity" });
+        }
+        private void ListBox_DeviceScanConfig_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            SetScanConfig(ScanConfig.TargetConfig[TargetCfg_SelIndex], true, TargetCfg_SelIndex);
+            scan_Params.ScanAvg = ScanConfig.TargetConfig[TargetCfg_SelIndex].head.num_repeats;
+            RefreshLocalCfgList();
+            RefreshTargetCfgList();
+            ListBox_TargetCfgs.SelectedIndex = DevCurCfg_Index;
+        }
+        #region Local Config
+        private void LoadLocalCfgList()
+        {
+            String FileName = Path.Combine(ConfigDir, "ConfigList.xml");
+
+            if (File.Exists(FileName) == true)
+            {
+                XmlSerializer xml = new XmlSerializer(typeof(List<ScanConfig.SlewScanConfig>));
+                TextReader reader = new StreamReader(FileName);
+                LocalConfig = (List<ScanConfig.SlewScanConfig>)xml.Deserialize(reader);
+                reader.Close();
+                RefreshLocalCfgList();
+            }
+        }
+        private void RefreshLocalCfgList()
+        {
+            ListBox_LocalCfgs.Items.Clear();
+            if (LocalConfig.Count > 0)
+            {
+                for (Int32 i = 0; i < LocalConfig.Count; i++)
+                {
+                    ListBox_LocalCfgs.Items.Add(LocalConfig[i].head.config_name);
+                    /*if (DevCurCfg_IsTarget == false)
+                        Item.Foreground = (DevCurCfg_Index == i) ? Brushes.DarkOrange : Brushes.Black;
+                    Item.MouseDoubleClick += new System.Windows.Input.MouseButtonEventHandler(ListBoxItem_LocalConfig_MouseDoubleClick);
+                    ListBox_LocalCfgs.Items.Add(Item);*/
+                }
+            }
+        }
+
+
+        private void ListBox_LocalCfgs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (NewConfig == true || EditConfig == true)
+            {
+                EditConfig = false;
+                NewConfig = false;
+                Button_CfgCancel_Click(this, e);
+            }
+            LocalCfg_Last_SelIndex = LocalCfg_SelIndex;
+            LocalCfg_SelIndex = ListBox_LocalCfgs.SelectedIndex;
+            if (LocalCfg_SelIndex < 0 || LocalConfig.Count == 0)
+                return;
+            else
+            {
+                if (!Scan.IsLocalRefExist && ReferenceSelect != Scan.SCAN_REF_TYPE.SCAN_REF_BUILT_IN)
+                {
+                    RadioButton_RefPre.Checked = false;
+                    RadioButton_RefNew.Checked = true;
+                }
+            }
+
+            SelCfg_IsTarget = false;
+            FillCfgDetailsContent();
+            OpenColseScanConfigButton(nameof(ScanConfigMode.INITIAL));
+            // Clear target listbox index after local config data refreshed.
+            if (ListBox_TargetCfgs.SelectedIndex != -1)
+                ListBox_TargetCfgs.SelectedIndex = -1;
+        }
+        private void ListBox_LocalCfgs_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            SetScanConfig(LocalConfig[LocalCfg_SelIndex], false, LocalCfg_SelIndex);
+            scan_Params.ScanAvg = LocalConfig[LocalCfg_SelIndex].head.num_repeats;
+            RefreshLocalCfgList();
+            RefreshTargetCfgList();
+            ListBox_LocalCfgs.SelectedIndex = DevCurCfg_Index;
+        }
+        private void Button_CopyCfgL2T_Click(object sender, EventArgs e)
+        {
+            if (LocalCfg_SelIndex < 0)
+            {
+                Message.ShowWarning("No item selected.");
+                return;
+            }
+
+            if (ScanConfig.TargetConfig.Count >= 20)
+            {
+                Message.ShowWarning("Number of scan configs in device cannot exceed 20.");
+                return;
+            }
+
+            ScanConfig.TargetConfig.Add(LocalConfig[LocalCfg_SelIndex]);
+            RefreshTargetCfgList();
+            SaveCfgToLocalOrDevice(true);
+        }
+        private Int32 SaveCfgToLocalOrDevice(Boolean IsTarget)
+        {
+            Int32 ret = SDK.FAIL;
+
+            if (IsTarget == true)
+            {
+                if ((ret = ScanConfig.SetConfigList()) == 0)
+                    Message.ShowInfo("Device Config List Update Success!");
+                else
+                    Message.ShowError("Device Config List Update Failed!");
+                if(EditConfig)
+                {
+                    ListBox_TargetCfgs.SelectedIndex = EditSelectIndex;
+                }
+                else
+                {
+                    ListBox_TargetCfgs.SelectedIndex = ListBox_TargetCfgs.Items.Count - 1;
+                }
+            }
+            else
+            {
+                if (!Directory.Exists(ConfigDir))
+                {
+                    Directory.CreateDirectory(ConfigDir);
+                }
+                String FileName = Path.Combine(ConfigDir, "ConfigList.xml");
+                XmlSerializer xml = new XmlSerializer(typeof(List<ScanConfig.SlewScanConfig>));
+                TextWriter writer = new StreamWriter(FileName);
+                xml.Serialize(writer, LocalConfig);
+                writer.Close();
+                Message.ShowInfo("Local Config List Update Success!");
+                ret = SDK.PASS;
+                if(EditConfig)
+                {
+                    ListBox_LocalCfgs.SelectedIndex = EditSelectIndex;
+                }
+                else
+                {
+                    ListBox_LocalCfgs.SelectedIndex = ListBox_LocalCfgs.Items.Count - 1;
+                }
+            }
+
+            return ret;
+        }
+        private void Button_CopyCfgT2L_Click(object sender, EventArgs e)
+        {
+            if (TargetCfg_SelIndex < 0)
+            {
+                Message.ShowWarning("No item selected.");
+                return;
+            }
+
+            LocalConfig.Add(ScanConfig.TargetConfig[TargetCfg_SelIndex]);
+            RefreshLocalCfgList();
+            SaveCfgToLocalOrDevice(false);
+        }
+        private void Button_MoveCfgL2T_Click(object sender, EventArgs e)
+        {
+            if (LocalCfg_SelIndex < 0)
+            {
+                Message.ShowWarning("No item selected.");
+                return;
+            }
+
+            if (ScanConfig.TargetConfig.Count >= 20)
+            {
+                Message.ShowWarning("Number of scan configs in device cannot exceed 20.");
+                return;
+            }
+
+            if (DevCurCfg_Index == LocalCfg_SelIndex)
+            {
+                Message.ShowWarning("Device current configuration will be moved,\n" +
+                                       "please set a new one to device later,\n" +
+                                       "or you can not do scan.");
+
+                // Clear previous scan data
+                ClearScanPlotsUI();
+
+                Button_Scan.Enabled = false;
+            }
+
+            ScanConfig.TargetConfig.Add(LocalConfig[LocalCfg_SelIndex]);
+            LocalConfig.RemoveAt(LocalCfg_SelIndex);
+            RefreshLocalCfgList();
+            SaveCfgToLocalOrDevice(false);
+            RefreshTargetCfgList();
+            ListBox_TargetCfgs.SelectedIndex = ScanConfig.TargetConfig.Count - 1;
+            SaveCfgToLocalOrDevice(true);
+        }
+        private void Button_MoveCfgT2L_Click(object sender, EventArgs e)
+        {
+            if (TargetCfg_SelIndex < 0)
+            {
+                Message.ShowWarning("No item selected.");
+                return;
+            }
+
+            if (TargetCfg_SelIndex == 0)
+            {
+                Message.ShowWarning("The built-in default configuration cannot be moved.");
+                return;
+            }
+
+            if (DevCurCfg_Index == TargetCfg_SelIndex)
+            {
+                Message.ShowWarning("Device current configuration will be moved,\n" +
+                                       "please set a new one to device later,\n" +
+                                       "or you can not do scan.");
+
+                // Clear previous scan data
+                ClearScanPlotsUI();
+
+                Button_Scan.Enabled = false;
+            }
+
+            Int32 ActiveIndex = ScanConfig.GetTargetActiveScanIndex();
+
+            LocalConfig.Add(ScanConfig.TargetConfig[TargetCfg_SelIndex]);
+            ScanConfig.TargetConfig.RemoveAt(TargetCfg_SelIndex);
+            if (TargetCfg_SelIndex == ActiveIndex)
+                ActiveIndex = 0;
+            else if (TargetCfg_SelIndex < ActiveIndex)
+                ActiveIndex--;
+            ScanConfig.SetTargetActiveScanIndex(ActiveIndex);
+           
+            RefreshTargetCfgList();
+            SaveCfgToLocalOrDevice(true);
+            RefreshLocalCfgList();
+            ListBox_LocalCfgs.SelectedIndex = LocalConfig.Count - 1;
+            SaveCfgToLocalOrDevice(false);
+        }
+        #endregion
+        public static FW_LEVEL GetFW_LEVEL()
+        {
+            if (Device.IsConnected())
+            {
+                String HWRev = String.Empty;
+                UInt32 curVer = 0;
+                
+                curVer = (UInt32)Device.DevInfo.TivaRev[0] << 16 | (UInt32)Device.DevInfo.TivaRev[1] << 8 | Device.DevInfo.TivaRev[2];
+                if (Device.IsConnected())
+                    HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(0, 1) : String.Empty;
+
+                if (HWRev != "D" && HWRev != "B")
+                {
+                    /* 
+                     * TI EVM Board 
+                     */
+                    return FW_LEVEL.LEVEL_0;
+                }
+                else if (curVer >= (2 << 16 | 3 << 8 | 2))  // >= 2.3.2
+                {
+                    /*
+                     * New Applications:
+                     * 1. Enable Glitch Filter
+                     */
+                    return FW_LEVEL.LEVEL_4;
+                }
+                else if (curVer >= (2 << 16 | 1 << 8 | 2))  // >= 2.1.2
+                {
+                    /*
+                     * New Applications:
+                     */
+                    return FW_LEVEL.LEVEL_3;
+                }
+                else if (curVer >= (2 << 16 | 1 << 8 | 0))  // >= 2.1.0.X
+                {
+                    /*
+                     * New Applications:
+                     * 1. Manufacture Serial Number Read
+                     * 2. Activation Key Read/Write
+                     * 3. Auto PGA Gain in Lamp On/Off
+                     * 4. Check BLE Board Exist
+                     * 5. Restore Calibration Coefficients
+                     * 6. Lamp Usage Read/Write
+                     */
+                    return FW_LEVEL.LEVEL_2;
+                }
+                else if (curVer <= (2 << 16 | 0 << 8 | 22))  // <= 2.0.22
+                {
+                    /*
+                     * New Applications:
+                     * 1. Model Name Read/Write
+                     * 2. Fixed PGA Gain Control
+                     * 3. Flash UUID Read
+                     */
+                    return FW_LEVEL.LEVEL_1;
+                }
+            }
+            return FW_LEVEL.LEVEL_0;
+        }
+        private void ClearScanPlotsUI()
+        {
+            if(scan_Params!=null)
+            {
+                scan_Params.SeriesCollection.Clear();
+            }          
+            Scan.Intensity.Clear();
+            Scan.ReferenceIntensity.Clear();
+            Scan.Reflectance.Clear();
+            Scan.Absorbance.Clear();
+            Label_ScanStatus.Text = String.Empty;
+            Label_CurrentConfig.Text = String.Empty;
+            Label_EstimatedScanTime.Text = String.Empty;
+        }
+        private void OpenColseScanConfigButton(String mode)
+        {
+            switch(mode)
+            {
+                case nameof(ScanConfigMode.INITIAL):
+                    Button_CfgNew.Enabled = true;
+                    Button_CfgEdit.Enabled = true;
+                    Button_CfgDelete.Enabled = true;
+                    Button_CfgSave.Enabled = false;
+                    Button_CfgCancel.Enabled = false;
+                    break;
+                case nameof(ScanConfigMode.NEW):
+                    Button_CfgEdit.Enabled = false;
+                    Button_CfgDelete.Enabled = false;
+                    Button_CfgSave.Enabled = true;
+                    Button_CfgCancel.Enabled = true;
+                    break;
+                case nameof(ScanConfigMode.EDIT):
+                    Button_CfgNew.Enabled = false;
+                    Button_CfgDelete.Enabled = false;
+                    Button_CfgSave.Enabled = true;
+                    Button_CfgCancel.Enabled = true;
+                    break;
+                case nameof(ScanConfigMode.DELETE):
+                    Button_CfgNew.Enabled = false;
+                    Button_CfgEdit.Enabled = false;
+                    Button_CfgSave.Enabled = false;
+                    Button_CfgCancel.Enabled = false;
+                    break;
+                case nameof(ScanConfigMode.SAVE):
+                    Button_CfgNew.Enabled = false;
+                    Button_CfgEdit.Enabled = false;
+                    Button_CfgDelete.Enabled = false;
+                    Button_CfgCancel.Enabled = false;
+                    break;
+                case nameof(ScanConfigMode.CANCEL):
+                    Button_CfgNew.Enabled = true;
+                    Button_CfgEdit.Enabled = true;
+                    Button_CfgDelete.Enabled = true;
+                    Button_CfgSave.Enabled = false;
+                    Button_CfgCancel.Enabled = false;
+                    break;
+            }
+        }
+        private void SaveSettings()
+        {
+            /*
+             * <?xml version="1.0" encoding="utf-8"?>
+             * <Settings>
+             *   <ScanDir>     Scan_Dir     </ScanDir>
+             *   <DisplayDir>  Display_Dir  </DisplayDir>
+             *   <FileFormats> ScanFile_Formats </FileFormats>
+             * </Settings>
+             */
+
+            if (Scan_Dir == String.Empty && Display_Dir == String.Empty && ScanFile_Formats == 0)
+                return;
+
+            XmlDocument XmlDoc = new XmlDocument();
+            XmlDeclaration XmlDec = XmlDoc.CreateXmlDeclaration("1.0", "utf-8", "");
+            XmlDoc.PrependChild(XmlDec);
+
+            // Create root element
+            XmlElement Root = XmlDoc.CreateElement("Settings");
+            XmlDoc.AppendChild(Root);
+
+            // Create scan dir node under root element
+            XmlElement ScanDir = XmlDoc.CreateElement("ScanDir");
+            ScanDir.AppendChild(XmlDoc.CreateTextNode(Scan_Dir));
+            Root.AppendChild(ScanDir);
+
+            // Create display dir node under root element
+            XmlElement DisplayDir = XmlDoc.CreateElement("DisplayDir");
+            DisplayDir.AppendChild(XmlDoc.CreateTextNode(Display_Dir));
+            Root.AppendChild(DisplayDir);
+
+            // Create file format node under root element
+            XmlElement FileFormats = XmlDoc.CreateElement("FileFormats");
+            FileFormats.AppendChild(XmlDoc.CreateTextNode(ScanFile_Formats.ToString()));
+            Root.AppendChild(FileFormats);
+
+            // Save XML file
+            String FilePath = Path.Combine(ConfigDir, "ScanPageSettings.xml");
+            String dirpath = Path.GetDirectoryName(FilePath);
+            if (!Directory.Exists(dirpath))
+            {
+                Directory.CreateDirectory(dirpath);
+            }              
+            XmlDoc.Save(FilePath);
+        }
+
+        private void button_manage_Click(object sender, EventArgs e)
+        {
+            ActiveKeyManageForm window = new ActiveKeyManageForm { Owner = this };
+            window.ShowDialog();
+            if (Device.GetActivationResult() == 1)
+            {
+                label_ActivateStatus.Text = "Activated!";
+                GUI_Handler((int)MainWindow.GUI_State.KEY_ACTIVATE);
+            }
+            else
+            {
+                label_ActivateStatus.Text = "Not activated!";
+                GUI_Handler((int)MainWindow.GUI_State.KEY_NOT_ACTIVATE);
+            }
+        }
+
+        private void Text_ContScan_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(Text_ContScan.Text, out int repeat) && repeat > 1)
+            {
+                CheckBox_SaveOneCSV.Enabled = true;
+            }
+            else
+            {
+                CheckBox_SaveOneCSV.Enabled = false;
+                CheckBox_SaveOneCSV.Checked = false;
+                OneScanFileName = String.Empty;
+            }
+        }
+
+        private void Button_ClearAllErrors_Click(object sender, EventArgs e)
+        {
+            if (!Device.IsConnected())
+                return;
+
+            if (Device.ResetErrorStatus() == 0)
+                RefreshErrorStatus();
+        }
+
+        private void button_tooltip_Click(object sender, EventArgs e)
+        {
+            if(button_tooltip.Text == "Data Tooltip Disabled")
+            {
+                button_tooltip.Text = "Data Tooltip Enabled";
+                button_tooltip.BackColor = System.Drawing.Color.LightSkyBlue;
+                MyChart.DataTooltip = new DefaultTooltip();
+                MyChart.Hoverable = true;
+            }
+            else
+            {
+                button_tooltip.Text = "Data Tooltip Disabled";
+                button_tooltip.BackColor = System.Drawing.Color.LightGray;
+                MyChart.DataTooltip = null;
+                MyChart.Hoverable = false;
+            }
+        }
+
+        private void button_zoom_Click(object sender, EventArgs e)
+        {
+            if (button_zoom.Text == "Zoom and Pan Disabled")
+            {
+                button_zoom.Text = "Zoom and Pan Enabled";
+                button_zoom.BackColor = System.Drawing.Color.LightSkyBlue;
+                MyChart.Zoom = ZoomingOptions.Xy;
+            }
+            else
+            {
+                button_zoom.Text = "Zoom and Pan Disabled";
+                button_zoom.BackColor = System.Drawing.Color.LightGray;
+                MyChart.Zoom = ZoomingOptions.None;
+                MyChart.AxisX.Clear();
+                MyChart.AxisY.Clear();
+                MyChart.AxisX.Add(new Axis { Title = "Wavelength (nm)", MinValue = 900, MaxValue = 1700 });
             }
         }
     }

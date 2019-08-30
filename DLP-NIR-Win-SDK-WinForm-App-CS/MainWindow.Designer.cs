@@ -36,6 +36,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage_Scan = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.button_tooltip = new System.Windows.Forms.Button();
+            this.button_zoom = new System.Windows.Forms.Button();
+            this.Check_Overlay = new System.Windows.Forms.CheckBox();
             this.Button_Scan = new System.Windows.Forms.Button();
             this.RadioButton_Reference = new System.Windows.Forms.RadioButton();
             this.RadioButton_Intensity = new System.Windows.Forms.RadioButton();
@@ -47,11 +50,26 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.MyChart = new LiveCharts.WinForms.CartesianChart();
             this.tabScanPage = new System.Windows.Forms.TabControl();
             this.tabPage_ScanSetting = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.CheckBox_GlitchFilter = new System.Windows.Forms.CheckBox();
+            this.Button_ClearAllErrors = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.Label_ContScan = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.Text_ContDelay = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.Text_ContScan = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.CheckBox_AutoGain = new System.Windows.Forms.CheckBox();
             this.ComboBox_PGAGain = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.GroupBox_SaveScan = new System.Windows.Forms.GroupBox();
+            this.CheckBox_SaveRJDX = new System.Windows.Forms.CheckBox();
+            this.CheckBox_SaveAJDX = new System.Windows.Forms.CheckBox();
+            this.CheckBox_SaveIJDX = new System.Windows.Forms.CheckBox();
+            this.CheckBox_SaveOneCSV = new System.Windows.Forms.CheckBox();
+            this.TextBox_FileNamePrefix = new System.Windows.Forms.TextBox();
+            this.CheckBox_FileNamePrefix = new System.Windows.Forms.CheckBox();
             this.TextBox_SaveDirPath = new System.Windows.Forms.TextBox();
             this.Button_SaveDirChange = new System.Windows.Forms.Button();
             this.CheckBox_SaveRCSV = new System.Windows.Forms.CheckBox();
@@ -73,8 +91,13 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.RadioButton_RefPre = new System.Windows.Forms.RadioButton();
             this.RadioButton_RefNew = new System.Windows.Forms.RadioButton();
             this.tabPage_ScanConfig = new System.Windows.Forms.TabPage();
+            this.Button_MoveCfgT2L = new System.Windows.Forms.Button();
+            this.Button_MoveCfgL2T = new System.Windows.Forms.Button();
+            this.Button_CopyCfgT2L = new System.Windows.Forms.Button();
+            this.Button_CopyCfgL2T = new System.Windows.Forms.Button();
+            this.ListBox_LocalCfgs = new System.Windows.Forms.ListBox();
             this.label_ActiveConfig = new System.Windows.Forms.Label();
-            this.ListBox_DeviceScanConfig = new System.Windows.Forms.ListBox();
+            this.ListBox_TargetCfgs = new System.Windows.Forms.ListBox();
             this.Button_SetActive = new System.Windows.Forms.Button();
             this.label94 = new System.Windows.Forms.Label();
             this.Button_CfgCancel = new System.Windows.Forms.Button();
@@ -199,6 +222,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.button_DeviceResetSys = new System.Windows.Forms.Button();
             this.label118 = new System.Windows.Forms.Label();
             this.groupBox_ActivationKey = new System.Windows.Forms.GroupBox();
+            this.button_manage = new System.Windows.Forms.Button();
             this.button_KeyClear = new System.Windows.Forms.Button();
             this.label_ActivateStatus = new System.Windows.Forms.Label();
             this.Status = new System.Windows.Forms.Label();
@@ -210,7 +234,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.label112 = new System.Windows.Forms.Label();
             this.label_DevInfoUUID = new System.Windows.Forms.Label();
             this.label114 = new System.Windows.Forms.Label();
-            this.label_DevInfoManfacSerNUm = new System.Windows.Forms.Label();
+            this.label_DevInfoManfacSerNum = new System.Windows.Forms.Label();
             this.label116 = new System.Windows.Forms.Label();
             this.label_DevInfoDevSerNum = new System.Windows.Forms.Label();
             this.label104 = new System.Windows.Forms.Label();
@@ -311,6 +335,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.splitContainer1.SuspendLayout();
             this.tabScanPage.SuspendLayout();
             this.tabPage_ScanSetting.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.GroupBox_SaveScan.SuspendLayout();
             this.GroupBox_ScanAvg.SuspendLayout();
@@ -350,7 +376,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             this.toolStripStatus_DeviceStatus.Image = ((System.Drawing.Image)(resources.GetObject("toolStripStatus_DeviceStatus.Image")));
             this.toolStripStatus_DeviceStatus.Name = "toolStripStatus_DeviceStatus";
-            this.toolStripStatus_DeviceStatus.Size = new System.Drawing.Size(131, 17);
+            this.toolStripStatus_DeviceStatus.Size = new System.Drawing.Size(130, 17);
             this.toolStripStatus_DeviceStatus.Text = "Device Disconnect!";
             // 
             // tabControl1
@@ -386,6 +412,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.button_tooltip);
+            this.splitContainer1.Panel1.Controls.Add(this.button_zoom);
+            this.splitContainer1.Panel1.Controls.Add(this.Check_Overlay);
             this.splitContainer1.Panel1.Controls.Add(this.Button_Scan);
             this.splitContainer1.Panel1.Controls.Add(this.RadioButton_Reference);
             this.splitContainer1.Panel1.Controls.Add(this.RadioButton_Intensity);
@@ -403,8 +432,49 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.splitContainer1.SplitterDistance = 845;
             this.splitContainer1.TabIndex = 0;
             // 
+            // button_tooltip
+            // 
+            this.button_tooltip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_tooltip.BackColor = System.Drawing.Color.LightGray;
+            this.button_tooltip.FlatAppearance.BorderSize = 0;
+            this.button_tooltip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_tooltip.Location = new System.Drawing.Point(654, 79);
+            this.button_tooltip.Name = "button_tooltip";
+            this.button_tooltip.Size = new System.Drawing.Size(152, 23);
+            this.button_tooltip.TabIndex = 11;
+            this.button_tooltip.Text = "Data Tooltip Disabled";
+            this.button_tooltip.UseVisualStyleBackColor = false;
+            this.button_tooltip.Click += new System.EventHandler(this.button_tooltip_Click);
+            // 
+            // button_zoom
+            // 
+            this.button_zoom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_zoom.BackColor = System.Drawing.Color.LightGray;
+            this.button_zoom.FlatAppearance.BorderSize = 0;
+            this.button_zoom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_zoom.Location = new System.Drawing.Point(654, 50);
+            this.button_zoom.Name = "button_zoom";
+            this.button_zoom.Size = new System.Drawing.Size(152, 23);
+            this.button_zoom.TabIndex = 10;
+            this.button_zoom.Text = "Zoom and Pan Disabled";
+            this.button_zoom.UseVisualStyleBackColor = false;
+            this.button_zoom.Click += new System.EventHandler(this.button_zoom_Click);
+            // 
+            // Check_Overlay
+            // 
+            this.Check_Overlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Check_Overlay.AutoSize = true;
+            this.Check_Overlay.Location = new System.Drawing.Point(472, 574);
+            this.Check_Overlay.Name = "Check_Overlay";
+            this.Check_Overlay.Size = new System.Drawing.Size(66, 18);
+            this.Check_Overlay.TabIndex = 9;
+            this.Check_Overlay.Text = "Overlay";
+            this.Check_Overlay.UseVisualStyleBackColor = true;
+            this.Check_Overlay.CheckedChanged += new System.EventHandler(this.Check_Overlay_CheckedChanged);
+            // 
             // Button_Scan
             // 
+            this.Button_Scan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Button_Scan.Location = new System.Drawing.Point(674, 569);
             this.Button_Scan.Name = "Button_Scan";
             this.Button_Scan.Size = new System.Drawing.Size(132, 23);
@@ -415,8 +485,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // RadioButton_Reference
             // 
+            this.RadioButton_Reference.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.RadioButton_Reference.AutoSize = true;
-            this.RadioButton_Reference.Location = new System.Drawing.Point(524, 573);
+            this.RadioButton_Reference.Location = new System.Drawing.Point(359, 574);
             this.RadioButton_Reference.Name = "RadioButton_Reference";
             this.RadioButton_Reference.Size = new System.Drawing.Size(80, 18);
             this.RadioButton_Reference.TabIndex = 7;
@@ -427,8 +498,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // RadioButton_Intensity
             // 
+            this.RadioButton_Intensity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.RadioButton_Intensity.AutoSize = true;
-            this.RadioButton_Intensity.Location = new System.Drawing.Point(356, 573);
+            this.RadioButton_Intensity.Location = new System.Drawing.Point(256, 573);
             this.RadioButton_Intensity.Name = "RadioButton_Intensity";
             this.RadioButton_Intensity.Size = new System.Drawing.Size(73, 18);
             this.RadioButton_Intensity.TabIndex = 6;
@@ -439,8 +511,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // RadioButton_Absorbance
             // 
+            this.RadioButton_Absorbance.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.RadioButton_Absorbance.AutoSize = true;
-            this.RadioButton_Absorbance.Location = new System.Drawing.Point(189, 573);
+            this.RadioButton_Absorbance.Location = new System.Drawing.Point(138, 573);
             this.RadioButton_Absorbance.Name = "RadioButton_Absorbance";
             this.RadioButton_Absorbance.Size = new System.Drawing.Size(89, 18);
             this.RadioButton_Absorbance.TabIndex = 5;
@@ -451,6 +524,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // RadioButton_Reflectance
             // 
+            this.RadioButton_Reflectance.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.RadioButton_Reflectance.AutoSize = true;
             this.RadioButton_Reflectance.Location = new System.Drawing.Point(23, 573);
             this.RadioButton_Reflectance.Name = "RadioButton_Reflectance";
@@ -484,18 +558,21 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // MyChart
             // 
-            this.MyChart.Location = new System.Drawing.Point(23, 55);
+            this.MyChart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.MyChart.Location = new System.Drawing.Point(23, 68);
             this.MyChart.Name = "MyChart";
-            this.MyChart.Size = new System.Drawing.Size(792, 498);
+            this.MyChart.Size = new System.Drawing.Size(792, 485);
             this.MyChart.TabIndex = 0;
             this.MyChart.Text = "cartesianChart1";
             // 
             // tabScanPage
             // 
+            this.tabScanPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tabScanPage.Controls.Add(this.tabPage_ScanSetting);
             this.tabScanPage.Controls.Add(this.tabPage_ScanConfig);
             this.tabScanPage.Controls.Add(this.tabPage_SaveScans);
-            this.tabScanPage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabScanPage.Location = new System.Drawing.Point(0, 0);
             this.tabScanPage.Name = "tabScanPage";
             this.tabScanPage.SelectedIndex = 0;
@@ -505,6 +582,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // tabPage_ScanSetting
             // 
+            this.tabPage_ScanSetting.Controls.Add(this.groupBox3);
+            this.tabPage_ScanSetting.Controls.Add(this.Button_ClearAllErrors);
+            this.tabPage_ScanSetting.Controls.Add(this.groupBox2);
             this.tabPage_ScanSetting.Controls.Add(this.groupBox1);
             this.tabPage_ScanSetting.Controls.Add(this.GroupBox_SaveScan);
             this.tabPage_ScanSetting.Controls.Add(this.GroupBox_ScanAvg);
@@ -517,6 +597,98 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.tabPage_ScanSetting.TabIndex = 0;
             this.tabPage_ScanSetting.Text = "Scan Setting";
             this.tabPage_ScanSetting.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.CheckBox_GlitchFilter);
+            this.groupBox3.Location = new System.Drawing.Point(3, 497);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(381, 68);
+            this.groupBox3.TabIndex = 9;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Other Options";
+            // 
+            // CheckBox_GlitchFilter
+            // 
+            this.CheckBox_GlitchFilter.AutoSize = true;
+            this.CheckBox_GlitchFilter.Location = new System.Drawing.Point(20, 21);
+            this.CheckBox_GlitchFilter.Name = "CheckBox_GlitchFilter";
+            this.CheckBox_GlitchFilter.Size = new System.Drawing.Size(131, 18);
+            this.CheckBox_GlitchFilter.TabIndex = 0;
+            this.CheckBox_GlitchFilter.Text = "Enable Glitch Filter";
+            this.CheckBox_GlitchFilter.UseVisualStyleBackColor = true;
+            // 
+            // Button_ClearAllErrors
+            // 
+            this.Button_ClearAllErrors.Location = new System.Drawing.Point(271, 571);
+            this.Button_ClearAllErrors.Name = "Button_ClearAllErrors";
+            this.Button_ClearAllErrors.Size = new System.Drawing.Size(116, 23);
+            this.Button_ClearAllErrors.TabIndex = 4;
+            this.Button_ClearAllErrors.Text = "Clear All Errors";
+            this.Button_ClearAllErrors.UseVisualStyleBackColor = true;
+            this.Button_ClearAllErrors.Click += new System.EventHandler(this.Button_ClearAllErrors_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.Label_ContScan);
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Controls.Add(this.Text_ContDelay);
+            this.groupBox2.Controls.Add(this.label2);
+            this.groupBox2.Controls.Add(this.Text_ContScan);
+            this.groupBox2.Location = new System.Drawing.Point(3, 276);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(381, 59);
+            this.groupBox2.TabIndex = 8;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Continuous Scan Select";
+            // 
+            // Label_ContScan
+            // 
+            this.Label_ContScan.AutoSize = true;
+            this.Label_ContScan.Location = new System.Drawing.Point(151, 30);
+            this.Label_ContScan.Name = "Label_ContScan";
+            this.Label_ContScan.Size = new System.Drawing.Size(48, 14);
+            this.Label_ContScan.TabIndex = 14;
+            this.Label_ContScan.Text = "label10";
+            // 
+            // label3
+            // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(202, 30);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(86, 14);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "Scan Delay (s):";
+            // 
+            // Text_ContDelay
+            // 
+            this.Text_ContDelay.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.Text_ContDelay.Location = new System.Drawing.Point(294, 27);
+            this.Text_ContDelay.Name = "Text_ContDelay";
+            this.Text_ContDelay.Size = new System.Drawing.Size(71, 22);
+            this.Text_ContDelay.TabIndex = 13;
+            this.Text_ContDelay.Text = "0";
+            // 
+            // label2
+            // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(17, 30);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(65, 14);
+            this.label2.TabIndex = 10;
+            this.label2.Text = "Cont. Scan:";
+            // 
+            // Text_ContScan
+            // 
+            this.Text_ContScan.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.Text_ContScan.Location = new System.Drawing.Point(88, 27);
+            this.Text_ContScan.Name = "Text_ContScan";
+            this.Text_ContScan.Size = new System.Drawing.Size(57, 22);
+            this.Text_ContScan.TabIndex = 11;
+            this.Text_ContScan.Text = "1";
+            this.Text_ContScan.TextChanged += new System.EventHandler(this.Text_ContScan_TextChanged);
             // 
             // groupBox1
             // 
@@ -568,6 +740,12 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // GroupBox_SaveScan
             // 
+            this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveRJDX);
+            this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveAJDX);
+            this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveIJDX);
+            this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveOneCSV);
+            this.GroupBox_SaveScan.Controls.Add(this.TextBox_FileNamePrefix);
+            this.GroupBox_SaveScan.Controls.Add(this.CheckBox_FileNamePrefix);
             this.GroupBox_SaveScan.Controls.Add(this.TextBox_SaveDirPath);
             this.GroupBox_SaveScan.Controls.Add(this.Button_SaveDirChange);
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveRCSV);
@@ -575,12 +753,69 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveICSV);
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveDAT);
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveCombCSV);
-            this.GroupBox_SaveScan.Location = new System.Drawing.Point(3, 276);
+            this.GroupBox_SaveScan.Location = new System.Drawing.Point(3, 341);
             this.GroupBox_SaveScan.Name = "GroupBox_SaveScan";
-            this.GroupBox_SaveScan.Size = new System.Drawing.Size(382, 126);
+            this.GroupBox_SaveScan.Size = new System.Drawing.Size(381, 150);
             this.GroupBox_SaveScan.TabIndex = 6;
             this.GroupBox_SaveScan.TabStop = false;
             this.GroupBox_SaveScan.Text = "Save Scan As";
+            // 
+            // CheckBox_SaveRJDX
+            // 
+            this.CheckBox_SaveRJDX.AutoSize = true;
+            this.CheckBox_SaveRJDX.Location = new System.Drawing.Point(250, 65);
+            this.CheckBox_SaveRJDX.Name = "CheckBox_SaveRJDX";
+            this.CheckBox_SaveRJDX.Size = new System.Drawing.Size(107, 18);
+            this.CheckBox_SaveRJDX.TabIndex = 15;
+            this.CheckBox_SaveRJDX.Text = "-reflectance.jdx";
+            this.CheckBox_SaveRJDX.UseVisualStyleBackColor = true;
+            // 
+            // CheckBox_SaveAJDX
+            // 
+            this.CheckBox_SaveAJDX.AutoSize = true;
+            this.CheckBox_SaveAJDX.Location = new System.Drawing.Point(250, 43);
+            this.CheckBox_SaveAJDX.Name = "CheckBox_SaveAJDX";
+            this.CheckBox_SaveAJDX.Size = new System.Drawing.Size(112, 18);
+            this.CheckBox_SaveAJDX.TabIndex = 14;
+            this.CheckBox_SaveAJDX.Text = "-absorbance.jdx";
+            this.CheckBox_SaveAJDX.UseVisualStyleBackColor = true;
+            // 
+            // CheckBox_SaveIJDX
+            // 
+            this.CheckBox_SaveIJDX.AutoSize = true;
+            this.CheckBox_SaveIJDX.Location = new System.Drawing.Point(250, 21);
+            this.CheckBox_SaveIJDX.Name = "CheckBox_SaveIJDX";
+            this.CheckBox_SaveIJDX.Size = new System.Drawing.Size(95, 18);
+            this.CheckBox_SaveIJDX.TabIndex = 13;
+            this.CheckBox_SaveIJDX.Text = "-intensity.jdx";
+            this.CheckBox_SaveIJDX.UseVisualStyleBackColor = true;
+            // 
+            // CheckBox_SaveOneCSV
+            // 
+            this.CheckBox_SaveOneCSV.AutoSize = true;
+            this.CheckBox_SaveOneCSV.Location = new System.Drawing.Point(20, 67);
+            this.CheckBox_SaveOneCSV.Name = "CheckBox_SaveOneCSV";
+            this.CheckBox_SaveOneCSV.Size = new System.Drawing.Size(70, 18);
+            this.CheckBox_SaveOneCSV.TabIndex = 12;
+            this.CheckBox_SaveOneCSV.Text = "-one.csv";
+            this.CheckBox_SaveOneCSV.UseVisualStyleBackColor = true;
+            // 
+            // TextBox_FileNamePrefix
+            // 
+            this.TextBox_FileNamePrefix.Location = new System.Drawing.Point(139, 117);
+            this.TextBox_FileNamePrefix.Name = "TextBox_FileNamePrefix";
+            this.TextBox_FileNamePrefix.Size = new System.Drawing.Size(231, 22);
+            this.TextBox_FileNamePrefix.TabIndex = 11;
+            // 
+            // CheckBox_FileNamePrefix
+            // 
+            this.CheckBox_FileNamePrefix.AutoSize = true;
+            this.CheckBox_FileNamePrefix.Location = new System.Drawing.Point(20, 121);
+            this.CheckBox_FileNamePrefix.Name = "CheckBox_FileNamePrefix";
+            this.CheckBox_FileNamePrefix.Size = new System.Drawing.Size(113, 18);
+            this.CheckBox_FileNamePrefix.TabIndex = 10;
+            this.CheckBox_FileNamePrefix.Text = "File Name Prefix";
+            this.CheckBox_FileNamePrefix.UseVisualStyleBackColor = true;
             // 
             // TextBox_SaveDirPath
             // 
@@ -797,8 +1032,13 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // tabPage_ScanConfig
             // 
+            this.tabPage_ScanConfig.Controls.Add(this.Button_MoveCfgT2L);
+            this.tabPage_ScanConfig.Controls.Add(this.Button_MoveCfgL2T);
+            this.tabPage_ScanConfig.Controls.Add(this.Button_CopyCfgT2L);
+            this.tabPage_ScanConfig.Controls.Add(this.Button_CopyCfgL2T);
+            this.tabPage_ScanConfig.Controls.Add(this.ListBox_LocalCfgs);
             this.tabPage_ScanConfig.Controls.Add(this.label_ActiveConfig);
-            this.tabPage_ScanConfig.Controls.Add(this.ListBox_DeviceScanConfig);
+            this.tabPage_ScanConfig.Controls.Add(this.ListBox_TargetCfgs);
             this.tabPage_ScanConfig.Controls.Add(this.Button_SetActive);
             this.tabPage_ScanConfig.Controls.Add(this.label94);
             this.tabPage_ScanConfig.Controls.Add(this.Button_CfgCancel);
@@ -810,10 +1050,61 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.tabPage_ScanConfig.Location = new System.Drawing.Point(4, 23);
             this.tabPage_ScanConfig.Name = "tabPage_ScanConfig";
             this.tabPage_ScanConfig.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_ScanConfig.Size = new System.Drawing.Size(390, 582);
+            this.tabPage_ScanConfig.Size = new System.Drawing.Size(393, 600);
             this.tabPage_ScanConfig.TabIndex = 1;
             this.tabPage_ScanConfig.Text = "Scan Config";
             this.tabPage_ScanConfig.UseVisualStyleBackColor = true;
+            // 
+            // Button_MoveCfgT2L
+            // 
+            this.Button_MoveCfgT2L.Location = new System.Drawing.Point(173, 174);
+            this.Button_MoveCfgT2L.Name = "Button_MoveCfgT2L";
+            this.Button_MoveCfgT2L.Size = new System.Drawing.Size(44, 37);
+            this.Button_MoveCfgT2L.TabIndex = 15;
+            this.Button_MoveCfgT2L.Text = "Move ◀◀";
+            this.Button_MoveCfgT2L.UseVisualStyleBackColor = true;
+            this.Button_MoveCfgT2L.Click += new System.EventHandler(this.Button_MoveCfgT2L_Click);
+            // 
+            // Button_MoveCfgL2T
+            // 
+            this.Button_MoveCfgL2T.Location = new System.Drawing.Point(173, 130);
+            this.Button_MoveCfgL2T.Name = "Button_MoveCfgL2T";
+            this.Button_MoveCfgL2T.Size = new System.Drawing.Size(44, 38);
+            this.Button_MoveCfgL2T.TabIndex = 14;
+            this.Button_MoveCfgL2T.Text = "Move▶▶";
+            this.Button_MoveCfgL2T.UseVisualStyleBackColor = true;
+            this.Button_MoveCfgL2T.Click += new System.EventHandler(this.Button_MoveCfgL2T_Click);
+            // 
+            // Button_CopyCfgT2L
+            // 
+            this.Button_CopyCfgT2L.Location = new System.Drawing.Point(173, 86);
+            this.Button_CopyCfgT2L.Name = "Button_CopyCfgT2L";
+            this.Button_CopyCfgT2L.Size = new System.Drawing.Size(44, 38);
+            this.Button_CopyCfgT2L.TabIndex = 13;
+            this.Button_CopyCfgT2L.Text = "Copy◀◀";
+            this.Button_CopyCfgT2L.UseVisualStyleBackColor = true;
+            this.Button_CopyCfgT2L.Click += new System.EventHandler(this.Button_CopyCfgT2L_Click);
+            // 
+            // Button_CopyCfgL2T
+            // 
+            this.Button_CopyCfgL2T.Location = new System.Drawing.Point(173, 40);
+            this.Button_CopyCfgL2T.Name = "Button_CopyCfgL2T";
+            this.Button_CopyCfgL2T.Size = new System.Drawing.Size(44, 40);
+            this.Button_CopyCfgL2T.TabIndex = 12;
+            this.Button_CopyCfgL2T.Text = "Copy▶▶";
+            this.Button_CopyCfgL2T.UseVisualStyleBackColor = true;
+            this.Button_CopyCfgL2T.Click += new System.EventHandler(this.Button_CopyCfgL2T_Click);
+            // 
+            // ListBox_LocalCfgs
+            // 
+            this.ListBox_LocalCfgs.FormattingEnabled = true;
+            this.ListBox_LocalCfgs.ItemHeight = 14;
+            this.ListBox_LocalCfgs.Location = new System.Drawing.Point(6, 40);
+            this.ListBox_LocalCfgs.Name = "ListBox_LocalCfgs";
+            this.ListBox_LocalCfgs.Size = new System.Drawing.Size(161, 186);
+            this.ListBox_LocalCfgs.TabIndex = 11;
+            this.ListBox_LocalCfgs.SelectedIndexChanged += new System.EventHandler(this.ListBox_LocalCfgs_SelectedIndexChanged);
+            this.ListBox_LocalCfgs.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_LocalCfgs_MouseDoubleClick);
             // 
             // label_ActiveConfig
             // 
@@ -824,22 +1115,22 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.label_ActiveConfig.TabIndex = 10;
             this.label_ActiveConfig.Text = "Column";
             // 
-            // ListBox_DeviceScanConfig
+            // ListBox_TargetCfgs
             // 
-            this.ListBox_DeviceScanConfig.FormattingEnabled = true;
-            this.ListBox_DeviceScanConfig.ItemHeight = 14;
-            this.ListBox_DeviceScanConfig.Location = new System.Drawing.Point(10, 40);
-            this.ListBox_DeviceScanConfig.Name = "ListBox_DeviceScanConfig";
-            this.ListBox_DeviceScanConfig.Size = new System.Drawing.Size(374, 186);
-            this.ListBox_DeviceScanConfig.TabIndex = 9;
-            this.ListBox_DeviceScanConfig.SelectedIndexChanged += new System.EventHandler(this.ListBox_DeviceScanConfig_SelectedIndexChanged);
-            this.ListBox_DeviceScanConfig.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_DeviceScanConfig_MouseDoubleClick);
+            this.ListBox_TargetCfgs.FormattingEnabled = true;
+            this.ListBox_TargetCfgs.ItemHeight = 14;
+            this.ListBox_TargetCfgs.Location = new System.Drawing.Point(223, 40);
+            this.ListBox_TargetCfgs.Name = "ListBox_TargetCfgs";
+            this.ListBox_TargetCfgs.Size = new System.Drawing.Size(161, 186);
+            this.ListBox_TargetCfgs.TabIndex = 9;
+            this.ListBox_TargetCfgs.SelectedIndexChanged += new System.EventHandler(this.ListBox_DeviceScanConfig_SelectedIndexChanged);
+            this.ListBox_TargetCfgs.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_DeviceScanConfig_MouseDoubleClick);
             // 
             // Button_SetActive
             // 
-            this.Button_SetActive.Location = new System.Drawing.Point(203, 232);
+            this.Button_SetActive.Location = new System.Drawing.Point(223, 232);
             this.Button_SetActive.Name = "Button_SetActive";
-            this.Button_SetActive.Size = new System.Drawing.Size(181, 23);
+            this.Button_SetActive.Size = new System.Drawing.Size(161, 23);
             this.Button_SetActive.TabIndex = 8;
             this.Button_SetActive.Text = "Set Device Boot-Up Config";
             this.Button_SetActive.UseVisualStyleBackColor = true;
@@ -1425,7 +1716,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.tabPage_SaveScans.Controls.Add(this.panel_Saved_Scan);
             this.tabPage_SaveScans.Location = new System.Drawing.Point(4, 23);
             this.tabPage_SaveScans.Name = "tabPage_SaveScans";
-            this.tabPage_SaveScans.Size = new System.Drawing.Size(390, 582);
+            this.tabPage_SaveScans.Size = new System.Drawing.Size(393, 600);
             this.tabPage_SaveScans.TabIndex = 2;
             this.tabPage_SaveScans.Text = "Saved Scans";
             this.tabPage_SaveScans.UseVisualStyleBackColor = true;
@@ -1919,7 +2210,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.tabPage_Utility.Location = new System.Drawing.Point(4, 23);
             this.tabPage_Utility.Name = "tabPage_Utility";
             this.tabPage_Utility.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_Utility.Size = new System.Drawing.Size(1256, 635);
+            this.tabPage_Utility.Size = new System.Drawing.Size(1256, 633);
             this.tabPage_Utility.TabIndex = 1;
             this.tabPage_Utility.Text = "Utility";
             this.tabPage_Utility.UseVisualStyleBackColor = true;
@@ -2019,6 +2310,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // groupBox_ActivationKey
             // 
+            this.groupBox_ActivationKey.Controls.Add(this.button_manage);
             this.groupBox_ActivationKey.Controls.Add(this.button_KeyClear);
             this.groupBox_ActivationKey.Controls.Add(this.label_ActivateStatus);
             this.groupBox_ActivationKey.Controls.Add(this.Status);
@@ -2031,6 +2323,16 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.groupBox_ActivationKey.TabIndex = 13;
             this.groupBox_ActivationKey.TabStop = false;
             this.groupBox_ActivationKey.Text = "Activation Key";
+            // 
+            // button_manage
+            // 
+            this.button_manage.Location = new System.Drawing.Point(276, 48);
+            this.button_manage.Name = "button_manage";
+            this.button_manage.Size = new System.Drawing.Size(66, 23);
+            this.button_manage.TabIndex = 6;
+            this.button_manage.Text = "Manage";
+            this.button_manage.UseVisualStyleBackColor = true;
+            this.button_manage.Click += new System.EventHandler(this.button_manage_Click);
             // 
             // button_KeyClear
             // 
@@ -2092,7 +2394,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.groupBox_DevInfo.Controls.Add(this.label112);
             this.groupBox_DevInfo.Controls.Add(this.label_DevInfoUUID);
             this.groupBox_DevInfo.Controls.Add(this.label114);
-            this.groupBox_DevInfo.Controls.Add(this.label_DevInfoManfacSerNUm);
+            this.groupBox_DevInfo.Controls.Add(this.label_DevInfoManfacSerNum);
             this.groupBox_DevInfo.Controls.Add(this.label116);
             this.groupBox_DevInfo.Controls.Add(this.label_DevInfoDevSerNum);
             this.groupBox_DevInfo.Controls.Add(this.label104);
@@ -2149,12 +2451,12 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.label114.TabIndex = 18;
             this.label114.Text = "Device UUID";
             // 
-            // label_DevInfoManfacSerNUm
+            // label_DevInfoManfacSerNum
             // 
-            this.label_DevInfoManfacSerNUm.Location = new System.Drawing.Point(200, 203);
-            this.label_DevInfoManfacSerNUm.Name = "label_DevInfoManfacSerNUm";
-            this.label_DevInfoManfacSerNUm.Size = new System.Drawing.Size(127, 14);
-            this.label_DevInfoManfacSerNUm.TabIndex = 17;
+            this.label_DevInfoManfacSerNum.Location = new System.Drawing.Point(200, 203);
+            this.label_DevInfoManfacSerNum.Name = "label_DevInfoManfacSerNum";
+            this.label_DevInfoManfacSerNum.Size = new System.Drawing.Size(142, 14);
+            this.label_DevInfoManfacSerNum.TabIndex = 17;
             // 
             // label116
             // 
@@ -2939,7 +3241,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.tabPage_about.Controls.Add(this.groupBox_About);
             this.tabPage_about.Location = new System.Drawing.Point(4, 23);
             this.tabPage_about.Name = "tabPage_about";
-            this.tabPage_about.Size = new System.Drawing.Size(1256, 635);
+            this.tabPage_about.Size = new System.Drawing.Size(1256, 633);
             this.tabPage_about.TabIndex = 2;
             this.tabPage_about.Text = "About";
             this.tabPage_about.UseVisualStyleBackColor = true;
@@ -3015,6 +3317,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.MaximizeBox = false;
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.statusStrip1.ResumeLayout(false);
@@ -3028,6 +3331,10 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.splitContainer1.ResumeLayout(false);
             this.tabScanPage.ResumeLayout(false);
             this.tabPage_ScanSetting.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.GroupBox_SaveScan.ResumeLayout(false);
@@ -3152,7 +3459,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private System.Windows.Forms.Label label112;
         private System.Windows.Forms.Label label_DevInfoUUID;
         private System.Windows.Forms.Label label114;
-        private System.Windows.Forms.Label label_DevInfoManfacSerNUm;
+        private System.Windows.Forms.Label label_DevInfoManfacSerNum;
         private System.Windows.Forms.Label label116;
         private System.Windows.Forms.Label label_DevInfoDevSerNum;
         private System.Windows.Forms.Label label104;
@@ -3213,7 +3520,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private System.Windows.Forms.RadioButton RadioButton_RefPre;
         private System.Windows.Forms.RadioButton RadioButton_RefNew;
         private System.Windows.Forms.TabPage tabPage_ScanConfig;
-        private System.Windows.Forms.ListBox ListBox_DeviceScanConfig;
+        private System.Windows.Forms.ListBox ListBox_TargetCfgs;
         private System.Windows.Forms.Button Button_SetActive;
         private System.Windows.Forms.Label label94;
         private System.Windows.Forms.Button Button_CfgCancel;
@@ -3348,6 +3655,30 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private Button Button_DisplayDirChange;
         private TextBox TextBox_DisplayDirPath;
         private Label label79;
+        private CheckBox Check_Overlay;
+        private GroupBox groupBox2;
+        private Label label3;
+        private TextBox Text_ContDelay;
+        private Label label2;
+        private TextBox Text_ContScan;
+        private Label Label_ContScan;
+        private Button Button_MoveCfgT2L;
+        private Button Button_MoveCfgL2T;
+        private Button Button_CopyCfgT2L;
+        private Button Button_CopyCfgL2T;
+        private ListBox ListBox_LocalCfgs;
+        private Button button_manage;
+        private TextBox TextBox_FileNamePrefix;
+        private CheckBox CheckBox_FileNamePrefix;
+        private CheckBox CheckBox_SaveRJDX;
+        private CheckBox CheckBox_SaveAJDX;
+        private CheckBox CheckBox_SaveIJDX;
+        private CheckBox CheckBox_SaveOneCSV;
+        private Button Button_ClearAllErrors;
+        private Button button_tooltip;
+        private Button button_zoom;
+        private GroupBox groupBox3;
+        private CheckBox CheckBox_GlitchFilter;
     }
 }
 

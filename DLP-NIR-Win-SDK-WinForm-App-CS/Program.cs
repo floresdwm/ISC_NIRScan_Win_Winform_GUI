@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,9 +15,19 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow());
+            bool isFirstOpen;
+            Mutex mutex = new Mutex(false, Application.ProductName, out isFirstOpen);
+            if (isFirstOpen)
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainWindow());
+            }
+            else
+            {
+                Message.ShowInfo("重複開啟!");
+            }
+            mutex.Dispose();
         }
     }
 }

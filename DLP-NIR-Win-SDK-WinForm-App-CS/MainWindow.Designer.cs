@@ -87,6 +87,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.RadioButton_LampOff = new System.Windows.Forms.RadioButton();
             this.RadioButton_LampOn = new System.Windows.Forms.RadioButton();
             this.GroupBox_RefSelect = new System.Windows.Forms.GroupBox();
+            this.label_ref = new System.Windows.Forms.Label();
             this.RadioButton_RefFac = new System.Windows.Forms.RadioButton();
             this.RadioButton_RefPre = new System.Windows.Forms.RadioButton();
             this.RadioButton_RefNew = new System.Windows.Forms.RadioButton();
@@ -213,6 +214,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.label79 = new System.Windows.Forms.Label();
             this.tabPage_Utility = new System.Windows.Forms.TabPage();
             this.groupBox_Device = new System.Windows.Forms.GroupBox();
+            this.button_cali = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
             this.button_DeviceRestoreFacRef = new System.Windows.Forms.Button();
             this.label121 = new System.Windows.Forms.Label();
             this.button_DeviceBackUpFacRef = new System.Windows.Forms.Button();
@@ -601,9 +604,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.CheckBox_GlitchFilter);
-            this.groupBox3.Location = new System.Drawing.Point(3, 497);
+            this.groupBox3.Location = new System.Drawing.Point(3, 517);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(381, 68);
+            this.groupBox3.Size = new System.Drawing.Size(381, 48);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Other Options";
@@ -635,9 +638,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.groupBox2.Controls.Add(this.Text_ContDelay);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.Text_ContScan);
-            this.groupBox2.Location = new System.Drawing.Point(3, 276);
+            this.groupBox2.Location = new System.Drawing.Point(3, 303);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(381, 59);
+            this.groupBox2.Size = new System.Drawing.Size(381, 55);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Continuous Scan Select";
@@ -655,7 +658,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(202, 30);
+            this.label3.Location = new System.Drawing.Point(202, 28);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(86, 14);
             this.label3.TabIndex = 12;
@@ -664,7 +667,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // Text_ContDelay
             // 
             this.Text_ContDelay.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.Text_ContDelay.Location = new System.Drawing.Point(294, 27);
+            this.Text_ContDelay.Location = new System.Drawing.Point(294, 25);
             this.Text_ContDelay.Name = "Text_ContDelay";
             this.Text_ContDelay.Size = new System.Drawing.Size(71, 22);
             this.Text_ContDelay.TabIndex = 13;
@@ -674,7 +677,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(17, 30);
+            this.label2.Location = new System.Drawing.Point(17, 28);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 14);
             this.label2.TabIndex = 10;
@@ -683,7 +686,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // Text_ContScan
             // 
             this.Text_ContScan.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.Text_ContScan.Location = new System.Drawing.Point(88, 27);
+            this.Text_ContScan.Location = new System.Drawing.Point(88, 25);
             this.Text_ContScan.Name = "Text_ContScan";
             this.Text_ContScan.Size = new System.Drawing.Size(57, 22);
             this.Text_ContScan.TabIndex = 11;
@@ -695,9 +698,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.groupBox1.Controls.Add(this.CheckBox_AutoGain);
             this.groupBox1.Controls.Add(this.ComboBox_PGAGain);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(3, 145);
+            this.groupBox1.Location = new System.Drawing.Point(3, 180);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(381, 56);
+            this.groupBox1.Size = new System.Drawing.Size(381, 55);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "GainControl";
@@ -753,9 +756,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveICSV);
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveDAT);
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveCombCSV);
-            this.GroupBox_SaveScan.Location = new System.Drawing.Point(3, 341);
+            this.GroupBox_SaveScan.Location = new System.Drawing.Point(3, 364);
             this.GroupBox_SaveScan.Name = "GroupBox_SaveScan";
-            this.GroupBox_SaveScan.Size = new System.Drawing.Size(381, 150);
+            this.GroupBox_SaveScan.Size = new System.Drawing.Size(381, 147);
             this.GroupBox_SaveScan.TabIndex = 6;
             this.GroupBox_SaveScan.TabStop = false;
             this.GroupBox_SaveScan.Text = "Save Scan As";
@@ -769,6 +772,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.CheckBox_SaveRJDX.TabIndex = 15;
             this.CheckBox_SaveRJDX.Text = "-reflectance.jdx";
             this.CheckBox_SaveRJDX.UseVisualStyleBackColor = true;
+            this.CheckBox_SaveRJDX.CheckedChanged += new System.EventHandler(this.CheckBox_SaveFileFormat_Click);
             // 
             // CheckBox_SaveAJDX
             // 
@@ -779,6 +783,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.CheckBox_SaveAJDX.TabIndex = 14;
             this.CheckBox_SaveAJDX.Text = "-absorbance.jdx";
             this.CheckBox_SaveAJDX.UseVisualStyleBackColor = true;
+            this.CheckBox_SaveAJDX.CheckedChanged += new System.EventHandler(this.CheckBox_SaveFileFormat_Click);
             // 
             // CheckBox_SaveIJDX
             // 
@@ -789,6 +794,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.CheckBox_SaveIJDX.TabIndex = 13;
             this.CheckBox_SaveIJDX.Text = "-intensity.jdx";
             this.CheckBox_SaveIJDX.UseVisualStyleBackColor = true;
+            this.CheckBox_SaveIJDX.CheckedChanged += new System.EventHandler(this.CheckBox_SaveFileFormat_Click);
             // 
             // CheckBox_SaveOneCSV
             // 
@@ -799,6 +805,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.CheckBox_SaveOneCSV.TabIndex = 12;
             this.CheckBox_SaveOneCSV.Text = "-one.csv";
             this.CheckBox_SaveOneCSV.UseVisualStyleBackColor = true;
+            this.CheckBox_SaveOneCSV.CheckedChanged += new System.EventHandler(this.CheckBox_SaveFileFormat_Click);
             // 
             // TextBox_FileNamePrefix
             // 
@@ -843,6 +850,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.CheckBox_SaveRCSV.TabIndex = 4;
             this.CheckBox_SaveRCSV.Text = "-reflectance.csv";
             this.CheckBox_SaveRCSV.UseVisualStyleBackColor = true;
+            this.CheckBox_SaveRCSV.CheckedChanged += new System.EventHandler(this.CheckBox_SaveFileFormat_Click);
             // 
             // CheckBox_SaveACSV
             // 
@@ -853,6 +861,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.CheckBox_SaveACSV.TabIndex = 3;
             this.CheckBox_SaveACSV.Text = "-absorbance.csv";
             this.CheckBox_SaveACSV.UseVisualStyleBackColor = true;
+            this.CheckBox_SaveACSV.CheckedChanged += new System.EventHandler(this.CheckBox_SaveFileFormat_Click);
             // 
             // CheckBox_SaveICSV
             // 
@@ -863,6 +872,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.CheckBox_SaveICSV.TabIndex = 2;
             this.CheckBox_SaveICSV.Text = "-intensity.csv";
             this.CheckBox_SaveICSV.UseVisualStyleBackColor = true;
+            this.CheckBox_SaveICSV.CheckedChanged += new System.EventHandler(this.CheckBox_SaveFileFormat_Click);
             // 
             // CheckBox_SaveDAT
             // 
@@ -873,6 +883,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.CheckBox_SaveDAT.TabIndex = 1;
             this.CheckBox_SaveDAT.Text = "*.dat";
             this.CheckBox_SaveDAT.UseVisualStyleBackColor = true;
+            this.CheckBox_SaveDAT.CheckedChanged += new System.EventHandler(this.CheckBox_SaveFileFormat_Click);
             // 
             // CheckBox_SaveCombCSV
             // 
@@ -883,14 +894,15 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.CheckBox_SaveCombCSV.TabIndex = 0;
             this.CheckBox_SaveCombCSV.Text = "*.csv";
             this.CheckBox_SaveCombCSV.UseVisualStyleBackColor = true;
+            this.CheckBox_SaveCombCSV.CheckedChanged += new System.EventHandler(this.CheckBox_SaveFileFormat_Click);
             // 
             // GroupBox_ScanAvg
             // 
             this.GroupBox_ScanAvg.Controls.Add(this.textBox_ScanAvg);
             this.GroupBox_ScanAvg.Controls.Add(this.label34);
-            this.GroupBox_ScanAvg.Location = new System.Drawing.Point(3, 207);
+            this.GroupBox_ScanAvg.Location = new System.Drawing.Point(3, 241);
             this.GroupBox_ScanAvg.Name = "GroupBox_ScanAvg";
-            this.GroupBox_ScanAvg.Size = new System.Drawing.Size(381, 63);
+            this.GroupBox_ScanAvg.Size = new System.Drawing.Size(381, 56);
             this.GroupBox_ScanAvg.TabIndex = 3;
             this.GroupBox_ScanAvg.TabStop = false;
             this.GroupBox_ScanAvg.Text = "Scan Average";
@@ -919,9 +931,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.GroupBox_LampControl.Controls.Add(this.RadioButton_LampStableTime);
             this.GroupBox_LampControl.Controls.Add(this.RadioButton_LampOff);
             this.GroupBox_LampControl.Controls.Add(this.RadioButton_LampOn);
-            this.GroupBox_LampControl.Location = new System.Drawing.Point(3, 65);
+            this.GroupBox_LampControl.Location = new System.Drawing.Point(3, 104);
             this.GroupBox_LampControl.Name = "GroupBox_LampControl";
-            this.GroupBox_LampControl.Size = new System.Drawing.Size(381, 74);
+            this.GroupBox_LampControl.Size = new System.Drawing.Size(381, 70);
             this.GroupBox_LampControl.TabIndex = 2;
             this.GroupBox_LampControl.TabStop = false;
             this.GroupBox_LampControl.Text = "Lamp Control";
@@ -939,9 +951,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // TextBox_LampStableTime
             // 
-            this.TextBox_LampStableTime.Location = new System.Drawing.Point(270, 42);
+            this.TextBox_LampStableTime.Location = new System.Drawing.Point(278, 42);
             this.TextBox_LampStableTime.Name = "TextBox_LampStableTime";
-            this.TextBox_LampStableTime.Size = new System.Drawing.Size(100, 22);
+            this.TextBox_LampStableTime.Size = new System.Drawing.Size(92, 22);
             this.TextBox_LampStableTime.TabIndex = 3;
             this.TextBox_LampStableTime.Text = "625";
             this.TextBox_LampStableTime.TextChanged += new System.EventHandler(this.TextBox_LampStableTime_TextChanged);
@@ -984,15 +996,25 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // GroupBox_RefSelect
             // 
+            this.GroupBox_RefSelect.Controls.Add(this.label_ref);
             this.GroupBox_RefSelect.Controls.Add(this.RadioButton_RefFac);
             this.GroupBox_RefSelect.Controls.Add(this.RadioButton_RefPre);
             this.GroupBox_RefSelect.Controls.Add(this.RadioButton_RefNew);
             this.GroupBox_RefSelect.Location = new System.Drawing.Point(3, 6);
             this.GroupBox_RefSelect.Name = "GroupBox_RefSelect";
-            this.GroupBox_RefSelect.Size = new System.Drawing.Size(381, 53);
+            this.GroupBox_RefSelect.Size = new System.Drawing.Size(381, 73);
             this.GroupBox_RefSelect.TabIndex = 1;
             this.GroupBox_RefSelect.TabStop = false;
             this.GroupBox_RefSelect.Text = "Reference Select";
+            // 
+            // label_ref
+            // 
+            this.label_ref.AutoSize = true;
+            this.label_ref.Location = new System.Drawing.Point(21, 50);
+            this.label_ref.Name = "label_ref";
+            this.label_ref.Size = new System.Drawing.Size(57, 14);
+            this.label_ref.TabIndex = 3;
+            this.label_ref.Text = "label_ref";
             // 
             // RadioButton_RefFac
             // 
@@ -1061,7 +1083,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.Button_MoveCfgT2L.Name = "Button_MoveCfgT2L";
             this.Button_MoveCfgT2L.Size = new System.Drawing.Size(44, 37);
             this.Button_MoveCfgT2L.TabIndex = 15;
-            this.Button_MoveCfgT2L.Text = "Move ◀◀";
+            this.Button_MoveCfgT2L.Text = "Move <<";
             this.Button_MoveCfgT2L.UseVisualStyleBackColor = true;
             this.Button_MoveCfgT2L.Click += new System.EventHandler(this.Button_MoveCfgT2L_Click);
             // 
@@ -1071,7 +1093,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.Button_MoveCfgL2T.Name = "Button_MoveCfgL2T";
             this.Button_MoveCfgL2T.Size = new System.Drawing.Size(44, 38);
             this.Button_MoveCfgL2T.TabIndex = 14;
-            this.Button_MoveCfgL2T.Text = "Move▶▶";
+            this.Button_MoveCfgL2T.Text = "Move>>";
             this.Button_MoveCfgL2T.UseVisualStyleBackColor = true;
             this.Button_MoveCfgL2T.Click += new System.EventHandler(this.Button_MoveCfgL2T_Click);
             // 
@@ -1081,7 +1103,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.Button_CopyCfgT2L.Name = "Button_CopyCfgT2L";
             this.Button_CopyCfgT2L.Size = new System.Drawing.Size(44, 38);
             this.Button_CopyCfgT2L.TabIndex = 13;
-            this.Button_CopyCfgT2L.Text = "Copy◀◀";
+            this.Button_CopyCfgT2L.Text = "Copy<<";
             this.Button_CopyCfgT2L.UseVisualStyleBackColor = true;
             this.Button_CopyCfgT2L.Click += new System.EventHandler(this.Button_CopyCfgT2L_Click);
             // 
@@ -1091,7 +1113,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.Button_CopyCfgL2T.Name = "Button_CopyCfgL2T";
             this.Button_CopyCfgL2T.Size = new System.Drawing.Size(44, 40);
             this.Button_CopyCfgL2T.TabIndex = 12;
-            this.Button_CopyCfgL2T.Text = "Copy▶▶";
+            this.Button_CopyCfgL2T.Text = "Copy>>";
             this.Button_CopyCfgL2T.UseVisualStyleBackColor = true;
             this.Button_CopyCfgL2T.Click += new System.EventHandler(this.Button_CopyCfgL2T_Click);
             // 
@@ -2217,6 +2239,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // groupBox_Device
             // 
+            this.groupBox_Device.Controls.Add(this.button_cali);
+            this.groupBox_Device.Controls.Add(this.label10);
             this.groupBox_Device.Controls.Add(this.button_DeviceRestoreFacRef);
             this.groupBox_Device.Controls.Add(this.label121);
             this.groupBox_Device.Controls.Add(this.button_DeviceBackUpFacRef);
@@ -2227,10 +2251,29 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.groupBox_Device.Controls.Add(this.label118);
             this.groupBox_Device.Location = new System.Drawing.Point(883, 384);
             this.groupBox_Device.Name = "groupBox_Device";
-            this.groupBox_Device.Size = new System.Drawing.Size(348, 132);
+            this.groupBox_Device.Size = new System.Drawing.Size(348, 167);
             this.groupBox_Device.TabIndex = 14;
             this.groupBox_Device.TabStop = false;
             this.groupBox_Device.Text = "Device";
+            // 
+            // button_cali
+            // 
+            this.button_cali.Location = new System.Drawing.Point(276, 131);
+            this.button_cali.Name = "button_cali";
+            this.button_cali.Size = new System.Drawing.Size(66, 23);
+            this.button_cali.TabIndex = 9;
+            this.button_cali.Text = "Click";
+            this.button_cali.UseVisualStyleBackColor = true;
+            this.button_cali.Click += new System.EventHandler(this.button_cali_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 135);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(163, 14);
+            this.label10.TabIndex = 8;
+            this.label10.Text = "User Wavelength Calibration";
             // 
             // button_DeviceRestoreFacRef
             // 
@@ -2439,7 +2482,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             this.label_DevInfoUUID.Location = new System.Drawing.Point(200, 226);
             this.label_DevInfoUUID.Name = "label_DevInfoUUID";
-            this.label_DevInfoUUID.Size = new System.Drawing.Size(127, 14);
+            this.label_DevInfoUUID.Size = new System.Drawing.Size(142, 14);
             this.label_DevInfoUUID.TabIndex = 19;
             // 
             // label114
@@ -2629,6 +2672,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // Button_CalWriteCoeffs
             // 
+            this.Button_CalWriteCoeffs.Enabled = false;
             this.Button_CalWriteCoeffs.Location = new System.Drawing.Point(265, 253);
             this.Button_CalWriteCoeffs.Name = "Button_CalWriteCoeffs";
             this.Button_CalWriteCoeffs.Size = new System.Drawing.Size(127, 23);
@@ -2649,6 +2693,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // Button_CalRestoreDefaultCoeffs
             // 
+            this.Button_CalRestoreDefaultCoeffs.Enabled = false;
             this.Button_CalRestoreDefaultCoeffs.Location = new System.Drawing.Point(9, 253);
             this.Button_CalRestoreDefaultCoeffs.Name = "Button_CalRestoreDefaultCoeffs";
             this.Button_CalRestoreDefaultCoeffs.Size = new System.Drawing.Size(106, 23);
@@ -2659,6 +2704,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // Button_CalWriteGenCoeffs
             // 
+            this.Button_CalWriteGenCoeffs.Enabled = false;
             this.Button_CalWriteGenCoeffs.Location = new System.Drawing.Point(9, 217);
             this.Button_CalWriteGenCoeffs.Name = "Button_CalWriteGenCoeffs";
             this.Button_CalWriteGenCoeffs.Size = new System.Drawing.Size(106, 23);
@@ -3300,7 +3346,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label_ErrorStatus
             // 
             this.label_ErrorStatus.AutoSize = true;
-            this.label_ErrorStatus.Location = new System.Drawing.Point(163, 665);
+            this.label_ErrorStatus.Location = new System.Drawing.Point(300, 665);
             this.label_ErrorStatus.Name = "label_ErrorStatus";
             this.label_ErrorStatus.Size = new System.Drawing.Size(0, 14);
             this.label_ErrorStatus.TabIndex = 3;
@@ -3679,6 +3725,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private Button button_zoom;
         private GroupBox groupBox3;
         private CheckBox CheckBox_GlitchFilter;
+        private Label label10;
+        private Button button_cali;
+        private Label label_ref;
     }
 }
 

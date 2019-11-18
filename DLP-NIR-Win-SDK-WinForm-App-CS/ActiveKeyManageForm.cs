@@ -196,6 +196,10 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
 
         private void button_del_Click(object sender, EventArgs e)
         {
+            if(listView1.Items.Count == 0)
+            {
+                return;
+            }
             int index = listView1.FocusedItem.Index;
             if (index < 0)
             {
@@ -208,7 +212,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             initListviewSelect();
             if (index <= listView1.Items.Count - 1)
                 listView1.Items[index].Selected = true;
-            else
+            else if (listView1.Items.Count != 0)
                 listView1.Items[listView1.Items.Count - 1].Selected = true;
             listView1.Focus();
 

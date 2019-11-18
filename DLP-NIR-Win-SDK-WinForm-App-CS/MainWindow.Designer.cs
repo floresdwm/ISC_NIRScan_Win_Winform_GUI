@@ -214,6 +214,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.label79 = new System.Windows.Forms.Label();
             this.tabPage_Utility = new System.Windows.Forms.TabPage();
             this.groupBox_Device = new System.Windows.Forms.GroupBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.button_cali = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
             this.button_DeviceRestoreFacRef = new System.Windows.Forms.Button();
@@ -618,7 +620,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.CheckBox_GlitchFilter.Name = "CheckBox_GlitchFilter";
             this.CheckBox_GlitchFilter.Size = new System.Drawing.Size(131, 18);
             this.CheckBox_GlitchFilter.TabIndex = 0;
-            this.CheckBox_GlitchFilter.Text = "Enable Glitch Filter";
+            this.CheckBox_GlitchFilter.Text = "Enable Noise Filter";
             this.CheckBox_GlitchFilter.UseVisualStyleBackColor = true;
             // 
             // Button_ClearAllErrors
@@ -658,7 +660,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(202, 28);
+            this.label3.Location = new System.Drawing.Point(207, 28);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(86, 14);
             this.label3.TabIndex = 12;
@@ -667,7 +669,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // Text_ContDelay
             // 
             this.Text_ContDelay.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.Text_ContDelay.Location = new System.Drawing.Point(294, 25);
+            this.Text_ContDelay.Location = new System.Drawing.Point(299, 25);
             this.Text_ContDelay.Name = "Text_ContDelay";
             this.Text_ContDelay.Size = new System.Drawing.Size(71, 22);
             this.Text_ContDelay.TabIndex = 13;
@@ -2239,6 +2241,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // groupBox_Device
             // 
+            this.groupBox_Device.Controls.Add(this.label12);
+            this.groupBox_Device.Controls.Add(this.label11);
             this.groupBox_Device.Controls.Add(this.button_cali);
             this.groupBox_Device.Controls.Add(this.label10);
             this.groupBox_Device.Controls.Add(this.button_DeviceRestoreFacRef);
@@ -2251,14 +2255,32 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.groupBox_Device.Controls.Add(this.label118);
             this.groupBox_Device.Location = new System.Drawing.Point(883, 384);
             this.groupBox_Device.Name = "groupBox_Device";
-            this.groupBox_Device.Size = new System.Drawing.Size(348, 167);
+            this.groupBox_Device.Size = new System.Drawing.Size(348, 207);
             this.groupBox_Device.TabIndex = 14;
             this.groupBox_Device.TabStop = false;
             this.groupBox_Device.Text = "Device";
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(6, 147);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(15, 14);
+            this.label12.TabIndex = 11;
+            this.label12.Text = "()";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 69);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(15, 14);
+            this.label11.TabIndex = 10;
+            this.label11.Text = "()";
+            // 
             // button_cali
             // 
-            this.button_cali.Location = new System.Drawing.Point(276, 131);
+            this.button_cali.Location = new System.Drawing.Point(276, 170);
             this.button_cali.Name = "button_cali";
             this.button_cali.Size = new System.Drawing.Size(66, 23);
             this.button_cali.TabIndex = 9;
@@ -2269,7 +2291,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 135);
+            this.label10.Location = new System.Drawing.Point(6, 174);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(163, 14);
             this.label10.TabIndex = 8;
@@ -2277,7 +2299,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // button_DeviceRestoreFacRef
             // 
-            this.button_DeviceRestoreFacRef.Location = new System.Drawing.Point(276, 100);
+            this.button_DeviceRestoreFacRef.Location = new System.Drawing.Point(276, 120);
             this.button_DeviceRestoreFacRef.Name = "button_DeviceRestoreFacRef";
             this.button_DeviceRestoreFacRef.Size = new System.Drawing.Size(66, 23);
             this.button_DeviceRestoreFacRef.TabIndex = 7;
@@ -2288,7 +2310,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label121
             // 
             this.label121.AutoSize = true;
-            this.label121.Location = new System.Drawing.Point(6, 104);
+            this.label121.Location = new System.Drawing.Point(6, 124);
             this.label121.Name = "label121";
             this.label121.Size = new System.Drawing.Size(148, 14);
             this.label121.TabIndex = 6;
@@ -2315,7 +2337,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // button_DeviceUpdateRef
             // 
-            this.button_DeviceUpdateRef.Location = new System.Drawing.Point(276, 71);
+            this.button_DeviceUpdateRef.Location = new System.Drawing.Point(276, 91);
             this.button_DeviceUpdateRef.Name = "button_DeviceUpdateRef";
             this.button_DeviceUpdateRef.Size = new System.Drawing.Size(66, 23);
             this.button_DeviceUpdateRef.TabIndex = 3;
@@ -2326,7 +2348,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label119
             // 
             this.label119.AutoSize = true;
-            this.label119.Location = new System.Drawing.Point(6, 75);
+            this.label119.Location = new System.Drawing.Point(6, 95);
             this.label119.Name = "label119";
             this.label119.Size = new System.Drawing.Size(134, 14);
             this.label119.TabIndex = 2;
@@ -2665,17 +2687,17 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.GroupBox_CalibCoeffs.Controls.Add(this.label29);
             this.GroupBox_CalibCoeffs.Location = new System.Drawing.Point(366, 182);
             this.GroupBox_CalibCoeffs.Name = "GroupBox_CalibCoeffs";
-            this.GroupBox_CalibCoeffs.Size = new System.Drawing.Size(511, 285);
+            this.GroupBox_CalibCoeffs.Size = new System.Drawing.Size(511, 340);
             this.GroupBox_CalibCoeffs.TabIndex = 11;
             this.GroupBox_CalibCoeffs.TabStop = false;
-            this.GroupBox_CalibCoeffs.Text = "Calibration Cofficients";
+            this.GroupBox_CalibCoeffs.Text = "Calibration Coefficients";
             // 
             // Button_CalWriteCoeffs
             // 
             this.Button_CalWriteCoeffs.Enabled = false;
-            this.Button_CalWriteCoeffs.Location = new System.Drawing.Point(265, 253);
+            this.Button_CalWriteCoeffs.Location = new System.Drawing.Point(304, 253);
             this.Button_CalWriteCoeffs.Name = "Button_CalWriteCoeffs";
-            this.Button_CalWriteCoeffs.Size = new System.Drawing.Size(127, 23);
+            this.Button_CalWriteCoeffs.Size = new System.Drawing.Size(115, 23);
             this.Button_CalWriteCoeffs.TabIndex = 28;
             this.Button_CalWriteCoeffs.Text = "Write Coeffs";
             this.Button_CalWriteCoeffs.UseVisualStyleBackColor = true;
@@ -2683,7 +2705,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // Button_CalReadCoeffs
             // 
-            this.Button_CalReadCoeffs.Location = new System.Drawing.Point(139, 253);
+            this.Button_CalReadCoeffs.Location = new System.Drawing.Point(206, 253);
             this.Button_CalReadCoeffs.Name = "Button_CalReadCoeffs";
             this.Button_CalReadCoeffs.Size = new System.Drawing.Size(92, 23);
             this.Button_CalReadCoeffs.TabIndex = 27;
@@ -2696,9 +2718,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.Button_CalRestoreDefaultCoeffs.Enabled = false;
             this.Button_CalRestoreDefaultCoeffs.Location = new System.Drawing.Point(9, 253);
             this.Button_CalRestoreDefaultCoeffs.Name = "Button_CalRestoreDefaultCoeffs";
-            this.Button_CalRestoreDefaultCoeffs.Size = new System.Drawing.Size(106, 23);
+            this.Button_CalRestoreDefaultCoeffs.Size = new System.Drawing.Size(191, 23);
             this.Button_CalRestoreDefaultCoeffs.TabIndex = 26;
-            this.Button_CalRestoreDefaultCoeffs.Text = "Restore Default";
+            this.Button_CalRestoreDefaultCoeffs.Text = "Restore Factory Calibration Data";
             this.Button_CalRestoreDefaultCoeffs.UseVisualStyleBackColor = true;
             this.Button_CalRestoreDefaultCoeffs.Click += new System.EventHandler(this.Button_CalRestoreDefaultCoeffs_Click);
             // 
@@ -3346,7 +3368,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label_ErrorStatus
             // 
             this.label_ErrorStatus.AutoSize = true;
-            this.label_ErrorStatus.Location = new System.Drawing.Point(300, 665);
+            this.label_ErrorStatus.Location = new System.Drawing.Point(550, 665);
             this.label_ErrorStatus.Name = "label_ErrorStatus";
             this.label_ErrorStatus.Size = new System.Drawing.Size(0, 14);
             this.label_ErrorStatus.TabIndex = 3;
@@ -3728,6 +3750,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private Label label10;
         private Button button_cali;
         private Label label_ref;
+        private Label label11;
+        private Label label12;
     }
 }
 

@@ -21,7 +21,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
 
         private void button_cancel_Click(object sender, EventArgs e)
         {
-            MainWindow.CancelContScan = !MainWindow.CancelContScan;
+            MainWindow.UserCancelScan = true;
         }
     }
 }

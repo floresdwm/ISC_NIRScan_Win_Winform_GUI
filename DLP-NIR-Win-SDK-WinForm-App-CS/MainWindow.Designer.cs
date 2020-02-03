@@ -36,8 +36,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage_Scan = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.button_tooltip = new System.Windows.Forms.Button();
-            this.button_zoom = new System.Windows.Forms.Button();
+            this.checkBox_zoom = new System.Windows.Forms.CheckBox();
+            this.checkBox_tooltip = new System.Windows.Forms.CheckBox();
             this.Check_Overlay = new System.Windows.Forms.CheckBox();
             this.Button_Scan = new System.Windows.Forms.Button();
             this.RadioButton_Reference = new System.Windows.Forms.RadioButton();
@@ -50,16 +50,14 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.MyChart = new LiveCharts.WinForms.CartesianChart();
             this.tabScanPage = new System.Windows.Forms.TabControl();
             this.tabPage_ScanSetting = new System.Windows.Forms.TabPage();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.CheckBox_GlitchFilter = new System.Windows.Forms.CheckBox();
             this.Button_ClearAllErrors = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.GroupBox_ContScan = new System.Windows.Forms.GroupBox();
             this.Label_ContScan = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.Text_ContDelay = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.Text_ContScan = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.GroupBox_GainControl = new System.Windows.Forms.GroupBox();
             this.CheckBox_AutoGain = new System.Windows.Forms.CheckBox();
             this.ComboBox_PGAGain = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -107,13 +105,14 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.Button_CfgEdit = new System.Windows.Forms.Button();
             this.Button_CfgNew = new System.Windows.Forms.Button();
             this.GroupBox_CfgDetails = new System.Windows.Forms.GroupBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label_pattern5 = new System.Windows.Forms.Label();
+            this.label_pattern4 = new System.Windows.Forms.Label();
+            this.label_pattern3 = new System.Windows.Forms.Label();
+            this.label_pattern2 = new System.Windows.Forms.Label();
+            this.label_pattern1 = new System.Windows.Forms.Label();
             this.comboBox_cfgNumSec = new System.Windows.Forms.ComboBox();
             this.Label_CfgNumPatterns = new System.Windows.Forms.Label();
-            this.Label_CfgDigRes5 = new System.Windows.Forms.Label();
-            this.Label_CfgDigRes4 = new System.Windows.Forms.Label();
-            this.Label_CfgDigRes3 = new System.Windows.Forms.Label();
-            this.Label_CfgDigRes2 = new System.Windows.Forms.Label();
-            this.Label_CfgDigRes1 = new System.Windows.Forms.Label();
             this.label93 = new System.Windows.Forms.Label();
             this.label92 = new System.Windows.Forms.Label();
             this.label91 = new System.Windows.Forms.Label();
@@ -162,7 +161,11 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.label80 = new System.Windows.Forms.Label();
             this.tabPage_SaveScans = new System.Windows.Forms.TabPage();
             this.panel_Saved_Scan = new System.Windows.Forms.Panel();
-            this.listBox_SavedData = new System.Windows.Forms.ListBox();
+            this.button_clear = new System.Windows.Forms.Button();
+            this.button_search = new System.Windows.Forms.Button();
+            this.textBox_filter = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.dataGridView_savescan = new System.Windows.Forms.DataGridView();
             this.label33 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
             this.Label_SavedAvg = new System.Windows.Forms.Label();
@@ -213,11 +216,17 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_DisplayDirPath = new System.Windows.Forms.TextBox();
             this.label79 = new System.Windows.Forms.Label();
             this.tabPage_Utility = new System.Windows.Forms.TabPage();
+            this.GroupBox_BleName = new System.Windows.Forms.GroupBox();
+            this.Button_Get_BLE_Display_Name = new System.Windows.Forms.Button();
+            this.Button_Set_BLE_Display_Name = new System.Windows.Forms.Button();
+            this.Button_Clear_BLE_Display_Name = new System.Windows.Forms.Button();
+            this.TextBox_BLE_Display_Name = new System.Windows.Forms.TextBox();
             this.groupBox_Device = new System.Windows.Forms.GroupBox();
+            this.Button_LockButton = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
+            this.Label_ButtonStatus = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.button_cali = new System.Windows.Forms.Button();
-            this.label10 = new System.Windows.Forms.Label();
+            this.Button_UnlockButton = new System.Windows.Forms.Button();
             this.button_DeviceRestoreFacRef = new System.Windows.Forms.Button();
             this.label121 = new System.Windows.Forms.Label();
             this.button_DeviceBackUpFacRef = new System.Windows.Forms.Button();
@@ -235,8 +244,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.textBox_Key = new System.Windows.Forms.TextBox();
             this.label117 = new System.Windows.Forms.Label();
             this.groupBox_DevInfo = new System.Windows.Forms.GroupBox();
+            this.label_DevInfoLampUsageValue = new System.Windows.Forms.Label();
             this.label_DevInfoLampUsage = new System.Windows.Forms.Label();
-            this.label112 = new System.Windows.Forms.Label();
             this.label_DevInfoUUID = new System.Windows.Forms.Label();
             this.label114 = new System.Windows.Forms.Label();
             this.label_DevInfoManfacSerNum = new System.Windows.Forms.Label();
@@ -283,13 +292,19 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.label29 = new System.Windows.Forms.Label();
             this.GroupBox_Sensors = new System.Windows.Forms.GroupBox();
             this.Button_SensorRead = new System.Windows.Forms.Button();
-            this.Label_SensorLampIntensity = new System.Windows.Forms.Label();
+            this.Label_SensorLampCM2Value = new System.Windows.Forms.Label();
+            this.Label_SensorLampCM1Value = new System.Windows.Forms.Label();
+            this.Label_SensorLampVM2Value = new System.Windows.Forms.Label();
+            this.Label_SensorLampVM1Value = new System.Windows.Forms.Label();
             this.Label_SensorTivaTemp = new System.Windows.Forms.Label();
             this.Label_SensorSysTemp = new System.Windows.Forms.Label();
             this.Label_SensorHumidity = new System.Windows.Forms.Label();
             this.Label_SensorBattCapacity = new System.Windows.Forms.Label();
             this.Label_SensorBattStatus = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
+            this.Label_SensorLampCM2 = new System.Windows.Forms.Label();
+            this.Label_SensorLampCM1 = new System.Windows.Forms.Label();
+            this.Label_SensorLampVM2 = new System.Windows.Forms.Label();
+            this.Label_SensorLampVM1 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
@@ -340,9 +355,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.splitContainer1.SuspendLayout();
             this.tabScanPage.SuspendLayout();
             this.tabPage_ScanSetting.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.GroupBox_ContScan.SuspendLayout();
+            this.GroupBox_GainControl.SuspendLayout();
             this.GroupBox_SaveScan.SuspendLayout();
             this.GroupBox_ScanAvg.SuspendLayout();
             this.GroupBox_LampControl.SuspendLayout();
@@ -351,7 +365,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.GroupBox_CfgDetails.SuspendLayout();
             this.tabPage_SaveScans.SuspendLayout();
             this.panel_Saved_Scan.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_savescan)).BeginInit();
             this.tabPage_Utility.SuspendLayout();
+            this.GroupBox_BleName.SuspendLayout();
             this.groupBox_Device.SuspendLayout();
             this.groupBox_ActivationKey.SuspendLayout();
             this.groupBox_DevInfo.SuspendLayout();
@@ -417,8 +433,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.button_tooltip);
-            this.splitContainer1.Panel1.Controls.Add(this.button_zoom);
+            this.splitContainer1.Panel1.Controls.Add(this.checkBox_zoom);
+            this.splitContainer1.Panel1.Controls.Add(this.checkBox_tooltip);
             this.splitContainer1.Panel1.Controls.Add(this.Check_Overlay);
             this.splitContainer1.Panel1.Controls.Add(this.Button_Scan);
             this.splitContainer1.Panel1.Controls.Add(this.RadioButton_Reference);
@@ -437,33 +453,27 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.splitContainer1.SplitterDistance = 845;
             this.splitContainer1.TabIndex = 0;
             // 
-            // button_tooltip
+            // checkBox_zoom
             // 
-            this.button_tooltip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_tooltip.BackColor = System.Drawing.Color.LightGray;
-            this.button_tooltip.FlatAppearance.BorderSize = 0;
-            this.button_tooltip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_tooltip.Location = new System.Drawing.Point(654, 79);
-            this.button_tooltip.Name = "button_tooltip";
-            this.button_tooltip.Size = new System.Drawing.Size(152, 23);
-            this.button_tooltip.TabIndex = 11;
-            this.button_tooltip.Text = "Data Tooltip Disabled";
-            this.button_tooltip.UseVisualStyleBackColor = false;
-            this.button_tooltip.Click += new System.EventHandler(this.button_tooltip_Click);
+            this.checkBox_zoom.AutoSize = true;
+            this.checkBox_zoom.Location = new System.Drawing.Point(546, 597);
+            this.checkBox_zoom.Name = "checkBox_zoom";
+            this.checkBox_zoom.Size = new System.Drawing.Size(103, 18);
+            this.checkBox_zoom.TabIndex = 13;
+            this.checkBox_zoom.Text = "Zoom and Pan";
+            this.checkBox_zoom.UseVisualStyleBackColor = true;
+            this.checkBox_zoom.CheckedChanged += new System.EventHandler(this.checkBox_zoom_CheckedChanged);
             // 
-            // button_zoom
+            // checkBox_tooltip
             // 
-            this.button_zoom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_zoom.BackColor = System.Drawing.Color.LightGray;
-            this.button_zoom.FlatAppearance.BorderSize = 0;
-            this.button_zoom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_zoom.Location = new System.Drawing.Point(654, 50);
-            this.button_zoom.Name = "button_zoom";
-            this.button_zoom.Size = new System.Drawing.Size(152, 23);
-            this.button_zoom.TabIndex = 10;
-            this.button_zoom.Text = "Zoom and Pan Disabled";
-            this.button_zoom.UseVisualStyleBackColor = false;
-            this.button_zoom.Click += new System.EventHandler(this.button_zoom_Click);
+            this.checkBox_tooltip.AutoSize = true;
+            this.checkBox_tooltip.Location = new System.Drawing.Point(472, 598);
+            this.checkBox_tooltip.Name = "checkBox_tooltip";
+            this.checkBox_tooltip.Size = new System.Drawing.Size(66, 18);
+            this.checkBox_tooltip.TabIndex = 12;
+            this.checkBox_tooltip.Text = "ToolTip";
+            this.checkBox_tooltip.UseVisualStyleBackColor = true;
+            this.checkBox_tooltip.CheckedChanged += new System.EventHandler(this.checkBox_tooltip_CheckedChanged);
             // 
             // Check_Overlay
             // 
@@ -587,10 +597,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // tabPage_ScanSetting
             // 
-            this.tabPage_ScanSetting.Controls.Add(this.groupBox3);
             this.tabPage_ScanSetting.Controls.Add(this.Button_ClearAllErrors);
-            this.tabPage_ScanSetting.Controls.Add(this.groupBox2);
-            this.tabPage_ScanSetting.Controls.Add(this.groupBox1);
+            this.tabPage_ScanSetting.Controls.Add(this.GroupBox_ContScan);
+            this.tabPage_ScanSetting.Controls.Add(this.GroupBox_GainControl);
             this.tabPage_ScanSetting.Controls.Add(this.GroupBox_SaveScan);
             this.tabPage_ScanSetting.Controls.Add(this.GroupBox_ScanAvg);
             this.tabPage_ScanSetting.Controls.Add(this.GroupBox_LampControl);
@@ -603,26 +612,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.tabPage_ScanSetting.Text = "Scan Setting";
             this.tabPage_ScanSetting.UseVisualStyleBackColor = true;
             // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.CheckBox_GlitchFilter);
-            this.groupBox3.Location = new System.Drawing.Point(3, 517);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(381, 48);
-            this.groupBox3.TabIndex = 9;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Other Options";
-            // 
-            // CheckBox_GlitchFilter
-            // 
-            this.CheckBox_GlitchFilter.AutoSize = true;
-            this.CheckBox_GlitchFilter.Location = new System.Drawing.Point(20, 21);
-            this.CheckBox_GlitchFilter.Name = "CheckBox_GlitchFilter";
-            this.CheckBox_GlitchFilter.Size = new System.Drawing.Size(131, 18);
-            this.CheckBox_GlitchFilter.TabIndex = 0;
-            this.CheckBox_GlitchFilter.Text = "Enable Noise Filter";
-            this.CheckBox_GlitchFilter.UseVisualStyleBackColor = true;
-            // 
             // Button_ClearAllErrors
             // 
             this.Button_ClearAllErrors.Location = new System.Drawing.Point(271, 571);
@@ -633,28 +622,28 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.Button_ClearAllErrors.UseVisualStyleBackColor = true;
             this.Button_ClearAllErrors.Click += new System.EventHandler(this.Button_ClearAllErrors_Click);
             // 
-            // groupBox2
+            // GroupBox_ContScan
             // 
-            this.groupBox2.Controls.Add(this.Label_ContScan);
-            this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.Text_ContDelay);
-            this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.Text_ContScan);
-            this.groupBox2.Location = new System.Drawing.Point(3, 303);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(381, 55);
-            this.groupBox2.TabIndex = 8;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Continuous Scan Select";
+            this.GroupBox_ContScan.Controls.Add(this.Label_ContScan);
+            this.GroupBox_ContScan.Controls.Add(this.label3);
+            this.GroupBox_ContScan.Controls.Add(this.Text_ContDelay);
+            this.GroupBox_ContScan.Controls.Add(this.label2);
+            this.GroupBox_ContScan.Controls.Add(this.Text_ContScan);
+            this.GroupBox_ContScan.Location = new System.Drawing.Point(3, 284);
+            this.GroupBox_ContScan.Name = "GroupBox_ContScan";
+            this.GroupBox_ContScan.Size = new System.Drawing.Size(381, 55);
+            this.GroupBox_ContScan.TabIndex = 8;
+            this.GroupBox_ContScan.TabStop = false;
+            this.GroupBox_ContScan.Text = "Continuous Scan Select";
             // 
             // Label_ContScan
             // 
             this.Label_ContScan.AutoSize = true;
             this.Label_ContScan.Location = new System.Drawing.Point(151, 30);
             this.Label_ContScan.Name = "Label_ContScan";
-            this.Label_ContScan.Size = new System.Drawing.Size(48, 14);
+            this.Label_ContScan.Size = new System.Drawing.Size(32, 14);
             this.Label_ContScan.TabIndex = 14;
-            this.Label_ContScan.Text = "label10";
+            this.Label_ContScan.Text = "(0/0)";
             // 
             // label3
             // 
@@ -695,17 +684,17 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.Text_ContScan.Text = "1";
             this.Text_ContScan.TextChanged += new System.EventHandler(this.Text_ContScan_TextChanged);
             // 
-            // groupBox1
+            // GroupBox_GainControl
             // 
-            this.groupBox1.Controls.Add(this.CheckBox_AutoGain);
-            this.groupBox1.Controls.Add(this.ComboBox_PGAGain);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(3, 180);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(381, 55);
-            this.groupBox1.TabIndex = 7;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "GainControl";
+            this.GroupBox_GainControl.Controls.Add(this.CheckBox_AutoGain);
+            this.GroupBox_GainControl.Controls.Add(this.ComboBox_PGAGain);
+            this.GroupBox_GainControl.Controls.Add(this.label1);
+            this.GroupBox_GainControl.Location = new System.Drawing.Point(3, 161);
+            this.GroupBox_GainControl.Name = "GroupBox_GainControl";
+            this.GroupBox_GainControl.Size = new System.Drawing.Size(381, 55);
+            this.GroupBox_GainControl.TabIndex = 7;
+            this.GroupBox_GainControl.TabStop = false;
+            this.GroupBox_GainControl.Text = "GainControl";
             // 
             // CheckBox_AutoGain
             // 
@@ -758,7 +747,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveICSV);
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveDAT);
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveCombCSV);
-            this.GroupBox_SaveScan.Location = new System.Drawing.Point(3, 364);
+            this.GroupBox_SaveScan.Location = new System.Drawing.Point(3, 345);
             this.GroupBox_SaveScan.Name = "GroupBox_SaveScan";
             this.GroupBox_SaveScan.Size = new System.Drawing.Size(381, 147);
             this.GroupBox_SaveScan.TabIndex = 6;
@@ -902,7 +891,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             this.GroupBox_ScanAvg.Controls.Add(this.textBox_ScanAvg);
             this.GroupBox_ScanAvg.Controls.Add(this.label34);
-            this.GroupBox_ScanAvg.Location = new System.Drawing.Point(3, 241);
+            this.GroupBox_ScanAvg.Location = new System.Drawing.Point(3, 222);
             this.GroupBox_ScanAvg.Name = "GroupBox_ScanAvg";
             this.GroupBox_ScanAvg.Size = new System.Drawing.Size(381, 56);
             this.GroupBox_ScanAvg.TabIndex = 3;
@@ -933,7 +922,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.GroupBox_LampControl.Controls.Add(this.RadioButton_LampStableTime);
             this.GroupBox_LampControl.Controls.Add(this.RadioButton_LampOff);
             this.GroupBox_LampControl.Controls.Add(this.RadioButton_LampOn);
-            this.GroupBox_LampControl.Location = new System.Drawing.Point(3, 104);
+            this.GroupBox_LampControl.Location = new System.Drawing.Point(3, 85);
             this.GroupBox_LampControl.Name = "GroupBox_LampControl";
             this.GroupBox_LampControl.Size = new System.Drawing.Size(381, 70);
             this.GroupBox_LampControl.TabIndex = 2;
@@ -1127,6 +1116,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ListBox_LocalCfgs.Name = "ListBox_LocalCfgs";
             this.ListBox_LocalCfgs.Size = new System.Drawing.Size(161, 186);
             this.ListBox_LocalCfgs.TabIndex = 11;
+            this.ListBox_LocalCfgs.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_LocalCfgs_MouseClick);
             this.ListBox_LocalCfgs.SelectedIndexChanged += new System.EventHandler(this.ListBox_LocalCfgs_SelectedIndexChanged);
             this.ListBox_LocalCfgs.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_LocalCfgs_MouseDoubleClick);
             // 
@@ -1221,13 +1211,14 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // GroupBox_CfgDetails
             // 
+            this.GroupBox_CfgDetails.Controls.Add(this.label14);
+            this.GroupBox_CfgDetails.Controls.Add(this.label_pattern5);
+            this.GroupBox_CfgDetails.Controls.Add(this.label_pattern4);
+            this.GroupBox_CfgDetails.Controls.Add(this.label_pattern3);
+            this.GroupBox_CfgDetails.Controls.Add(this.label_pattern2);
+            this.GroupBox_CfgDetails.Controls.Add(this.label_pattern1);
             this.GroupBox_CfgDetails.Controls.Add(this.comboBox_cfgNumSec);
             this.GroupBox_CfgDetails.Controls.Add(this.Label_CfgNumPatterns);
-            this.GroupBox_CfgDetails.Controls.Add(this.Label_CfgDigRes5);
-            this.GroupBox_CfgDetails.Controls.Add(this.Label_CfgDigRes4);
-            this.GroupBox_CfgDetails.Controls.Add(this.Label_CfgDigRes3);
-            this.GroupBox_CfgDetails.Controls.Add(this.Label_CfgDigRes2);
-            this.GroupBox_CfgDetails.Controls.Add(this.Label_CfgDigRes1);
             this.GroupBox_CfgDetails.Controls.Add(this.label93);
             this.GroupBox_CfgDetails.Controls.Add(this.label92);
             this.GroupBox_CfgDetails.Controls.Add(this.label91);
@@ -1276,10 +1267,54 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.GroupBox_CfgDetails.Controls.Add(this.label80);
             this.GroupBox_CfgDetails.Location = new System.Drawing.Point(6, 261);
             this.GroupBox_CfgDetails.Name = "GroupBox_CfgDetails";
-            this.GroupBox_CfgDetails.Size = new System.Drawing.Size(381, 257);
+            this.GroupBox_CfgDetails.Size = new System.Drawing.Size(381, 269);
             this.GroupBox_CfgDetails.TabIndex = 0;
             this.GroupBox_CfgDetails.TabStop = false;
             this.GroupBox_CfgDetails.Text = "Details";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 228);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(91, 14);
+            this.label14.TabIndex = 59;
+            this.label14.Text = "Max Resolution";
+            // 
+            // label_pattern5
+            // 
+            this.label_pattern5.Location = new System.Drawing.Point(327, 220);
+            this.label_pattern5.Name = "label_pattern5";
+            this.label_pattern5.Size = new System.Drawing.Size(48, 16);
+            this.label_pattern5.TabIndex = 58;
+            // 
+            // label_pattern4
+            // 
+            this.label_pattern4.Location = new System.Drawing.Point(279, 220);
+            this.label_pattern4.Name = "label_pattern4";
+            this.label_pattern4.Size = new System.Drawing.Size(48, 16);
+            this.label_pattern4.TabIndex = 57;
+            // 
+            // label_pattern3
+            // 
+            this.label_pattern3.Location = new System.Drawing.Point(231, 220);
+            this.label_pattern3.Name = "label_pattern3";
+            this.label_pattern3.Size = new System.Drawing.Size(48, 16);
+            this.label_pattern3.TabIndex = 56;
+            // 
+            // label_pattern2
+            // 
+            this.label_pattern2.Location = new System.Drawing.Point(180, 220);
+            this.label_pattern2.Name = "label_pattern2";
+            this.label_pattern2.Size = new System.Drawing.Size(48, 16);
+            this.label_pattern2.TabIndex = 55;
+            // 
+            // label_pattern1
+            // 
+            this.label_pattern1.Location = new System.Drawing.Point(131, 220);
+            this.label_pattern1.Name = "label_pattern1";
+            this.label_pattern1.Size = new System.Drawing.Size(48, 16);
+            this.label_pattern1.TabIndex = 54;
             // 
             // comboBox_cfgNumSec
             // 
@@ -1300,43 +1335,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             this.Label_CfgNumPatterns.Location = new System.Drawing.Point(6, 212);
             this.Label_CfgNumPatterns.Name = "Label_CfgNumPatterns";
-            this.Label_CfgNumPatterns.Size = new System.Drawing.Size(116, 30);
+            this.Label_CfgNumPatterns.Size = new System.Drawing.Size(116, 16);
             this.Label_CfgNumPatterns.TabIndex = 52;
-            // 
-            // Label_CfgDigRes5
-            // 
-            this.Label_CfgDigRes5.Location = new System.Drawing.Point(330, 212);
-            this.Label_CfgDigRes5.Name = "Label_CfgDigRes5";
-            this.Label_CfgDigRes5.Size = new System.Drawing.Size(48, 16);
-            this.Label_CfgDigRes5.TabIndex = 51;
-            // 
-            // Label_CfgDigRes4
-            // 
-            this.Label_CfgDigRes4.Location = new System.Drawing.Point(282, 212);
-            this.Label_CfgDigRes4.Name = "Label_CfgDigRes4";
-            this.Label_CfgDigRes4.Size = new System.Drawing.Size(48, 16);
-            this.Label_CfgDigRes4.TabIndex = 50;
-            // 
-            // Label_CfgDigRes3
-            // 
-            this.Label_CfgDigRes3.Location = new System.Drawing.Point(234, 212);
-            this.Label_CfgDigRes3.Name = "Label_CfgDigRes3";
-            this.Label_CfgDigRes3.Size = new System.Drawing.Size(48, 16);
-            this.Label_CfgDigRes3.TabIndex = 49;
-            // 
-            // Label_CfgDigRes2
-            // 
-            this.Label_CfgDigRes2.Location = new System.Drawing.Point(183, 212);
-            this.Label_CfgDigRes2.Name = "Label_CfgDigRes2";
-            this.Label_CfgDigRes2.Size = new System.Drawing.Size(48, 16);
-            this.Label_CfgDigRes2.TabIndex = 48;
-            // 
-            // Label_CfgDigRes1
-            // 
-            this.Label_CfgDigRes1.Location = new System.Drawing.Point(134, 212);
-            this.Label_CfgDigRes1.Name = "Label_CfgDigRes1";
-            this.Label_CfgDigRes1.Size = new System.Drawing.Size(48, 16);
-            this.Label_CfgDigRes1.TabIndex = 47;
+            this.Label_CfgNumPatterns.Text = "Pattern Used  / ";
             // 
             // label93
             // 
@@ -1398,7 +1399,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgDigRes1.Name = "TextBox_CfgDigRes1";
             this.TextBox_CfgDigRes1.Size = new System.Drawing.Size(49, 22);
             this.TextBox_CfgDigRes1.TabIndex = 40;
-            this.TextBox_CfgDigRes1.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgDigRes1.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // TextBox_CfgDigRes2
             // 
@@ -1406,7 +1407,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgDigRes2.Name = "TextBox_CfgDigRes2";
             this.TextBox_CfgDigRes2.Size = new System.Drawing.Size(49, 22);
             this.TextBox_CfgDigRes2.TabIndex = 39;
-            this.TextBox_CfgDigRes2.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgDigRes2.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // TextBox_CfgDigRes3
             // 
@@ -1414,7 +1415,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgDigRes3.Name = "TextBox_CfgDigRes3";
             this.TextBox_CfgDigRes3.Size = new System.Drawing.Size(49, 22);
             this.TextBox_CfgDigRes3.TabIndex = 38;
-            this.TextBox_CfgDigRes3.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgDigRes3.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // TextBox_CfgDigRes4
             // 
@@ -1422,7 +1423,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgDigRes4.Name = "TextBox_CfgDigRes4";
             this.TextBox_CfgDigRes4.Size = new System.Drawing.Size(49, 22);
             this.TextBox_CfgDigRes4.TabIndex = 37;
-            this.TextBox_CfgDigRes4.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgDigRes4.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // TextBox_CfgDigRes5
             // 
@@ -1430,7 +1431,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgDigRes5.Name = "TextBox_CfgDigRes5";
             this.TextBox_CfgDigRes5.Size = new System.Drawing.Size(49, 22);
             this.TextBox_CfgDigRes5.TabIndex = 36;
-            this.TextBox_CfgDigRes5.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgDigRes5.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // ComboBox_CfgExposure1
             // 
@@ -1439,7 +1440,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_CfgExposure1.Name = "ComboBox_CfgExposure1";
             this.ComboBox_CfgExposure1.Size = new System.Drawing.Size(49, 22);
             this.ComboBox_CfgExposure1.TabIndex = 35;
-            this.ComboBox_CfgExposure1.SelectedIndexChanged += new System.EventHandler(this.CfgDetails_SelectionChanged);
+            this.ComboBox_CfgExposure1.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // ComboBox_CfgExposure2
             // 
@@ -1448,7 +1449,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_CfgExposure2.Name = "ComboBox_CfgExposure2";
             this.ComboBox_CfgExposure2.Size = new System.Drawing.Size(49, 22);
             this.ComboBox_CfgExposure2.TabIndex = 34;
-            this.ComboBox_CfgExposure2.SelectedIndexChanged += new System.EventHandler(this.CfgDetails_SelectionChanged);
+            this.ComboBox_CfgExposure2.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // ComboBox_CfgExposure3
             // 
@@ -1457,7 +1458,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_CfgExposure3.Name = "ComboBox_CfgExposure3";
             this.ComboBox_CfgExposure3.Size = new System.Drawing.Size(49, 22);
             this.ComboBox_CfgExposure3.TabIndex = 33;
-            this.ComboBox_CfgExposure3.SelectedIndexChanged += new System.EventHandler(this.CfgDetails_SelectionChanged);
+            this.ComboBox_CfgExposure3.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // ComboBox_CfgExposure4
             // 
@@ -1466,7 +1467,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_CfgExposure4.Name = "ComboBox_CfgExposure4";
             this.ComboBox_CfgExposure4.Size = new System.Drawing.Size(49, 22);
             this.ComboBox_CfgExposure4.TabIndex = 32;
-            this.ComboBox_CfgExposure4.SelectedIndexChanged += new System.EventHandler(this.CfgDetails_SelectionChanged);
+            this.ComboBox_CfgExposure4.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // ComboBox_CfgExposure5
             // 
@@ -1475,7 +1476,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_CfgExposure5.Name = "ComboBox_CfgExposure5";
             this.ComboBox_CfgExposure5.Size = new System.Drawing.Size(49, 22);
             this.ComboBox_CfgExposure5.TabIndex = 31;
-            this.ComboBox_CfgExposure5.SelectedIndexChanged += new System.EventHandler(this.CfgDetails_SelectionChanged);
+            this.ComboBox_CfgExposure5.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // ComboBox_CfgWidth1
             // 
@@ -1484,7 +1485,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_CfgWidth1.Name = "ComboBox_CfgWidth1";
             this.ComboBox_CfgWidth1.Size = new System.Drawing.Size(49, 22);
             this.ComboBox_CfgWidth1.TabIndex = 30;
-            this.ComboBox_CfgWidth1.SelectedIndexChanged += new System.EventHandler(this.CfgDetails_SelectionChanged);
+            this.ComboBox_CfgWidth1.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // ComboBox_CfgWidth2
             // 
@@ -1493,7 +1494,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_CfgWidth2.Name = "ComboBox_CfgWidth2";
             this.ComboBox_CfgWidth2.Size = new System.Drawing.Size(49, 22);
             this.ComboBox_CfgWidth2.TabIndex = 29;
-            this.ComboBox_CfgWidth2.SelectedIndexChanged += new System.EventHandler(this.CfgDetails_SelectionChanged);
+            this.ComboBox_CfgWidth2.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // ComboBox_CfgWidth3
             // 
@@ -1502,7 +1503,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_CfgWidth3.Name = "ComboBox_CfgWidth3";
             this.ComboBox_CfgWidth3.Size = new System.Drawing.Size(49, 22);
             this.ComboBox_CfgWidth3.TabIndex = 28;
-            this.ComboBox_CfgWidth3.SelectedIndexChanged += new System.EventHandler(this.CfgDetails_SelectionChanged);
+            this.ComboBox_CfgWidth3.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // ComboBox_CfgWidth4
             // 
@@ -1511,7 +1512,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_CfgWidth4.Name = "ComboBox_CfgWidth4";
             this.ComboBox_CfgWidth4.Size = new System.Drawing.Size(49, 22);
             this.ComboBox_CfgWidth4.TabIndex = 27;
-            this.ComboBox_CfgWidth4.SelectedIndexChanged += new System.EventHandler(this.CfgDetails_SelectionChanged);
+            this.ComboBox_CfgWidth4.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // ComboBox_CfgWidth5
             // 
@@ -1520,7 +1521,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_CfgWidth5.Name = "ComboBox_CfgWidth5";
             this.ComboBox_CfgWidth5.Size = new System.Drawing.Size(49, 22);
             this.ComboBox_CfgWidth5.TabIndex = 26;
-            this.ComboBox_CfgWidth5.SelectedIndexChanged += new System.EventHandler(this.CfgDetails_SelectionChanged);
+            this.ComboBox_CfgWidth5.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // TextBox_CfgRangeEnd1
             // 
@@ -1528,7 +1529,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgRangeEnd1.Name = "TextBox_CfgRangeEnd1";
             this.TextBox_CfgRangeEnd1.Size = new System.Drawing.Size(49, 22);
             this.TextBox_CfgRangeEnd1.TabIndex = 25;
-            this.TextBox_CfgRangeEnd1.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgRangeEnd1.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // TextBox_CfgRangeEnd2
             // 
@@ -1536,7 +1537,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgRangeEnd2.Name = "TextBox_CfgRangeEnd2";
             this.TextBox_CfgRangeEnd2.Size = new System.Drawing.Size(49, 22);
             this.TextBox_CfgRangeEnd2.TabIndex = 24;
-            this.TextBox_CfgRangeEnd2.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgRangeEnd2.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // TextBox_CfgRangeEnd3
             // 
@@ -1544,7 +1545,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgRangeEnd3.Name = "TextBox_CfgRangeEnd3";
             this.TextBox_CfgRangeEnd3.Size = new System.Drawing.Size(49, 22);
             this.TextBox_CfgRangeEnd3.TabIndex = 23;
-            this.TextBox_CfgRangeEnd3.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgRangeEnd3.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // TextBox_CfgRangeEnd4
             // 
@@ -1552,7 +1553,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgRangeEnd4.Name = "TextBox_CfgRangeEnd4";
             this.TextBox_CfgRangeEnd4.Size = new System.Drawing.Size(49, 22);
             this.TextBox_CfgRangeEnd4.TabIndex = 22;
-            this.TextBox_CfgRangeEnd4.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgRangeEnd4.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // TextBox_CfgRangeEnd5
             // 
@@ -1560,7 +1561,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgRangeEnd5.Name = "TextBox_CfgRangeEnd5";
             this.TextBox_CfgRangeEnd5.Size = new System.Drawing.Size(49, 22);
             this.TextBox_CfgRangeEnd5.TabIndex = 21;
-            this.TextBox_CfgRangeEnd5.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgRangeEnd5.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // TextBox_CfgRangeStart1
             // 
@@ -1568,7 +1569,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgRangeStart1.Name = "TextBox_CfgRangeStart1";
             this.TextBox_CfgRangeStart1.Size = new System.Drawing.Size(49, 22);
             this.TextBox_CfgRangeStart1.TabIndex = 20;
-            this.TextBox_CfgRangeStart1.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgRangeStart1.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // TextBox_CfgRangeStart2
             // 
@@ -1576,7 +1577,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgRangeStart2.Name = "TextBox_CfgRangeStart2";
             this.TextBox_CfgRangeStart2.Size = new System.Drawing.Size(49, 22);
             this.TextBox_CfgRangeStart2.TabIndex = 19;
-            this.TextBox_CfgRangeStart2.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgRangeStart2.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // TextBox_CfgRangeStart3
             // 
@@ -1584,7 +1585,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgRangeStart3.Name = "TextBox_CfgRangeStart3";
             this.TextBox_CfgRangeStart3.Size = new System.Drawing.Size(49, 22);
             this.TextBox_CfgRangeStart3.TabIndex = 18;
-            this.TextBox_CfgRangeStart3.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgRangeStart3.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // TextBox_CfgRangeStart4
             // 
@@ -1592,7 +1593,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgRangeStart4.Name = "TextBox_CfgRangeStart4";
             this.TextBox_CfgRangeStart4.Size = new System.Drawing.Size(49, 22);
             this.TextBox_CfgRangeStart4.TabIndex = 17;
-            this.TextBox_CfgRangeStart4.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgRangeStart4.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // ComboBox_CfgScanType1
             // 
@@ -1601,7 +1602,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_CfgScanType1.Name = "ComboBox_CfgScanType1";
             this.ComboBox_CfgScanType1.Size = new System.Drawing.Size(49, 22);
             this.ComboBox_CfgScanType1.TabIndex = 16;
-            this.ComboBox_CfgScanType1.SelectedIndexChanged += new System.EventHandler(this.CfgDetails_SelectionChanged);
+            this.ComboBox_CfgScanType1.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // ComboBox_CfgScanType2
             // 
@@ -1610,7 +1611,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_CfgScanType2.Name = "ComboBox_CfgScanType2";
             this.ComboBox_CfgScanType2.Size = new System.Drawing.Size(49, 22);
             this.ComboBox_CfgScanType2.TabIndex = 15;
-            this.ComboBox_CfgScanType2.SelectedIndexChanged += new System.EventHandler(this.CfgDetails_SelectionChanged);
+            this.ComboBox_CfgScanType2.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // ComboBox_CfgScanType3
             // 
@@ -1619,7 +1620,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_CfgScanType3.Name = "ComboBox_CfgScanType3";
             this.ComboBox_CfgScanType3.Size = new System.Drawing.Size(49, 22);
             this.ComboBox_CfgScanType3.TabIndex = 14;
-            this.ComboBox_CfgScanType3.SelectedIndexChanged += new System.EventHandler(this.CfgDetails_SelectionChanged);
+            this.ComboBox_CfgScanType3.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // ComboBox_CfgScanType4
             // 
@@ -1628,7 +1629,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_CfgScanType4.Name = "ComboBox_CfgScanType4";
             this.ComboBox_CfgScanType4.Size = new System.Drawing.Size(49, 22);
             this.ComboBox_CfgScanType4.TabIndex = 13;
-            this.ComboBox_CfgScanType4.SelectedIndexChanged += new System.EventHandler(this.CfgDetails_SelectionChanged);
+            this.ComboBox_CfgScanType4.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // TextBox_CfgRangeStart5
             // 
@@ -1636,7 +1637,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgRangeStart5.Name = "TextBox_CfgRangeStart5";
             this.TextBox_CfgRangeStart5.Size = new System.Drawing.Size(49, 22);
             this.TextBox_CfgRangeStart5.TabIndex = 12;
-            this.TextBox_CfgRangeStart5.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgRangeStart5.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // ComboBox_CfgScanType5
             // 
@@ -1645,7 +1646,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_CfgScanType5.Name = "ComboBox_CfgScanType5";
             this.ComboBox_CfgScanType5.Size = new System.Drawing.Size(49, 22);
             this.ComboBox_CfgScanType5.TabIndex = 11;
-            this.ComboBox_CfgScanType5.SelectedIndexChanged += new System.EventHandler(this.CfgDetails_SelectionChanged);
+            this.ComboBox_CfgScanType5.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // label87
             // 
@@ -1707,7 +1708,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgAvg.Name = "TextBox_CfgAvg";
             this.TextBox_CfgAvg.Size = new System.Drawing.Size(69, 22);
             this.TextBox_CfgAvg.TabIndex = 3;
-            this.TextBox_CfgAvg.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgAvg.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // label81
             // 
@@ -1724,7 +1725,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgName.Name = "TextBox_CfgName";
             this.TextBox_CfgName.Size = new System.Drawing.Size(129, 22);
             this.TextBox_CfgName.TabIndex = 1;
-            this.TextBox_CfgName.TextChanged += new System.EventHandler(this.CfgDetails_TextChanged);
+            this.TextBox_CfgName.Validated += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // label80
             // 
@@ -1747,7 +1748,11 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // panel_Saved_Scan
             // 
-            this.panel_Saved_Scan.Controls.Add(this.listBox_SavedData);
+            this.panel_Saved_Scan.Controls.Add(this.button_clear);
+            this.panel_Saved_Scan.Controls.Add(this.button_search);
+            this.panel_Saved_Scan.Controls.Add(this.textBox_filter);
+            this.panel_Saved_Scan.Controls.Add(this.label13);
+            this.panel_Saved_Scan.Controls.Add(this.dataGridView_savescan);
             this.panel_Saved_Scan.Controls.Add(this.label33);
             this.panel_Saved_Scan.Controls.Add(this.label30);
             this.panel_Saved_Scan.Controls.Add(this.Label_SavedAvg);
@@ -1802,15 +1807,56 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.panel_Saved_Scan.Size = new System.Drawing.Size(392, 584);
             this.panel_Saved_Scan.TabIndex = 0;
             // 
-            // listBox_SavedData
+            // button_clear
             // 
-            this.listBox_SavedData.FormattingEnabled = true;
-            this.listBox_SavedData.ItemHeight = 14;
-            this.listBox_SavedData.Location = new System.Drawing.Point(3, 44);
-            this.listBox_SavedData.Name = "listBox_SavedData";
-            this.listBox_SavedData.Size = new System.Drawing.Size(387, 326);
-            this.listBox_SavedData.TabIndex = 102;
-            this.listBox_SavedData.SelectedIndexChanged += new System.EventHandler(this.listBox_SavedData_SelectedIndexChanged);
+            this.button_clear.Location = new System.Drawing.Point(315, 43);
+            this.button_clear.Name = "button_clear";
+            this.button_clear.Size = new System.Drawing.Size(75, 23);
+            this.button_clear.TabIndex = 107;
+            this.button_clear.Text = "Clear";
+            this.button_clear.UseVisualStyleBackColor = true;
+            this.button_clear.Click += new System.EventHandler(this.button_clear_Click);
+            // 
+            // button_search
+            // 
+            this.button_search.Location = new System.Drawing.Point(234, 43);
+            this.button_search.Name = "button_search";
+            this.button_search.Size = new System.Drawing.Size(75, 23);
+            this.button_search.TabIndex = 106;
+            this.button_search.Text = "Apply";
+            this.button_search.UseVisualStyleBackColor = true;
+            this.button_search.Click += new System.EventHandler(this.button_search_Click);
+            // 
+            // textBox_filter
+            // 
+            this.textBox_filter.Location = new System.Drawing.Point(58, 44);
+            this.textBox_filter.Name = "textBox_filter";
+            this.textBox_filter.Size = new System.Drawing.Size(170, 22);
+            this.textBox_filter.TabIndex = 105;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(7, 47);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(45, 14);
+            this.label13.TabIndex = 104;
+            this.label13.Text = "Filter : ";
+            // 
+            // dataGridView_savescan
+            // 
+            this.dataGridView_savescan.AllowUserToAddRows = false;
+            this.dataGridView_savescan.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.dataGridView_savescan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView_savescan.Location = new System.Drawing.Point(3, 72);
+            this.dataGridView_savescan.MultiSelect = false;
+            this.dataGridView_savescan.Name = "dataGridView_savescan";
+            this.dataGridView_savescan.ReadOnly = true;
+            this.dataGridView_savescan.RowTemplate.Height = 24;
+            this.dataGridView_savescan.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView_savescan.Size = new System.Drawing.Size(386, 278);
+            this.dataGridView_savescan.TabIndex = 103;
+            this.dataGridView_savescan.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridView_savescan_MouseClick);
             // 
             // label33
             // 
@@ -2219,6 +2265,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // tabPage_Utility
             // 
+            this.tabPage_Utility.Controls.Add(this.GroupBox_BleName);
             this.tabPage_Utility.Controls.Add(this.groupBox_Device);
             this.tabPage_Utility.Controls.Add(this.groupBox_ActivationKey);
             this.tabPage_Utility.Controls.Add(this.groupBox_DevInfo);
@@ -2239,12 +2286,63 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.tabPage_Utility.Text = "Utility";
             this.tabPage_Utility.UseVisualStyleBackColor = true;
             // 
+            // GroupBox_BleName
+            // 
+            this.GroupBox_BleName.Controls.Add(this.Button_Get_BLE_Display_Name);
+            this.GroupBox_BleName.Controls.Add(this.Button_Set_BLE_Display_Name);
+            this.GroupBox_BleName.Controls.Add(this.Button_Clear_BLE_Display_Name);
+            this.GroupBox_BleName.Controls.Add(this.TextBox_BLE_Display_Name);
+            this.GroupBox_BleName.Location = new System.Drawing.Point(7, 474);
+            this.GroupBox_BleName.Name = "GroupBox_BleName";
+            this.GroupBox_BleName.Size = new System.Drawing.Size(251, 80);
+            this.GroupBox_BleName.TabIndex = 15;
+            this.GroupBox_BleName.TabStop = false;
+            this.GroupBox_BleName.Text = "Bluetooth LE Advertising Name";
+            // 
+            // Button_Get_BLE_Display_Name
+            // 
+            this.Button_Get_BLE_Display_Name.Location = new System.Drawing.Point(168, 49);
+            this.Button_Get_BLE_Display_Name.Name = "Button_Get_BLE_Display_Name";
+            this.Button_Get_BLE_Display_Name.Size = new System.Drawing.Size(75, 23);
+            this.Button_Get_BLE_Display_Name.TabIndex = 3;
+            this.Button_Get_BLE_Display_Name.Text = "Get";
+            this.Button_Get_BLE_Display_Name.UseVisualStyleBackColor = true;
+            this.Button_Get_BLE_Display_Name.Click += new System.EventHandler(this.Button_Get_BLE_Display_Name_Click);
+            // 
+            // Button_Set_BLE_Display_Name
+            // 
+            this.Button_Set_BLE_Display_Name.Location = new System.Drawing.Point(87, 49);
+            this.Button_Set_BLE_Display_Name.Name = "Button_Set_BLE_Display_Name";
+            this.Button_Set_BLE_Display_Name.Size = new System.Drawing.Size(75, 23);
+            this.Button_Set_BLE_Display_Name.TabIndex = 2;
+            this.Button_Set_BLE_Display_Name.Text = "Set";
+            this.Button_Set_BLE_Display_Name.UseVisualStyleBackColor = true;
+            this.Button_Set_BLE_Display_Name.Click += new System.EventHandler(this.Button_Set_BLE_Display_Name_Click);
+            // 
+            // Button_Clear_BLE_Display_Name
+            // 
+            this.Button_Clear_BLE_Display_Name.Location = new System.Drawing.Point(6, 49);
+            this.Button_Clear_BLE_Display_Name.Name = "Button_Clear_BLE_Display_Name";
+            this.Button_Clear_BLE_Display_Name.Size = new System.Drawing.Size(75, 23);
+            this.Button_Clear_BLE_Display_Name.TabIndex = 1;
+            this.Button_Clear_BLE_Display_Name.Text = "Default";
+            this.Button_Clear_BLE_Display_Name.UseVisualStyleBackColor = true;
+            this.Button_Clear_BLE_Display_Name.Click += new System.EventHandler(this.Button_Clear_BLE_Display_Name_Click);
+            // 
+            // TextBox_BLE_Display_Name
+            // 
+            this.TextBox_BLE_Display_Name.Location = new System.Drawing.Point(6, 21);
+            this.TextBox_BLE_Display_Name.Name = "TextBox_BLE_Display_Name";
+            this.TextBox_BLE_Display_Name.Size = new System.Drawing.Size(237, 22);
+            this.TextBox_BLE_Display_Name.TabIndex = 0;
+            // 
             // groupBox_Device
             // 
+            this.groupBox_Device.Controls.Add(this.Button_LockButton);
             this.groupBox_Device.Controls.Add(this.label12);
+            this.groupBox_Device.Controls.Add(this.Label_ButtonStatus);
             this.groupBox_Device.Controls.Add(this.label11);
-            this.groupBox_Device.Controls.Add(this.button_cali);
-            this.groupBox_Device.Controls.Add(this.label10);
+            this.groupBox_Device.Controls.Add(this.Button_UnlockButton);
             this.groupBox_Device.Controls.Add(this.button_DeviceRestoreFacRef);
             this.groupBox_Device.Controls.Add(this.label121);
             this.groupBox_Device.Controls.Add(this.button_DeviceBackUpFacRef);
@@ -2253,64 +2351,74 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.groupBox_Device.Controls.Add(this.label119);
             this.groupBox_Device.Controls.Add(this.button_DeviceResetSys);
             this.groupBox_Device.Controls.Add(this.label118);
-            this.groupBox_Device.Location = new System.Drawing.Point(883, 384);
+            this.groupBox_Device.Location = new System.Drawing.Point(883, 374);
             this.groupBox_Device.Name = "groupBox_Device";
-            this.groupBox_Device.Size = new System.Drawing.Size(348, 207);
+            this.groupBox_Device.Size = new System.Drawing.Size(348, 253);
             this.groupBox_Device.TabIndex = 14;
             this.groupBox_Device.TabStop = false;
             this.groupBox_Device.Text = "Device";
             // 
+            // Button_LockButton
+            // 
+            this.Button_LockButton.Location = new System.Drawing.Point(183, 224);
+            this.Button_LockButton.Name = "Button_LockButton";
+            this.Button_LockButton.Size = new System.Drawing.Size(75, 23);
+            this.Button_LockButton.TabIndex = 14;
+            this.Button_LockButton.Text = "Lock";
+            this.Button_LockButton.UseVisualStyleBackColor = true;
+            this.Button_LockButton.Click += new System.EventHandler(this.Button_LockButton_Click);
+            // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(6, 147);
+            this.label12.Location = new System.Drawing.Point(6, 170);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(15, 14);
             this.label12.TabIndex = 11;
             this.label12.Text = "()";
             // 
+            // Label_ButtonStatus
+            // 
+            this.Label_ButtonStatus.AutoSize = true;
+            this.Label_ButtonStatus.Location = new System.Drawing.Point(6, 228);
+            this.Label_ButtonStatus.Name = "Label_ButtonStatus";
+            this.Label_ButtonStatus.Size = new System.Drawing.Size(86, 14);
+            this.Label_ButtonStatus.TabIndex = 12;
+            this.Label_ButtonStatus.Text = "Button Status: ";
+            // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 69);
+            this.label11.Location = new System.Drawing.Point(6, 83);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(15, 14);
             this.label11.TabIndex = 10;
             this.label11.Text = "()";
             // 
-            // button_cali
+            // Button_UnlockButton
             // 
-            this.button_cali.Location = new System.Drawing.Point(276, 170);
-            this.button_cali.Name = "button_cali";
-            this.button_cali.Size = new System.Drawing.Size(66, 23);
-            this.button_cali.TabIndex = 9;
-            this.button_cali.Text = "Click";
-            this.button_cali.UseVisualStyleBackColor = true;
-            this.button_cali.Click += new System.EventHandler(this.button_cali_Click);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 174);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(163, 14);
-            this.label10.TabIndex = 8;
-            this.label10.Text = "User Wavelength Calibration";
+            this.Button_UnlockButton.Location = new System.Drawing.Point(264, 224);
+            this.Button_UnlockButton.Name = "Button_UnlockButton";
+            this.Button_UnlockButton.Size = new System.Drawing.Size(78, 23);
+            this.Button_UnlockButton.TabIndex = 13;
+            this.Button_UnlockButton.Text = "Unlock";
+            this.Button_UnlockButton.UseVisualStyleBackColor = true;
+            this.Button_UnlockButton.Click += new System.EventHandler(this.Button_UnlockButton_Click);
             // 
             // button_DeviceRestoreFacRef
             // 
-            this.button_DeviceRestoreFacRef.Location = new System.Drawing.Point(276, 120);
+            this.button_DeviceRestoreFacRef.Location = new System.Drawing.Point(264, 137);
             this.button_DeviceRestoreFacRef.Name = "button_DeviceRestoreFacRef";
-            this.button_DeviceRestoreFacRef.Size = new System.Drawing.Size(66, 23);
+            this.button_DeviceRestoreFacRef.Size = new System.Drawing.Size(78, 23);
             this.button_DeviceRestoreFacRef.TabIndex = 7;
-            this.button_DeviceRestoreFacRef.Text = "Click";
+            this.button_DeviceRestoreFacRef.Text = "Restore";
             this.button_DeviceRestoreFacRef.UseVisualStyleBackColor = true;
             this.button_DeviceRestoreFacRef.Click += new System.EventHandler(this.button_DeviceRestoreFacRef_Click);
             // 
             // label121
             // 
             this.label121.AutoSize = true;
-            this.label121.Location = new System.Drawing.Point(6, 124);
+            this.label121.Location = new System.Drawing.Point(6, 141);
             this.label121.Name = "label121";
             this.label121.Size = new System.Drawing.Size(148, 14);
             this.label121.TabIndex = 6;
@@ -2318,18 +2426,18 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // button_DeviceBackUpFacRef
             // 
-            this.button_DeviceBackUpFacRef.Location = new System.Drawing.Point(276, 42);
+            this.button_DeviceBackUpFacRef.Location = new System.Drawing.Point(264, 50);
             this.button_DeviceBackUpFacRef.Name = "button_DeviceBackUpFacRef";
-            this.button_DeviceBackUpFacRef.Size = new System.Drawing.Size(66, 23);
+            this.button_DeviceBackUpFacRef.Size = new System.Drawing.Size(78, 23);
             this.button_DeviceBackUpFacRef.TabIndex = 5;
-            this.button_DeviceBackUpFacRef.Text = "Click";
+            this.button_DeviceBackUpFacRef.Text = "Backup";
             this.button_DeviceBackUpFacRef.UseVisualStyleBackColor = true;
             this.button_DeviceBackUpFacRef.Click += new System.EventHandler(this.button_DeviceBackUpFacRef_Click);
             // 
             // label120
             // 
             this.label120.AutoSize = true;
-            this.label120.Location = new System.Drawing.Point(6, 46);
+            this.label120.Location = new System.Drawing.Point(6, 54);
             this.label120.Name = "label120";
             this.label120.Size = new System.Drawing.Size(145, 14);
             this.label120.TabIndex = 4;
@@ -2337,18 +2445,18 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // button_DeviceUpdateRef
             // 
-            this.button_DeviceUpdateRef.Location = new System.Drawing.Point(276, 91);
+            this.button_DeviceUpdateRef.Location = new System.Drawing.Point(264, 108);
             this.button_DeviceUpdateRef.Name = "button_DeviceUpdateRef";
-            this.button_DeviceUpdateRef.Size = new System.Drawing.Size(66, 23);
+            this.button_DeviceUpdateRef.Size = new System.Drawing.Size(78, 23);
             this.button_DeviceUpdateRef.TabIndex = 3;
-            this.button_DeviceUpdateRef.Text = "Click";
+            this.button_DeviceUpdateRef.Text = "Update";
             this.button_DeviceUpdateRef.UseVisualStyleBackColor = true;
             this.button_DeviceUpdateRef.Click += new System.EventHandler(this.button_DeviceUpdateRef_Click);
             // 
             // label119
             // 
             this.label119.AutoSize = true;
-            this.label119.Location = new System.Drawing.Point(6, 95);
+            this.label119.Location = new System.Drawing.Point(6, 112);
             this.label119.Name = "label119";
             this.label119.Size = new System.Drawing.Size(134, 14);
             this.label119.TabIndex = 2;
@@ -2356,18 +2464,18 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // button_DeviceResetSys
             // 
-            this.button_DeviceResetSys.Location = new System.Drawing.Point(276, 14);
+            this.button_DeviceResetSys.Location = new System.Drawing.Point(264, 21);
             this.button_DeviceResetSys.Name = "button_DeviceResetSys";
-            this.button_DeviceResetSys.Size = new System.Drawing.Size(66, 23);
+            this.button_DeviceResetSys.Size = new System.Drawing.Size(78, 23);
             this.button_DeviceResetSys.TabIndex = 1;
-            this.button_DeviceResetSys.Text = "Click";
+            this.button_DeviceResetSys.Text = "Reset";
             this.button_DeviceResetSys.UseVisualStyleBackColor = true;
             this.button_DeviceResetSys.Click += new System.EventHandler(this.button_DeviceResetSys_Click);
             // 
             // label118
             // 
             this.label118.AutoSize = true;
-            this.label118.Location = new System.Drawing.Point(6, 18);
+            this.label118.Location = new System.Drawing.Point(6, 25);
             this.label118.Name = "label118";
             this.label118.Size = new System.Drawing.Size(79, 14);
             this.label118.TabIndex = 0;
@@ -2382,7 +2490,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.groupBox_ActivationKey.Controls.Add(this.button_KeySet);
             this.groupBox_ActivationKey.Controls.Add(this.textBox_Key);
             this.groupBox_ActivationKey.Controls.Add(this.label117);
-            this.groupBox_ActivationKey.Location = new System.Drawing.Point(883, 295);
+            this.groupBox_ActivationKey.Location = new System.Drawing.Point(883, 285);
             this.groupBox_ActivationKey.Name = "groupBox_ActivationKey";
             this.groupBox_ActivationKey.Size = new System.Drawing.Size(348, 83);
             this.groupBox_ActivationKey.TabIndex = 13;
@@ -2455,8 +2563,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // groupBox_DevInfo
             // 
+            this.groupBox_DevInfo.Controls.Add(this.label_DevInfoLampUsageValue);
             this.groupBox_DevInfo.Controls.Add(this.label_DevInfoLampUsage);
-            this.groupBox_DevInfo.Controls.Add(this.label112);
             this.groupBox_DevInfo.Controls.Add(this.label_DevInfoUUID);
             this.groupBox_DevInfo.Controls.Add(this.label114);
             this.groupBox_DevInfo.Controls.Add(this.label_DevInfoManfacSerNum);
@@ -2479,26 +2587,26 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.groupBox_DevInfo.Controls.Add(this.label95);
             this.groupBox_DevInfo.Location = new System.Drawing.Point(883, 6);
             this.groupBox_DevInfo.Name = "groupBox_DevInfo";
-            this.groupBox_DevInfo.Size = new System.Drawing.Size(348, 283);
+            this.groupBox_DevInfo.Size = new System.Drawing.Size(348, 273);
             this.groupBox_DevInfo.TabIndex = 12;
             this.groupBox_DevInfo.TabStop = false;
             this.groupBox_DevInfo.Text = "Device Information";
             // 
+            // label_DevInfoLampUsageValue
+            // 
+            this.label_DevInfoLampUsageValue.Location = new System.Drawing.Point(200, 249);
+            this.label_DevInfoLampUsageValue.Name = "label_DevInfoLampUsageValue";
+            this.label_DevInfoLampUsageValue.Size = new System.Drawing.Size(127, 14);
+            this.label_DevInfoLampUsageValue.TabIndex = 21;
+            // 
             // label_DevInfoLampUsage
             // 
-            this.label_DevInfoLampUsage.Location = new System.Drawing.Point(200, 249);
+            this.label_DevInfoLampUsage.AutoSize = true;
+            this.label_DevInfoLampUsage.Location = new System.Drawing.Point(6, 249);
             this.label_DevInfoLampUsage.Name = "label_DevInfoLampUsage";
-            this.label_DevInfoLampUsage.Size = new System.Drawing.Size(127, 14);
-            this.label_DevInfoLampUsage.TabIndex = 21;
-            // 
-            // label112
-            // 
-            this.label112.AutoSize = true;
-            this.label112.Location = new System.Drawing.Point(6, 249);
-            this.label112.Name = "label112";
-            this.label112.Size = new System.Drawing.Size(73, 14);
-            this.label112.TabIndex = 20;
-            this.label112.Text = "Lamp Usage";
+            this.label_DevInfoLampUsage.Size = new System.Drawing.Size(73, 14);
+            this.label_DevInfoLampUsage.TabIndex = 20;
+            this.label_DevInfoLampUsage.Text = "Lamp Usage";
             // 
             // label_DevInfoUUID
             // 
@@ -2687,7 +2795,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.GroupBox_CalibCoeffs.Controls.Add(this.label29);
             this.GroupBox_CalibCoeffs.Location = new System.Drawing.Point(366, 182);
             this.GroupBox_CalibCoeffs.Name = "GroupBox_CalibCoeffs";
-            this.GroupBox_CalibCoeffs.Size = new System.Drawing.Size(511, 340);
+            this.GroupBox_CalibCoeffs.Size = new System.Drawing.Size(511, 285);
             this.GroupBox_CalibCoeffs.TabIndex = 11;
             this.GroupBox_CalibCoeffs.TabStop = false;
             this.GroupBox_CalibCoeffs.Text = "Calibration Coefficients";
@@ -2899,13 +3007,19 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // GroupBox_Sensors
             // 
             this.GroupBox_Sensors.Controls.Add(this.Button_SensorRead);
-            this.GroupBox_Sensors.Controls.Add(this.Label_SensorLampIntensity);
+            this.GroupBox_Sensors.Controls.Add(this.Label_SensorLampCM2Value);
+            this.GroupBox_Sensors.Controls.Add(this.Label_SensorLampCM1Value);
+            this.GroupBox_Sensors.Controls.Add(this.Label_SensorLampVM2Value);
+            this.GroupBox_Sensors.Controls.Add(this.Label_SensorLampVM1Value);
             this.GroupBox_Sensors.Controls.Add(this.Label_SensorTivaTemp);
             this.GroupBox_Sensors.Controls.Add(this.Label_SensorSysTemp);
             this.GroupBox_Sensors.Controls.Add(this.Label_SensorHumidity);
             this.GroupBox_Sensors.Controls.Add(this.Label_SensorBattCapacity);
             this.GroupBox_Sensors.Controls.Add(this.Label_SensorBattStatus);
-            this.GroupBox_Sensors.Controls.Add(this.label7);
+            this.GroupBox_Sensors.Controls.Add(this.Label_SensorLampCM2);
+            this.GroupBox_Sensors.Controls.Add(this.Label_SensorLampCM1);
+            this.GroupBox_Sensors.Controls.Add(this.Label_SensorLampVM2);
+            this.GroupBox_Sensors.Controls.Add(this.Label_SensorLampVM1);
             this.GroupBox_Sensors.Controls.Add(this.label8);
             this.GroupBox_Sensors.Controls.Add(this.label5);
             this.GroupBox_Sensors.Controls.Add(this.label16);
@@ -2928,61 +3042,109 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.Button_SensorRead.UseVisualStyleBackColor = true;
             this.Button_SensorRead.Click += new System.EventHandler(this.Button_SensorRead_Click);
             // 
-            // Label_SensorLampIntensity
+            // Label_SensorLampCM2Value
             // 
-            this.Label_SensorLampIntensity.Location = new System.Drawing.Point(177, 151);
-            this.Label_SensorLampIntensity.Name = "Label_SensorLampIntensity";
-            this.Label_SensorLampIntensity.Size = new System.Drawing.Size(129, 14);
-            this.Label_SensorLampIntensity.TabIndex = 12;
+            this.Label_SensorLampCM2Value.Location = new System.Drawing.Point(176, 218);
+            this.Label_SensorLampCM2Value.Name = "Label_SensorLampCM2Value";
+            this.Label_SensorLampCM2Value.Size = new System.Drawing.Size(129, 14);
+            this.Label_SensorLampCM2Value.TabIndex = 19;
+            // 
+            // Label_SensorLampCM1Value
+            // 
+            this.Label_SensorLampCM1Value.Location = new System.Drawing.Point(177, 168);
+            this.Label_SensorLampCM1Value.Name = "Label_SensorLampCM1Value";
+            this.Label_SensorLampCM1Value.Size = new System.Drawing.Size(129, 14);
+            this.Label_SensorLampCM1Value.TabIndex = 18;
+            // 
+            // Label_SensorLampVM2Value
+            // 
+            this.Label_SensorLampVM2Value.Location = new System.Drawing.Point(177, 193);
+            this.Label_SensorLampVM2Value.Name = "Label_SensorLampVM2Value";
+            this.Label_SensorLampVM2Value.Size = new System.Drawing.Size(129, 14);
+            this.Label_SensorLampVM2Value.TabIndex = 17;
+            // 
+            // Label_SensorLampVM1Value
+            // 
+            this.Label_SensorLampVM1Value.Location = new System.Drawing.Point(177, 143);
+            this.Label_SensorLampVM1Value.Name = "Label_SensorLampVM1Value";
+            this.Label_SensorLampVM1Value.Size = new System.Drawing.Size(129, 14);
+            this.Label_SensorLampVM1Value.TabIndex = 12;
             // 
             // Label_SensorTivaTemp
             // 
-            this.Label_SensorTivaTemp.Location = new System.Drawing.Point(177, 124);
+            this.Label_SensorTivaTemp.Location = new System.Drawing.Point(177, 118);
             this.Label_SensorTivaTemp.Name = "Label_SensorTivaTemp";
             this.Label_SensorTivaTemp.Size = new System.Drawing.Size(129, 14);
             this.Label_SensorTivaTemp.TabIndex = 11;
             // 
             // Label_SensorSysTemp
             // 
-            this.Label_SensorSysTemp.Location = new System.Drawing.Point(177, 99);
+            this.Label_SensorSysTemp.Location = new System.Drawing.Point(177, 93);
             this.Label_SensorSysTemp.Name = "Label_SensorSysTemp";
             this.Label_SensorSysTemp.Size = new System.Drawing.Size(129, 14);
             this.Label_SensorSysTemp.TabIndex = 10;
             // 
             // Label_SensorHumidity
             // 
-            this.Label_SensorHumidity.Location = new System.Drawing.Point(177, 74);
+            this.Label_SensorHumidity.Location = new System.Drawing.Point(177, 68);
             this.Label_SensorHumidity.Name = "Label_SensorHumidity";
             this.Label_SensorHumidity.Size = new System.Drawing.Size(129, 14);
             this.Label_SensorHumidity.TabIndex = 9;
             // 
             // Label_SensorBattCapacity
             // 
-            this.Label_SensorBattCapacity.Location = new System.Drawing.Point(177, 47);
+            this.Label_SensorBattCapacity.Location = new System.Drawing.Point(177, 43);
             this.Label_SensorBattCapacity.Name = "Label_SensorBattCapacity";
             this.Label_SensorBattCapacity.Size = new System.Drawing.Size(129, 14);
             this.Label_SensorBattCapacity.TabIndex = 8;
             // 
             // Label_SensorBattStatus
             // 
-            this.Label_SensorBattStatus.Location = new System.Drawing.Point(177, 22);
+            this.Label_SensorBattStatus.Location = new System.Drawing.Point(177, 18);
             this.Label_SensorBattStatus.Name = "Label_SensorBattStatus";
             this.Label_SensorBattStatus.Size = new System.Drawing.Size(129, 14);
             this.Label_SensorBattStatus.TabIndex = 7;
             // 
-            // label7
+            // Label_SensorLampCM2
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 151);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(87, 14);
-            this.label7.TabIndex = 5;
-            this.label7.Text = "Lamp Intensity";
+            this.Label_SensorLampCM2.AutoSize = true;
+            this.Label_SensorLampCM2.Location = new System.Drawing.Point(6, 218);
+            this.Label_SensorLampCM2.Name = "Label_SensorLampCM2";
+            this.Label_SensorLampCM2.Size = new System.Drawing.Size(61, 14);
+            this.Label_SensorLampCM2.TabIndex = 16;
+            this.Label_SensorLampCM2.Text = "Lamp CM2";
+            // 
+            // Label_SensorLampCM1
+            // 
+            this.Label_SensorLampCM1.AutoSize = true;
+            this.Label_SensorLampCM1.Location = new System.Drawing.Point(6, 168);
+            this.Label_SensorLampCM1.Name = "Label_SensorLampCM1";
+            this.Label_SensorLampCM1.Size = new System.Drawing.Size(61, 14);
+            this.Label_SensorLampCM1.TabIndex = 15;
+            this.Label_SensorLampCM1.Text = "Lamp CM1";
+            // 
+            // Label_SensorLampVM2
+            // 
+            this.Label_SensorLampVM2.AutoSize = true;
+            this.Label_SensorLampVM2.Location = new System.Drawing.Point(6, 193);
+            this.Label_SensorLampVM2.Name = "Label_SensorLampVM2";
+            this.Label_SensorLampVM2.Size = new System.Drawing.Size(62, 14);
+            this.Label_SensorLampVM2.TabIndex = 14;
+            this.Label_SensorLampVM2.Text = "Lamp VM2";
+            // 
+            // Label_SensorLampVM1
+            // 
+            this.Label_SensorLampVM1.AutoSize = true;
+            this.Label_SensorLampVM1.Location = new System.Drawing.Point(6, 143);
+            this.Label_SensorLampVM1.Name = "Label_SensorLampVM1";
+            this.Label_SensorLampVM1.Size = new System.Drawing.Size(62, 14);
+            this.Label_SensorLampVM1.TabIndex = 5;
+            this.Label_SensorLampVM1.Text = "Lamp VM1";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(7, 124);
+            this.label8.Location = new System.Drawing.Point(6, 118);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(61, 14);
             this.label8.TabIndex = 4;
@@ -2991,7 +3153,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(7, 99);
+            this.label5.Location = new System.Drawing.Point(6, 93);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(77, 14);
             this.label5.TabIndex = 3;
@@ -3000,7 +3162,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(7, 74);
+            this.label16.Location = new System.Drawing.Point(6, 68);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(97, 14);
             this.label16.TabIndex = 2;
@@ -3009,7 +3171,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(7, 47);
+            this.label17.Location = new System.Drawing.Point(6, 43);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(93, 14);
             this.label17.TabIndex = 1;
@@ -3018,7 +3180,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(7, 22);
+            this.label18.Location = new System.Drawing.Point(6, 18);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(129, 14);
             this.label18.TabIndex = 0;
@@ -3079,7 +3241,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(124, 25);
+            this.label4.Location = new System.Drawing.Point(117, 25);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(46, 14);
             this.label4.TabIndex = 3;
@@ -3109,7 +3271,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             this.TextBox_LampUsage.Location = new System.Drawing.Point(7, 22);
             this.TextBox_LampUsage.Name = "TextBox_LampUsage";
-            this.TextBox_LampUsage.Size = new System.Drawing.Size(111, 22);
+            this.TextBox_LampUsage.Size = new System.Drawing.Size(104, 22);
             this.TextBox_LampUsage.TabIndex = 0;
             // 
             // GroupBox_DLPC150FWUpdate
@@ -3124,7 +3286,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.GroupBox_DLPC150FWUpdate.Size = new System.Drawing.Size(511, 82);
             this.GroupBox_DLPC150FWUpdate.TabIndex = 7;
             this.GroupBox_DLPC150FWUpdate.TabStop = false;
-            this.GroupBox_DLPC150FWUpdate.Text = "DLPC150 Firemware Update";
+            this.GroupBox_DLPC150FWUpdate.Text = "DLPC150 Firmware Update";
             // 
             // Button_DLPC150FWUpdate
             // 
@@ -3181,7 +3343,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.GroupBox_TivaFWUpdate.Size = new System.Drawing.Size(511, 82);
             this.GroupBox_TivaFWUpdate.TabIndex = 6;
             this.GroupBox_TivaFWUpdate.TabStop = false;
-            this.GroupBox_TivaFWUpdate.Text = "TIVA Firemware Update";
+            this.GroupBox_TivaFWUpdate.Text = "TIVA Firmware Update";
             // 
             // Button_TivaFWUpdate
             // 
@@ -3399,12 +3561,10 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.splitContainer1.ResumeLayout(false);
             this.tabScanPage.ResumeLayout(false);
             this.tabPage_ScanSetting.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.GroupBox_ContScan.ResumeLayout(false);
+            this.GroupBox_ContScan.PerformLayout();
+            this.GroupBox_GainControl.ResumeLayout(false);
+            this.GroupBox_GainControl.PerformLayout();
             this.GroupBox_SaveScan.ResumeLayout(false);
             this.GroupBox_SaveScan.PerformLayout();
             this.GroupBox_ScanAvg.ResumeLayout(false);
@@ -3420,7 +3580,10 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.tabPage_SaveScans.ResumeLayout(false);
             this.panel_Saved_Scan.ResumeLayout(false);
             this.panel_Saved_Scan.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_savescan)).EndInit();
             this.tabPage_Utility.ResumeLayout(false);
+            this.GroupBox_BleName.ResumeLayout(false);
+            this.GroupBox_BleName.PerformLayout();
             this.groupBox_Device.ResumeLayout(false);
             this.groupBox_Device.PerformLayout();
             this.groupBox_ActivationKey.ResumeLayout(false);
@@ -3489,13 +3652,13 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.GroupBox GroupBox_Sensors;
         private System.Windows.Forms.Button Button_SensorRead;
-        private System.Windows.Forms.Label Label_SensorLampIntensity;
+        private System.Windows.Forms.Label Label_SensorLampVM1Value;
         private System.Windows.Forms.Label Label_SensorTivaTemp;
         private System.Windows.Forms.Label Label_SensorSysTemp;
         private System.Windows.Forms.Label Label_SensorHumidity;
         private System.Windows.Forms.Label Label_SensorBattCapacity;
         private System.Windows.Forms.Label Label_SensorBattStatus;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label Label_SensorLampVM1;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label16;
@@ -3523,8 +3686,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private System.Windows.Forms.TextBox TextBox_TivaFWPath;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.GroupBox groupBox_DevInfo;
+        private System.Windows.Forms.Label label_DevInfoLampUsageValue;
         private System.Windows.Forms.Label label_DevInfoLampUsage;
-        private System.Windows.Forms.Label label112;
         private System.Windows.Forms.Label label_DevInfoUUID;
         private System.Windows.Forms.Label label114;
         private System.Windows.Forms.Label label_DevInfoManfacSerNum;
@@ -3597,11 +3760,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private System.Windows.Forms.Button Button_CfgEdit;
         private System.Windows.Forms.Button Button_CfgNew;
         private System.Windows.Forms.GroupBox GroupBox_CfgDetails;
-        private System.Windows.Forms.Label Label_CfgDigRes5;
-        private System.Windows.Forms.Label Label_CfgDigRes4;
-        private System.Windows.Forms.Label Label_CfgDigRes3;
-        private System.Windows.Forms.Label Label_CfgDigRes2;
-        private System.Windows.Forms.Label Label_CfgDigRes1;
         private System.Windows.Forms.Label label93;
         private System.Windows.Forms.Label label92;
         private System.Windows.Forms.Label label91;
@@ -3656,7 +3814,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private System.Windows.Forms.Label Label_CurrentConfig;
         private System.Windows.Forms.Label Label_ScanStatus;
         private System.Windows.Forms.Button Button_Scan;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox GroupBox_GainControl;
         private System.Windows.Forms.CheckBox CheckBox_AutoGain;
         private System.Windows.Forms.ComboBox ComboBox_PGAGain;
         private System.Windows.Forms.Label label1;
@@ -3673,7 +3831,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private Label label_ErrorStatus;
         private TabPage tabPage_SaveScans;
         private Panel panel_Saved_Scan;
-        private ListBox listBox_SavedData;
         private Label label33;
         private Label label30;
         private Label Label_SavedAvg;
@@ -3724,7 +3881,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private TextBox TextBox_DisplayDirPath;
         private Label label79;
         private CheckBox Check_Overlay;
-        private GroupBox groupBox2;
+        private GroupBox GroupBox_ContScan;
         private Label label3;
         private TextBox Text_ContDelay;
         private Label label2;
@@ -3743,15 +3900,36 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private CheckBox CheckBox_SaveIJDX;
         private CheckBox CheckBox_SaveOneCSV;
         private Button Button_ClearAllErrors;
-        private Button button_tooltip;
-        private Button button_zoom;
-        private GroupBox groupBox3;
-        private CheckBox CheckBox_GlitchFilter;
-        private Label label10;
-        private Button button_cali;
         private Label label_ref;
         private Label label11;
         private Label label12;
+        private DataGridView dataGridView_savescan;
+        private Button button_search;
+        private TextBox textBox_filter;
+        private Label label13;
+        private Button button_clear;
+        private CheckBox checkBox_zoom;
+        private CheckBox checkBox_tooltip;
+        private Label label_pattern5;
+        private Label label_pattern4;
+        private Label label_pattern3;
+        private Label label_pattern2;
+        private Label label_pattern1;
+        private Label label14;
+        private Label Label_SensorLampCM2;
+        private Label Label_SensorLampCM1;
+        private Label Label_SensorLampVM2;
+        private Label Label_SensorLampCM2Value;
+        private Label Label_SensorLampCM1Value;
+        private Label Label_SensorLampVM2Value;
+        private GroupBox GroupBox_BleName;
+        private Button Button_Get_BLE_Display_Name;
+        private Button Button_Set_BLE_Display_Name;
+        private Button Button_Clear_BLE_Display_Name;
+        private TextBox TextBox_BLE_Display_Name;
+        private Button Button_LockButton;
+        private Button Button_UnlockButton;
+        private Label Label_ButtonStatus;
     }
 }
 

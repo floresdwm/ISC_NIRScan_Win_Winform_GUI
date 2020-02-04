@@ -2648,7 +2648,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             String ModelName = Device.DevInfo.ModelName;
             String TivaRev = String.Empty;
             String DLPCRev = String.Empty;
-            String SpecLibRev = String.Empty;
             if (GetFW_LEVEL() >= FW_LEVEL.LEVEL_3 || GetFW_LEVEL() == FW_LEVEL.LEVEL_1)
             {
                 TivaRev = Device.DevInfo.TivaRev[0].ToString() + "."
@@ -2675,19 +2674,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
                         + Device.DevInfo.DLPCRev[2].ToString() + "."
                         + Device.DevInfo.DLPCRev[3].ToString();
             }
-            if (Device.DevInfo.SpecLibRev[3].ToString() == "0")
-            {
-                SpecLibRev = Device.DevInfo.SpecLibRev[0].ToString() + "."
-                           + Device.DevInfo.SpecLibRev[1].ToString() + "."
-                           + Device.DevInfo.SpecLibRev[2].ToString();
-            }
-            else
-            {
-                SpecLibRev = Device.DevInfo.SpecLibRev[0].ToString() + "."
-                           + Device.DevInfo.SpecLibRev[1].ToString() + "."
-                           + Device.DevInfo.SpecLibRev[2].ToString() + "."
-                           + Device.DevInfo.SpecLibRev[3].ToString();
-            }
             String UUID = BitConverter.ToString(Device.DevInfo.DeviceUUID).Replace("-", ":");
             String HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(0, 1) : String.Empty;
             String Detector_Board_HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(2, 1) : String.Empty;
@@ -2699,8 +2685,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             String Exposure = String.Empty, Ref_Exposure = String.Empty;
             //----------------------------------------------
 
-            String[,] CSV = new String[29, 15];
-            for (int i = 0; i < 29; i++)
+            String[,] CSV = new String[28, 15];
+            for (int i = 0; i < 28; i++)
                 for (int j = 0; j < 15; j++)
                     CSV[i, j] = ",";
 
@@ -2709,7 +2695,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             CSV[0, 7] = "***Reference Scan Information***";
             CSV[17, 0] = "***General Information***,";
             CSV[17, 7] = "***Calibration Coefficients***";
-            CSV[28, 0] = "***Scan Data***";
+            CSV[27, 0] = "***Scan Data***";
             // Config field names & values
             for (int i = 0; i < 2; i++)
             {
@@ -2846,17 +2832,15 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             CSV[21, 1] = TivaRev + ",";
             CSV[22, 0] = "DLPC Version:,";
             CSV[22, 1] = DLPCRev + ",";
-            CSV[23, 0] = "DLPSPECLIB Version:,";
-            CSV[23, 1] = SpecLibRev + ",";
-            CSV[24, 0] = "UUID:,";
-            CSV[24, 1] = UUID + ",";
-            CSV[25, 0] = "Main Board Version:,";
-            CSV[26, 0] = "Detector Board Version:,";
-            CSV[25, 1] = HWRev + ",";
-            CSV[26, 1] = Detector_Board_HWRev + ",";
+            CSV[23, 0] = "UUID:,";
+            CSV[23, 1] = UUID + ",";
+            CSV[24, 0] = "Main Board Version:,";
+            CSV[24, 1] = HWRev + ",";
+            CSV[25, 0] = "Detector Board Version:,";
+            CSV[25, 1] = Detector_Board_HWRev + ",";
 
             string buf = "";
-            for (int i = 0; i < 29; i++)
+            for (int i = 0; i < 28; i++)
             {
                 for (int j = 0; j < 15; j++)
                 {
@@ -3776,26 +3760,11 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
                     + Device.DevInfo.DLPCRev[1].ToString() + "."
                     + Device.DevInfo.DLPCRev[2].ToString();
 
-            String SpecLibRev = String.Empty;
-            if (Device.DevInfo.SpecLibRev[3].ToString() == "0")
-            {
-                SpecLibRev = Device.DevInfo.SpecLibRev[0].ToString() + "."
-                           + Device.DevInfo.SpecLibRev[1].ToString() + "."
-                           + Device.DevInfo.SpecLibRev[2].ToString();
-            }
-            else
-            {
-                SpecLibRev = Device.DevInfo.SpecLibRev[0].ToString() + "."
-                           + Device.DevInfo.SpecLibRev[1].ToString() + "."
-                           + Device.DevInfo.SpecLibRev[2].ToString() + "."
-                           + Device.DevInfo.SpecLibRev[3].ToString();
-            }
             String HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(0, 1) : String.Empty;
             String Detector_Board_HWRev = (!String.IsNullOrEmpty(Device.DevInfo.HardwareRev)) ? Device.DevInfo.HardwareRev.Substring(2, 1) : String.Empty;
 
             label_DevInfoGUIVer.Text = GUIRev;
             label_DevInfoDLPCVer.Text = DLPCRev;
-            label_DevInfoSpecLibVer.Text = SpecLibRev;
             label_DevInfoMainBoardVer.Text = HWRev;
             label_DevInfoDetectorBoardVer.Text = Detector_Board_HWRev;
             label_DevInfoModelName.Text = Device.DevInfo.ModelName;

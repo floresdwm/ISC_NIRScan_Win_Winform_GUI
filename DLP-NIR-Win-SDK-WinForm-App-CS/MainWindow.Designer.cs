@@ -258,8 +258,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.label108 = new System.Windows.Forms.Label();
             this.label_DevInfoMainBoardVer = new System.Windows.Forms.Label();
             this.label110 = new System.Windows.Forms.Label();
-            this.label_DevInfoSpecLibVer = new System.Windows.Forms.Label();
-            this.label100 = new System.Windows.Forms.Label();
             this.label_DevInfoDLPCVer = new System.Windows.Forms.Label();
             this.label102 = new System.Windows.Forms.Label();
             this.label_DevInfoTivaSWVer = new System.Windows.Forms.Label();
@@ -2351,7 +2349,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.groupBox_Device.Controls.Add(this.label119);
             this.groupBox_Device.Controls.Add(this.button_DeviceResetSys);
             this.groupBox_Device.Controls.Add(this.label118);
-            this.groupBox_Device.Location = new System.Drawing.Point(883, 374);
+            this.groupBox_Device.Location = new System.Drawing.Point(883, 353);
             this.groupBox_Device.Name = "groupBox_Device";
             this.groupBox_Device.Size = new System.Drawing.Size(348, 253);
             this.groupBox_Device.TabIndex = 14;
@@ -2490,7 +2488,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.groupBox_ActivationKey.Controls.Add(this.button_KeySet);
             this.groupBox_ActivationKey.Controls.Add(this.textBox_Key);
             this.groupBox_ActivationKey.Controls.Add(this.label117);
-            this.groupBox_ActivationKey.Location = new System.Drawing.Point(883, 285);
+            this.groupBox_ActivationKey.Location = new System.Drawing.Point(883, 264);
             this.groupBox_ActivationKey.Name = "groupBox_ActivationKey";
             this.groupBox_ActivationKey.Size = new System.Drawing.Size(348, 83);
             this.groupBox_ActivationKey.TabIndex = 13;
@@ -2577,8 +2575,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.groupBox_DevInfo.Controls.Add(this.label108);
             this.groupBox_DevInfo.Controls.Add(this.label_DevInfoMainBoardVer);
             this.groupBox_DevInfo.Controls.Add(this.label110);
-            this.groupBox_DevInfo.Controls.Add(this.label_DevInfoSpecLibVer);
-            this.groupBox_DevInfo.Controls.Add(this.label100);
             this.groupBox_DevInfo.Controls.Add(this.label_DevInfoDLPCVer);
             this.groupBox_DevInfo.Controls.Add(this.label102);
             this.groupBox_DevInfo.Controls.Add(this.label_DevInfoTivaSWVer);
@@ -2587,22 +2583,22 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.groupBox_DevInfo.Controls.Add(this.label95);
             this.groupBox_DevInfo.Location = new System.Drawing.Point(883, 6);
             this.groupBox_DevInfo.Name = "groupBox_DevInfo";
-            this.groupBox_DevInfo.Size = new System.Drawing.Size(348, 273);
+            this.groupBox_DevInfo.Size = new System.Drawing.Size(348, 252);
             this.groupBox_DevInfo.TabIndex = 12;
             this.groupBox_DevInfo.TabStop = false;
             this.groupBox_DevInfo.Text = "Device Information";
             // 
             // label_DevInfoLampUsageValue
             // 
-            this.label_DevInfoLampUsageValue.Location = new System.Drawing.Point(200, 249);
+            this.label_DevInfoLampUsageValue.Location = new System.Drawing.Point(200, 226);
             this.label_DevInfoLampUsageValue.Name = "label_DevInfoLampUsageValue";
-            this.label_DevInfoLampUsageValue.Size = new System.Drawing.Size(127, 14);
+            this.label_DevInfoLampUsageValue.Size = new System.Drawing.Size(142, 14);
             this.label_DevInfoLampUsageValue.TabIndex = 21;
             // 
             // label_DevInfoLampUsage
             // 
             this.label_DevInfoLampUsage.AutoSize = true;
-            this.label_DevInfoLampUsage.Location = new System.Drawing.Point(6, 249);
+            this.label_DevInfoLampUsage.Location = new System.Drawing.Point(6, 226);
             this.label_DevInfoLampUsage.Name = "label_DevInfoLampUsage";
             this.label_DevInfoLampUsage.Size = new System.Drawing.Size(73, 14);
             this.label_DevInfoLampUsage.TabIndex = 20;
@@ -2610,7 +2606,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // label_DevInfoUUID
             // 
-            this.label_DevInfoUUID.Location = new System.Drawing.Point(200, 226);
+            this.label_DevInfoUUID.Location = new System.Drawing.Point(200, 203);
             this.label_DevInfoUUID.Name = "label_DevInfoUUID";
             this.label_DevInfoUUID.Size = new System.Drawing.Size(142, 14);
             this.label_DevInfoUUID.TabIndex = 19;
@@ -2618,7 +2614,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label114
             // 
             this.label114.AutoSize = true;
-            this.label114.Location = new System.Drawing.Point(6, 226);
+            this.label114.Location = new System.Drawing.Point(6, 203);
             this.label114.Name = "label114";
             this.label114.Size = new System.Drawing.Size(74, 14);
             this.label114.TabIndex = 18;
@@ -2626,7 +2622,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // label_DevInfoManfacSerNum
             // 
-            this.label_DevInfoManfacSerNum.Location = new System.Drawing.Point(200, 203);
+            this.label_DevInfoManfacSerNum.Location = new System.Drawing.Point(200, 180);
             this.label_DevInfoManfacSerNum.Name = "label_DevInfoManfacSerNum";
             this.label_DevInfoManfacSerNum.Size = new System.Drawing.Size(142, 14);
             this.label_DevInfoManfacSerNum.TabIndex = 17;
@@ -2634,7 +2630,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label116
             // 
             this.label116.AutoSize = true;
-            this.label116.Location = new System.Drawing.Point(6, 203);
+            this.label116.Location = new System.Drawing.Point(6, 180);
             this.label116.Name = "label116";
             this.label116.Size = new System.Drawing.Size(167, 14);
             this.label116.TabIndex = 16;
@@ -2642,15 +2638,15 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // label_DevInfoDevSerNum
             // 
-            this.label_DevInfoDevSerNum.Location = new System.Drawing.Point(200, 180);
+            this.label_DevInfoDevSerNum.Location = new System.Drawing.Point(200, 157);
             this.label_DevInfoDevSerNum.Name = "label_DevInfoDevSerNum";
-            this.label_DevInfoDevSerNum.Size = new System.Drawing.Size(127, 14);
+            this.label_DevInfoDevSerNum.Size = new System.Drawing.Size(142, 13);
             this.label_DevInfoDevSerNum.TabIndex = 15;
             // 
             // label104
             // 
             this.label104.AutoSize = true;
-            this.label104.Location = new System.Drawing.Point(6, 180);
+            this.label104.Location = new System.Drawing.Point(6, 157);
             this.label104.Name = "label104";
             this.label104.Size = new System.Drawing.Size(124, 14);
             this.label104.TabIndex = 14;
@@ -2658,15 +2654,15 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // label_DevInfoModelName
             // 
-            this.label_DevInfoModelName.Location = new System.Drawing.Point(200, 157);
+            this.label_DevInfoModelName.Location = new System.Drawing.Point(200, 133);
             this.label_DevInfoModelName.Name = "label_DevInfoModelName";
-            this.label_DevInfoModelName.Size = new System.Drawing.Size(127, 14);
+            this.label_DevInfoModelName.Size = new System.Drawing.Size(142, 14);
             this.label_DevInfoModelName.TabIndex = 13;
             // 
             // label106
             // 
             this.label106.AutoSize = true;
-            this.label106.Location = new System.Drawing.Point(6, 157);
+            this.label106.Location = new System.Drawing.Point(6, 133);
             this.label106.Name = "label106";
             this.label106.Size = new System.Drawing.Size(77, 14);
             this.label106.TabIndex = 12;
@@ -2674,15 +2670,15 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // label_DevInfoDetectorBoardVer
             // 
-            this.label_DevInfoDetectorBoardVer.Location = new System.Drawing.Point(200, 133);
+            this.label_DevInfoDetectorBoardVer.Location = new System.Drawing.Point(200, 110);
             this.label_DevInfoDetectorBoardVer.Name = "label_DevInfoDetectorBoardVer";
-            this.label_DevInfoDetectorBoardVer.Size = new System.Drawing.Size(127, 14);
+            this.label_DevInfoDetectorBoardVer.Size = new System.Drawing.Size(142, 14);
             this.label_DevInfoDetectorBoardVer.TabIndex = 11;
             // 
             // label108
             // 
             this.label108.AutoSize = true;
-            this.label108.Location = new System.Drawing.Point(6, 134);
+            this.label108.Location = new System.Drawing.Point(6, 110);
             this.label108.Name = "label108";
             this.label108.Size = new System.Drawing.Size(132, 14);
             this.label108.TabIndex = 10;
@@ -2690,41 +2686,25 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // label_DevInfoMainBoardVer
             // 
-            this.label_DevInfoMainBoardVer.Location = new System.Drawing.Point(200, 110);
+            this.label_DevInfoMainBoardVer.Location = new System.Drawing.Point(200, 88);
             this.label_DevInfoMainBoardVer.Name = "label_DevInfoMainBoardVer";
-            this.label_DevInfoMainBoardVer.Size = new System.Drawing.Size(127, 14);
+            this.label_DevInfoMainBoardVer.Size = new System.Drawing.Size(142, 14);
             this.label_DevInfoMainBoardVer.TabIndex = 9;
             // 
             // label110
             // 
             this.label110.AutoSize = true;
-            this.label110.Location = new System.Drawing.Point(6, 111);
+            this.label110.Location = new System.Drawing.Point(6, 88);
             this.label110.Name = "label110";
             this.label110.Size = new System.Drawing.Size(114, 14);
             this.label110.TabIndex = 8;
             this.label110.Text = "Main Board Version";
             // 
-            // label_DevInfoSpecLibVer
-            // 
-            this.label_DevInfoSpecLibVer.Location = new System.Drawing.Point(200, 88);
-            this.label_DevInfoSpecLibVer.Name = "label_DevInfoSpecLibVer";
-            this.label_DevInfoSpecLibVer.Size = new System.Drawing.Size(127, 14);
-            this.label_DevInfoSpecLibVer.TabIndex = 7;
-            // 
-            // label100
-            // 
-            this.label100.AutoSize = true;
-            this.label100.Location = new System.Drawing.Point(6, 88);
-            this.label100.Name = "label100";
-            this.label100.Size = new System.Drawing.Size(140, 14);
-            this.label100.TabIndex = 6;
-            this.label100.Text = "Spectrum Library Version";
-            // 
             // label_DevInfoDLPCVer
             // 
             this.label_DevInfoDLPCVer.Location = new System.Drawing.Point(200, 65);
             this.label_DevInfoDLPCVer.Name = "label_DevInfoDLPCVer";
-            this.label_DevInfoDLPCVer.Size = new System.Drawing.Size(127, 14);
+            this.label_DevInfoDLPCVer.Size = new System.Drawing.Size(142, 14);
             this.label_DevInfoDLPCVer.TabIndex = 5;
             // 
             // label102
@@ -2740,7 +2720,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             this.label_DevInfoTivaSWVer.Location = new System.Drawing.Point(200, 41);
             this.label_DevInfoTivaSWVer.Name = "label_DevInfoTivaSWVer";
-            this.label_DevInfoTivaSWVer.Size = new System.Drawing.Size(127, 14);
+            this.label_DevInfoTivaSWVer.Size = new System.Drawing.Size(142, 15);
             this.label_DevInfoTivaSWVer.TabIndex = 3;
             // 
             // label98
@@ -2756,7 +2736,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             this.label_DevInfoGUIVer.Location = new System.Drawing.Point(200, 18);
             this.label_DevInfoGUIVer.Name = "label_DevInfoGUIVer";
-            this.label_DevInfoGUIVer.Size = new System.Drawing.Size(127, 14);
+            this.label_DevInfoGUIVer.Size = new System.Drawing.Size(142, 15);
             this.label_DevInfoGUIVer.TabIndex = 1;
             // 
             // label95
@@ -3700,8 +3680,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private System.Windows.Forms.Label label108;
         private System.Windows.Forms.Label label_DevInfoMainBoardVer;
         private System.Windows.Forms.Label label110;
-        private System.Windows.Forms.Label label_DevInfoSpecLibVer;
-        private System.Windows.Forms.Label label100;
         private System.Windows.Forms.Label label_DevInfoDLPCVer;
         private System.Windows.Forms.Label label102;
         private System.Windows.Forms.Label label_DevInfoTivaSWVer;

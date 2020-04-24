@@ -30,10 +30,11 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatus_DeviceStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabControl_MainFunctions = new System.Windows.Forms.TabControl();
             this.tabPage_Scan = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.checkBox_zoom = new System.Windows.Forms.CheckBox();
@@ -52,6 +53,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.tabPage_ScanSetting = new System.Windows.Forms.TabPage();
             this.Button_ClearAllErrors = new System.Windows.Forms.Button();
             this.GroupBox_ContScan = new System.Windows.Forms.GroupBox();
+            this.checkBox_StopOnError = new System.Windows.Forms.CheckBox();
             this.Label_ContScan = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.Text_ContDelay = new System.Windows.Forms.TextBox();
@@ -62,11 +64,15 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_PGAGain = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.GroupBox_SaveScan = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.TextBox_FileNamePrefix3 = new System.Windows.Forms.TextBox();
+            this.TextBox_FileNamePrefix2 = new System.Windows.Forms.TextBox();
             this.CheckBox_SaveRJDX = new System.Windows.Forms.CheckBox();
             this.CheckBox_SaveAJDX = new System.Windows.Forms.CheckBox();
             this.CheckBox_SaveIJDX = new System.Windows.Forms.CheckBox();
             this.CheckBox_SaveOneCSV = new System.Windows.Forms.CheckBox();
-            this.TextBox_FileNamePrefix = new System.Windows.Forms.TextBox();
+            this.TextBox_FileNamePrefix1 = new System.Windows.Forms.TextBox();
             this.CheckBox_FileNamePrefix = new System.Windows.Forms.CheckBox();
             this.TextBox_SaveDirPath = new System.Windows.Forms.TextBox();
             this.Button_SaveDirChange = new System.Windows.Forms.Button();
@@ -105,6 +111,13 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.Button_CfgEdit = new System.Windows.Forms.Button();
             this.Button_CfgNew = new System.Windows.Forms.Button();
             this.GroupBox_CfgDetails = new System.Windows.Forms.GroupBox();
+            this.label_totalPatterns = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label_maxPattern5 = new System.Windows.Forms.Label();
+            this.label_maxPattern4 = new System.Windows.Forms.Label();
+            this.label_maxPattern3 = new System.Windows.Forms.Label();
+            this.label_maxPattern2 = new System.Windows.Forms.Label();
+            this.label_maxPattern1 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label_pattern5 = new System.Windows.Forms.Label();
             this.label_pattern4 = new System.Windows.Forms.Label();
@@ -213,7 +226,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.label36 = new System.Windows.Forms.Label();
             this.label35 = new System.Windows.Forms.Label();
             this.Button_DisplayDirChange = new System.Windows.Forms.Button();
-            this.TextBox_DisplayDirPath = new System.Windows.Forms.TextBox();
+            this.TextBox_SavedFileDirPath = new System.Windows.Forms.TextBox();
             this.label79 = new System.Windows.Forms.Label();
             this.tabPage_Utility = new System.Windows.Forms.TabPage();
             this.GroupBox_BleName = new System.Windows.Forms.GroupBox();
@@ -222,26 +235,21 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.Button_Clear_BLE_Display_Name = new System.Windows.Forms.Button();
             this.TextBox_BLE_Display_Name = new System.Windows.Forms.TextBox();
             this.groupBox_Device = new System.Windows.Forms.GroupBox();
+            this.button_restore_fac_ref_warning = new System.Windows.Forms.Button();
             this.Button_LockButton = new System.Windows.Forms.Button();
-            this.label12 = new System.Windows.Forms.Label();
             this.Label_ButtonStatus = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             this.Button_UnlockButton = new System.Windows.Forms.Button();
             this.button_DeviceRestoreFacRef = new System.Windows.Forms.Button();
-            this.label121 = new System.Windows.Forms.Label();
-            this.button_DeviceBackUpFacRef = new System.Windows.Forms.Button();
-            this.label120 = new System.Windows.Forms.Label();
+            this.label_RestoreFacRef = new System.Windows.Forms.Label();
             this.button_DeviceUpdateRef = new System.Windows.Forms.Button();
             this.label119 = new System.Windows.Forms.Label();
             this.button_DeviceResetSys = new System.Windows.Forms.Button();
             this.label118 = new System.Windows.Forms.Label();
             this.groupBox_ActivationKey = new System.Windows.Forms.GroupBox();
-            this.button_manage = new System.Windows.Forms.Button();
-            this.button_KeyClear = new System.Windows.Forms.Button();
             this.label_ActivateStatus = new System.Windows.Forms.Label();
             this.Status = new System.Windows.Forms.Label();
             this.button_KeySet = new System.Windows.Forms.Button();
-            this.textBox_Key = new System.Windows.Forms.TextBox();
+            this.TextBox_Key = new System.Windows.Forms.TextBox();
             this.label117 = new System.Windows.Forms.Label();
             this.groupBox_DevInfo = new System.Windows.Forms.GroupBox();
             this.label_DevInfoLampUsageValue = new System.Windows.Forms.Label();
@@ -249,7 +257,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.label_DevInfoUUID = new System.Windows.Forms.Label();
             this.label114 = new System.Windows.Forms.Label();
             this.label_DevInfoManfacSerNum = new System.Windows.Forms.Label();
-            this.label116 = new System.Windows.Forms.Label();
+            this.label_MFC_Seri_Num = new System.Windows.Forms.Label();
             this.label_DevInfoDevSerNum = new System.Windows.Forms.Label();
             this.label104 = new System.Windows.Forms.Label();
             this.label_DevInfoModelName = new System.Windows.Forms.Label();
@@ -305,7 +313,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.Label_SensorLampVM1 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
+            this.label_sys_humidity = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.GroupBox_DateTime = new System.Windows.Forms.GroupBox();
@@ -341,11 +349,12 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.groupBox_About = new System.Windows.Forms.GroupBox();
             this.button_About = new System.Windows.Forms.Button();
             this.button_AboutLicense = new System.Windows.Forms.Button();
-            this.label123 = new System.Windows.Forms.Label();
-            this.label122 = new System.Windows.Forms.Label();
+            this.label_about_us = new System.Windows.Forms.Label();
+            this.label_license_agree = new System.Windows.Forms.Label();
             this.label_ErrorStatus = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.statusStrip1.SuspendLayout();
-            this.tabControl1.SuspendLayout();
+            this.tabControl_MainFunctions.SuspendLayout();
             this.tabPage_Scan.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -398,18 +407,18 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.toolStripStatus_DeviceStatus.Size = new System.Drawing.Size(130, 17);
             this.toolStripStatus_DeviceStatus.Text = "Device Disconnect!";
             // 
-            // tabControl1
+            // tabControl_MainFunctions
             // 
-            this.tabControl1.Controls.Add(this.tabPage_Scan);
-            this.tabControl1.Controls.Add(this.tabPage_Utility);
-            this.tabControl1.Controls.Add(this.tabPage_about);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1264, 660);
-            this.tabControl1.TabIndex = 2;
-            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            this.tabControl_MainFunctions.Controls.Add(this.tabPage_Scan);
+            this.tabControl_MainFunctions.Controls.Add(this.tabPage_Utility);
+            this.tabControl_MainFunctions.Controls.Add(this.tabPage_about);
+            this.tabControl_MainFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl_MainFunctions.Location = new System.Drawing.Point(0, 0);
+            this.tabControl_MainFunctions.Name = "tabControl_MainFunctions";
+            this.tabControl_MainFunctions.SelectedIndex = 0;
+            this.tabControl_MainFunctions.Size = new System.Drawing.Size(1264, 660);
+            this.tabControl_MainFunctions.TabIndex = 2;
+            this.tabControl_MainFunctions.SelectedIndexChanged += new System.EventHandler(this.tabControl_MainFunctions_SelectedIndexChanged);
             // 
             // tabPage_Scan
             // 
@@ -504,7 +513,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.RadioButton_Reference.Name = "RadioButton_Reference";
             this.RadioButton_Reference.Size = new System.Drawing.Size(80, 18);
             this.RadioButton_Reference.TabIndex = 7;
-            this.RadioButton_Reference.TabStop = true;
             this.RadioButton_Reference.Text = "Reference";
             this.RadioButton_Reference.UseVisualStyleBackColor = true;
             this.RadioButton_Reference.CheckedChanged += new System.EventHandler(this.RadioButton_Reference_CheckedChanged);
@@ -517,7 +525,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.RadioButton_Intensity.Name = "RadioButton_Intensity";
             this.RadioButton_Intensity.Size = new System.Drawing.Size(73, 18);
             this.RadioButton_Intensity.TabIndex = 6;
-            this.RadioButton_Intensity.TabStop = true;
             this.RadioButton_Intensity.Text = "Intensity";
             this.RadioButton_Intensity.UseVisualStyleBackColor = true;
             this.RadioButton_Intensity.CheckedChanged += new System.EventHandler(this.RadioButton_Intensity_CheckedChanged);
@@ -530,7 +537,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.RadioButton_Absorbance.Name = "RadioButton_Absorbance";
             this.RadioButton_Absorbance.Size = new System.Drawing.Size(89, 18);
             this.RadioButton_Absorbance.TabIndex = 5;
-            this.RadioButton_Absorbance.TabStop = true;
             this.RadioButton_Absorbance.Text = "Absorbance";
             this.RadioButton_Absorbance.UseVisualStyleBackColor = true;
             this.RadioButton_Absorbance.CheckedChanged += new System.EventHandler(this.RadioButton_Absorbance_CheckedChanged);
@@ -543,7 +549,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.RadioButton_Reflectance.Name = "RadioButton_Reflectance";
             this.RadioButton_Reflectance.Size = new System.Drawing.Size(87, 18);
             this.RadioButton_Reflectance.TabIndex = 4;
-            this.RadioButton_Reflectance.TabStop = true;
             this.RadioButton_Reflectance.Text = "Reflectance";
             this.RadioButton_Reflectance.UseVisualStyleBackColor = true;
             this.RadioButton_Reflectance.CheckedChanged += new System.EventHandler(this.RadioButton_Reflectance_CheckedChanged);
@@ -622,6 +627,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // GroupBox_ContScan
             // 
+            this.GroupBox_ContScan.Controls.Add(this.checkBox_StopOnError);
             this.GroupBox_ContScan.Controls.Add(this.Label_ContScan);
             this.GroupBox_ContScan.Controls.Add(this.label3);
             this.GroupBox_ContScan.Controls.Add(this.Text_ContDelay);
@@ -629,15 +635,27 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.GroupBox_ContScan.Controls.Add(this.Text_ContScan);
             this.GroupBox_ContScan.Location = new System.Drawing.Point(3, 284);
             this.GroupBox_ContScan.Name = "GroupBox_ContScan";
-            this.GroupBox_ContScan.Size = new System.Drawing.Size(381, 55);
+            this.GroupBox_ContScan.Size = new System.Drawing.Size(381, 83);
             this.GroupBox_ContScan.TabIndex = 8;
             this.GroupBox_ContScan.TabStop = false;
             this.GroupBox_ContScan.Text = "Continuous Scan Select";
             // 
+            // checkBox_StopOnError
+            // 
+            this.checkBox_StopOnError.AutoSize = true;
+            this.checkBox_StopOnError.Checked = true;
+            this.checkBox_StopOnError.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_StopOnError.Location = new System.Drawing.Point(20, 55);
+            this.checkBox_StopOnError.Name = "checkBox_StopOnError";
+            this.checkBox_StopOnError.Size = new System.Drawing.Size(193, 18);
+            this.checkBox_StopOnError.TabIndex = 15;
+            this.checkBox_StopOnError.Text = "Stop continuous scans on error";
+            this.checkBox_StopOnError.UseVisualStyleBackColor = true;
+            // 
             // Label_ContScan
             // 
             this.Label_ContScan.AutoSize = true;
-            this.Label_ContScan.Location = new System.Drawing.Point(151, 30);
+            this.Label_ContScan.Location = new System.Drawing.Point(154, 26);
             this.Label_ContScan.Name = "Label_ContScan";
             this.Label_ContScan.Size = new System.Drawing.Size(32, 14);
             this.Label_ContScan.TabIndex = 14;
@@ -647,7 +665,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(207, 28);
+            this.label3.Location = new System.Drawing.Point(203, 26);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(86, 14);
             this.label3.TabIndex = 12;
@@ -656,7 +674,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // Text_ContDelay
             // 
             this.Text_ContDelay.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.Text_ContDelay.Location = new System.Drawing.Point(299, 25);
+            this.Text_ContDelay.Location = new System.Drawing.Point(295, 23);
             this.Text_ContDelay.Name = "Text_ContDelay";
             this.Text_ContDelay.Size = new System.Drawing.Size(71, 22);
             this.Text_ContDelay.TabIndex = 13;
@@ -666,7 +684,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(17, 28);
+            this.label2.Location = new System.Drawing.Point(17, 26);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 14);
             this.label2.TabIndex = 10;
@@ -675,12 +693,13 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // Text_ContScan
             // 
             this.Text_ContScan.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.Text_ContScan.Location = new System.Drawing.Point(88, 25);
+            this.Text_ContScan.Location = new System.Drawing.Point(88, 23);
             this.Text_ContScan.Name = "Text_ContScan";
             this.Text_ContScan.Size = new System.Drawing.Size(57, 22);
             this.Text_ContScan.TabIndex = 11;
             this.Text_ContScan.Text = "1";
             this.Text_ContScan.TextChanged += new System.EventHandler(this.Text_ContScan_TextChanged);
+            this.Text_ContScan.Validated += new System.EventHandler(this.Text_ContScan_Validated);
             // 
             // GroupBox_GainControl
             // 
@@ -697,6 +716,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // CheckBox_AutoGain
             // 
             this.CheckBox_AutoGain.AutoSize = true;
+            this.CheckBox_AutoGain.Checked = true;
+            this.CheckBox_AutoGain.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CheckBox_AutoGain.Location = new System.Drawing.Point(270, 23);
             this.CheckBox_AutoGain.Name = "CheckBox_AutoGain";
             this.CheckBox_AutoGain.Size = new System.Drawing.Size(51, 18);
@@ -732,11 +753,15 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // GroupBox_SaveScan
             // 
+            this.GroupBox_SaveScan.Controls.Add(this.label11);
+            this.GroupBox_SaveScan.Controls.Add(this.label10);
+            this.GroupBox_SaveScan.Controls.Add(this.TextBox_FileNamePrefix3);
+            this.GroupBox_SaveScan.Controls.Add(this.TextBox_FileNamePrefix2);
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveRJDX);
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveAJDX);
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveIJDX);
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveOneCSV);
-            this.GroupBox_SaveScan.Controls.Add(this.TextBox_FileNamePrefix);
+            this.GroupBox_SaveScan.Controls.Add(this.TextBox_FileNamePrefix1);
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_FileNamePrefix);
             this.GroupBox_SaveScan.Controls.Add(this.TextBox_SaveDirPath);
             this.GroupBox_SaveScan.Controls.Add(this.Button_SaveDirChange);
@@ -745,12 +770,44 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveICSV);
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveDAT);
             this.GroupBox_SaveScan.Controls.Add(this.CheckBox_SaveCombCSV);
-            this.GroupBox_SaveScan.Location = new System.Drawing.Point(3, 345);
+            this.GroupBox_SaveScan.Location = new System.Drawing.Point(3, 373);
             this.GroupBox_SaveScan.Name = "GroupBox_SaveScan";
             this.GroupBox_SaveScan.Size = new System.Drawing.Size(381, 147);
             this.GroupBox_SaveScan.TabIndex = 6;
             this.GroupBox_SaveScan.TabStop = false;
             this.GroupBox_SaveScan.Text = "Save Scan As";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(273, 122);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(13, 14);
+            this.label11.TabIndex = 19;
+            this.label11.Text = "_";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(196, 122);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(13, 14);
+            this.label10.TabIndex = 18;
+            this.label10.Text = "_";
+            // 
+            // TextBox_FileNamePrefix3
+            // 
+            this.TextBox_FileNamePrefix3.Location = new System.Drawing.Point(288, 117);
+            this.TextBox_FileNamePrefix3.Name = "TextBox_FileNamePrefix3";
+            this.TextBox_FileNamePrefix3.Size = new System.Drawing.Size(60, 22);
+            this.TextBox_FileNamePrefix3.TabIndex = 17;
+            // 
+            // TextBox_FileNamePrefix2
+            // 
+            this.TextBox_FileNamePrefix2.Location = new System.Drawing.Point(211, 117);
+            this.TextBox_FileNamePrefix2.Name = "TextBox_FileNamePrefix2";
+            this.TextBox_FileNamePrefix2.Size = new System.Drawing.Size(60, 22);
+            this.TextBox_FileNamePrefix2.TabIndex = 16;
             // 
             // CheckBox_SaveRJDX
             // 
@@ -790,18 +847,18 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.CheckBox_SaveOneCSV.AutoSize = true;
             this.CheckBox_SaveOneCSV.Location = new System.Drawing.Point(20, 67);
             this.CheckBox_SaveOneCSV.Name = "CheckBox_SaveOneCSV";
-            this.CheckBox_SaveOneCSV.Size = new System.Drawing.Size(70, 18);
+            this.CheckBox_SaveOneCSV.Size = new System.Drawing.Size(103, 18);
             this.CheckBox_SaveOneCSV.TabIndex = 12;
-            this.CheckBox_SaveOneCSV.Text = "-one.csv";
+            this.CheckBox_SaveOneCSV.Text = "-combined.csv";
             this.CheckBox_SaveOneCSV.UseVisualStyleBackColor = true;
             this.CheckBox_SaveOneCSV.CheckedChanged += new System.EventHandler(this.CheckBox_SaveFileFormat_Click);
             // 
-            // TextBox_FileNamePrefix
+            // TextBox_FileNamePrefix1
             // 
-            this.TextBox_FileNamePrefix.Location = new System.Drawing.Point(139, 117);
-            this.TextBox_FileNamePrefix.Name = "TextBox_FileNamePrefix";
-            this.TextBox_FileNamePrefix.Size = new System.Drawing.Size(231, 22);
-            this.TextBox_FileNamePrefix.TabIndex = 11;
+            this.TextBox_FileNamePrefix1.Location = new System.Drawing.Point(134, 117);
+            this.TextBox_FileNamePrefix1.Name = "TextBox_FileNamePrefix1";
+            this.TextBox_FileNamePrefix1.Size = new System.Drawing.Size(60, 22);
+            this.TextBox_FileNamePrefix1.TabIndex = 11;
             // 
             // CheckBox_FileNamePrefix
             // 
@@ -812,11 +869,13 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.CheckBox_FileNamePrefix.TabIndex = 10;
             this.CheckBox_FileNamePrefix.Text = "File Name Prefix";
             this.CheckBox_FileNamePrefix.UseVisualStyleBackColor = true;
+            this.CheckBox_FileNamePrefix.CheckedChanged += new System.EventHandler(this.CheckBox_FileNamePrefix_CheckedChanged);
             // 
             // TextBox_SaveDirPath
             // 
             this.TextBox_SaveDirPath.Location = new System.Drawing.Point(20, 89);
             this.TextBox_SaveDirPath.Name = "TextBox_SaveDirPath";
+            this.TextBox_SaveDirPath.ReadOnly = true;
             this.TextBox_SaveDirPath.Size = new System.Drawing.Size(269, 22);
             this.TextBox_SaveDirPath.TabIndex = 9;
             // 
@@ -866,6 +925,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // CheckBox_SaveDAT
             // 
             this.CheckBox_SaveDAT.AutoSize = true;
+            this.CheckBox_SaveDAT.Checked = true;
+            this.CheckBox_SaveDAT.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CheckBox_SaveDAT.Location = new System.Drawing.Point(20, 43);
             this.CheckBox_SaveDAT.Name = "CheckBox_SaveDAT";
             this.CheckBox_SaveDAT.Size = new System.Drawing.Size(53, 18);
@@ -877,6 +938,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // CheckBox_SaveCombCSV
             // 
             this.CheckBox_SaveCombCSV.AutoSize = true;
+            this.CheckBox_SaveCombCSV.Checked = true;
+            this.CheckBox_SaveCombCSV.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CheckBox_SaveCombCSV.Location = new System.Drawing.Point(20, 21);
             this.CheckBox_SaveCombCSV.Name = "CheckBox_SaveCombCSV";
             this.CheckBox_SaveCombCSV.Size = new System.Drawing.Size(51, 18);
@@ -902,7 +965,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.textBox_ScanAvg.Name = "textBox_ScanAvg";
             this.textBox_ScanAvg.Size = new System.Drawing.Size(100, 22);
             this.textBox_ScanAvg.TabIndex = 1;
-            this.textBox_ScanAvg.TextChanged += new System.EventHandler(this.ScanAvg_TextChanged);
+            this.textBox_ScanAvg.Validated += new System.EventHandler(this.textBox_ScanAvg_Validated);
             // 
             // label34
             // 
@@ -950,6 +1013,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // RadioButton_LampStableTime
             // 
             this.RadioButton_LampStableTime.AutoSize = true;
+            this.RadioButton_LampStableTime.Checked = true;
             this.RadioButton_LampStableTime.Location = new System.Drawing.Point(20, 43);
             this.RadioButton_LampStableTime.Name = "RadioButton_LampStableTime";
             this.RadioButton_LampStableTime.Size = new System.Drawing.Size(252, 18);
@@ -1032,6 +1096,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // RadioButton_RefNew
             // 
             this.RadioButton_RefNew.AutoSize = true;
+            this.RadioButton_RefNew.Checked = true;
             this.RadioButton_RefNew.Location = new System.Drawing.Point(20, 21);
             this.RadioButton_RefNew.Name = "RadioButton_RefNew";
             this.RadioButton_RefNew.Size = new System.Drawing.Size(49, 18);
@@ -1121,7 +1186,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label_ActiveConfig
             // 
             this.label_ActiveConfig.AutoSize = true;
-            this.label_ActiveConfig.Location = new System.Drawing.Point(95, 14);
+            this.label_ActiveConfig.Location = new System.Drawing.Point(135, 14);
             this.label_ActiveConfig.Name = "label_ActiveConfig";
             this.label_ActiveConfig.Size = new System.Drawing.Size(48, 14);
             this.label_ActiveConfig.TabIndex = 10;
@@ -1144,7 +1209,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.Button_SetActive.Name = "Button_SetActive";
             this.Button_SetActive.Size = new System.Drawing.Size(161, 23);
             this.Button_SetActive.TabIndex = 8;
-            this.Button_SetActive.Text = "Set Device Boot-Up Config";
+            this.Button_SetActive.Text = "Set Device Default Config";
             this.Button_SetActive.UseVisualStyleBackColor = true;
             this.Button_SetActive.Click += new System.EventHandler(this.Button_SetActive_Click);
             // 
@@ -1153,9 +1218,9 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.label94.AutoSize = true;
             this.label94.Location = new System.Drawing.Point(9, 14);
             this.label94.Name = "label94";
-            this.label94.Size = new System.Drawing.Size(82, 14);
+            this.label94.Size = new System.Drawing.Size(131, 14);
             this.label94.TabIndex = 7;
-            this.label94.Text = "Active Config : ";
+            this.label94.Text = "Device Default Config : ";
             // 
             // Button_CfgCancel
             // 
@@ -1209,6 +1274,13 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // GroupBox_CfgDetails
             // 
+            this.GroupBox_CfgDetails.Controls.Add(this.label_totalPatterns);
+            this.GroupBox_CfgDetails.Controls.Add(this.label7);
+            this.GroupBox_CfgDetails.Controls.Add(this.label_maxPattern5);
+            this.GroupBox_CfgDetails.Controls.Add(this.label_maxPattern4);
+            this.GroupBox_CfgDetails.Controls.Add(this.label_maxPattern3);
+            this.GroupBox_CfgDetails.Controls.Add(this.label_maxPattern2);
+            this.GroupBox_CfgDetails.Controls.Add(this.label_maxPattern1);
             this.GroupBox_CfgDetails.Controls.Add(this.label14);
             this.GroupBox_CfgDetails.Controls.Add(this.label_pattern5);
             this.GroupBox_CfgDetails.Controls.Add(this.label_pattern4);
@@ -1270,46 +1342,119 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.GroupBox_CfgDetails.TabStop = false;
             this.GroupBox_CfgDetails.Text = "Details";
             // 
+            // label_totalPatterns
+            // 
+            this.label_totalPatterns.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_totalPatterns.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.label_totalPatterns.Location = new System.Drawing.Point(132, 249);
+            this.label_totalPatterns.Name = "label_totalPatterns";
+            this.label_totalPatterns.Size = new System.Drawing.Size(33, 12);
+            this.label_totalPatterns.TabIndex = 66;
+            // 
+            // label7
+            // 
+            this.label7.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.label7.Location = new System.Drawing.Point(24, 249);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(101, 16);
+            this.label7.TabIndex = 65;
+            this.label7.Text = "Total Pattern Used";
+            this.toolTip1.SetToolTip(this.label7, "Total DMD patterns used with all configuration sections, the maximum value is 624" +
+        ".");
+            // 
+            // label_maxPattern5
+            // 
+            this.label_maxPattern5.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_maxPattern5.Location = new System.Drawing.Point(327, 214);
+            this.label_maxPattern5.Name = "label_maxPattern5";
+            this.label_maxPattern5.Size = new System.Drawing.Size(42, 14);
+            this.label_maxPattern5.TabIndex = 64;
+            // 
+            // label_maxPattern4
+            // 
+            this.label_maxPattern4.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_maxPattern4.Location = new System.Drawing.Point(279, 214);
+            this.label_maxPattern4.Name = "label_maxPattern4";
+            this.label_maxPattern4.Size = new System.Drawing.Size(42, 14);
+            this.label_maxPattern4.TabIndex = 63;
+            // 
+            // label_maxPattern3
+            // 
+            this.label_maxPattern3.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_maxPattern3.Location = new System.Drawing.Point(230, 214);
+            this.label_maxPattern3.Name = "label_maxPattern3";
+            this.label_maxPattern3.Size = new System.Drawing.Size(42, 14);
+            this.label_maxPattern3.TabIndex = 62;
+            // 
+            // label_maxPattern2
+            // 
+            this.label_maxPattern2.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_maxPattern2.Location = new System.Drawing.Point(180, 214);
+            this.label_maxPattern2.Name = "label_maxPattern2";
+            this.label_maxPattern2.Size = new System.Drawing.Size(42, 14);
+            this.label_maxPattern2.TabIndex = 61;
+            // 
+            // label_maxPattern1
+            // 
+            this.label_maxPattern1.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_maxPattern1.Location = new System.Drawing.Point(132, 214);
+            this.label_maxPattern1.Name = "label_maxPattern1";
+            this.label_maxPattern1.Size = new System.Drawing.Size(33, 12);
+            this.label_maxPattern1.TabIndex = 60;
+            // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 228);
+            this.label14.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(41, 213);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(91, 14);
+            this.label14.Size = new System.Drawing.Size(84, 14);
             this.label14.TabIndex = 59;
             this.label14.Text = "Max Resolution";
+            this.toolTip1.SetToolTip(this.label14, "The maximum resolution is limited by 3x pattern overlap.");
             // 
             // label_pattern5
             // 
-            this.label_pattern5.Location = new System.Drawing.Point(327, 220);
+            this.label_pattern5.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_pattern5.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.label_pattern5.Location = new System.Drawing.Point(327, 231);
             this.label_pattern5.Name = "label_pattern5";
             this.label_pattern5.Size = new System.Drawing.Size(48, 16);
             this.label_pattern5.TabIndex = 58;
             // 
             // label_pattern4
             // 
-            this.label_pattern4.Location = new System.Drawing.Point(279, 220);
+            this.label_pattern4.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_pattern4.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.label_pattern4.Location = new System.Drawing.Point(279, 231);
             this.label_pattern4.Name = "label_pattern4";
             this.label_pattern4.Size = new System.Drawing.Size(48, 16);
             this.label_pattern4.TabIndex = 57;
             // 
             // label_pattern3
             // 
-            this.label_pattern3.Location = new System.Drawing.Point(231, 220);
+            this.label_pattern3.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_pattern3.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.label_pattern3.Location = new System.Drawing.Point(230, 231);
             this.label_pattern3.Name = "label_pattern3";
             this.label_pattern3.Size = new System.Drawing.Size(48, 16);
             this.label_pattern3.TabIndex = 56;
             // 
             // label_pattern2
             // 
-            this.label_pattern2.Location = new System.Drawing.Point(180, 220);
+            this.label_pattern2.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_pattern2.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.label_pattern2.Location = new System.Drawing.Point(180, 231);
             this.label_pattern2.Name = "label_pattern2";
             this.label_pattern2.Size = new System.Drawing.Size(48, 16);
             this.label_pattern2.TabIndex = 55;
             // 
             // label_pattern1
             // 
-            this.label_pattern1.Location = new System.Drawing.Point(131, 220);
+            this.label_pattern1.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_pattern1.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.label_pattern1.Location = new System.Drawing.Point(132, 231);
             this.label_pattern1.Name = "label_pattern1";
             this.label_pattern1.Size = new System.Drawing.Size(48, 16);
             this.label_pattern1.TabIndex = 54;
@@ -1331,16 +1476,19 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // Label_CfgNumPatterns
             // 
-            this.Label_CfgNumPatterns.Location = new System.Drawing.Point(6, 212);
+            this.Label_CfgNumPatterns.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label_CfgNumPatterns.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.Label_CfgNumPatterns.Location = new System.Drawing.Point(52, 231);
             this.Label_CfgNumPatterns.Name = "Label_CfgNumPatterns";
-            this.Label_CfgNumPatterns.Size = new System.Drawing.Size(116, 16);
+            this.Label_CfgNumPatterns.Size = new System.Drawing.Size(73, 16);
             this.Label_CfgNumPatterns.TabIndex = 52;
-            this.Label_CfgNumPatterns.Text = "Pattern Used  / ";
+            this.Label_CfgNumPatterns.Text = "Pattern Used";
+            this.toolTip1.SetToolTip(this.Label_CfgNumPatterns, "DMD pattern number used by configuration.");
             // 
             // label93
             // 
             this.label93.AutoSize = true;
-            this.label93.Location = new System.Drawing.Point(6, 190);
+            this.label93.Location = new System.Drawing.Point(36, 190);
             this.label93.Name = "label93";
             this.label93.Size = new System.Drawing.Size(90, 14);
             this.label93.TabIndex = 46;
@@ -1349,7 +1497,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label92
             // 
             this.label92.AutoSize = true;
-            this.label92.Location = new System.Drawing.Point(6, 168);
+            this.label92.Location = new System.Drawing.Point(15, 168);
             this.label92.Name = "label92";
             this.label92.Size = new System.Drawing.Size(113, 14);
             this.label92.TabIndex = 45;
@@ -1358,7 +1506,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label91
             // 
             this.label91.AutoSize = true;
-            this.label91.Location = new System.Drawing.Point(6, 146);
+            this.label91.Location = new System.Drawing.Point(60, 146);
             this.label91.Name = "label91";
             this.label91.Size = new System.Drawing.Size(68, 14);
             this.label91.TabIndex = 44;
@@ -1367,7 +1515,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label90
             // 
             this.label90.AutoSize = true;
-            this.label90.Location = new System.Drawing.Point(6, 124);
+            this.label90.Location = new System.Drawing.Point(17, 124);
             this.label90.Name = "label90";
             this.label90.Size = new System.Drawing.Size(111, 14);
             this.label90.TabIndex = 43;
@@ -1376,7 +1524,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label89
             // 
             this.label89.AutoSize = true;
-            this.label89.Location = new System.Drawing.Point(6, 102);
+            this.label89.Location = new System.Drawing.Point(12, 102);
             this.label89.Name = "label89";
             this.label89.Size = new System.Drawing.Size(116, 14);
             this.label89.TabIndex = 42;
@@ -1385,7 +1533,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label88
             // 
             this.label88.AutoSize = true;
-            this.label88.Location = new System.Drawing.Point(6, 80);
+            this.label88.Location = new System.Drawing.Point(69, 80);
             this.label88.Name = "label88";
             this.label88.Size = new System.Drawing.Size(59, 14);
             this.label88.TabIndex = 41;
@@ -1397,7 +1545,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.TextBox_CfgDigRes1.Name = "TextBox_CfgDigRes1";
             this.TextBox_CfgDigRes1.Size = new System.Drawing.Size(49, 22);
             this.TextBox_CfgDigRes1.TabIndex = 40;
-            this.TextBox_CfgDigRes1.Validated += new System.EventHandler(this.CfgDetails_Validated);
+            this.TextBox_CfgDigRes1.Leave += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // TextBox_CfgDigRes2
             // 
@@ -1483,7 +1631,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.ComboBox_CfgWidth1.Name = "ComboBox_CfgWidth1";
             this.ComboBox_CfgWidth1.Size = new System.Drawing.Size(49, 22);
             this.ComboBox_CfgWidth1.TabIndex = 30;
-            this.ComboBox_CfgWidth1.Validated += new System.EventHandler(this.CfgDetails_Validated);
+            this.ComboBox_CfgWidth1.SelectionChangeCommitted += new System.EventHandler(this.CfgDetails_Validated);
             // 
             // ComboBox_CfgWidth2
             // 
@@ -1798,7 +1946,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.panel_Saved_Scan.Controls.Add(this.label36);
             this.panel_Saved_Scan.Controls.Add(this.label35);
             this.panel_Saved_Scan.Controls.Add(this.Button_DisplayDirChange);
-            this.panel_Saved_Scan.Controls.Add(this.TextBox_DisplayDirPath);
+            this.panel_Saved_Scan.Controls.Add(this.TextBox_SavedFileDirPath);
             this.panel_Saved_Scan.Controls.Add(this.label79);
             this.panel_Saved_Scan.Location = new System.Drawing.Point(1, 1);
             this.panel_Saved_Scan.Name = "panel_Saved_Scan";
@@ -2245,12 +2393,13 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.Button_DisplayDirChange.UseVisualStyleBackColor = true;
             this.Button_DisplayDirChange.Click += new System.EventHandler(this.Button_DisplayDirChange_Click);
             // 
-            // TextBox_DisplayDirPath
+            // TextBox_SavedFileDirPath
             // 
-            this.TextBox_DisplayDirPath.Location = new System.Drawing.Point(6, 16);
-            this.TextBox_DisplayDirPath.Name = "TextBox_DisplayDirPath";
-            this.TextBox_DisplayDirPath.Size = new System.Drawing.Size(303, 22);
-            this.TextBox_DisplayDirPath.TabIndex = 53;
+            this.TextBox_SavedFileDirPath.Location = new System.Drawing.Point(6, 16);
+            this.TextBox_SavedFileDirPath.Name = "TextBox_SavedFileDirPath";
+            this.TextBox_SavedFileDirPath.ReadOnly = true;
+            this.TextBox_SavedFileDirPath.Size = new System.Drawing.Size(303, 22);
+            this.TextBox_SavedFileDirPath.TabIndex = 53;
             // 
             // label79
             // 
@@ -2292,7 +2441,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.GroupBox_BleName.Controls.Add(this.TextBox_BLE_Display_Name);
             this.GroupBox_BleName.Location = new System.Drawing.Point(7, 474);
             this.GroupBox_BleName.Name = "GroupBox_BleName";
-            this.GroupBox_BleName.Size = new System.Drawing.Size(251, 80);
+            this.GroupBox_BleName.Size = new System.Drawing.Size(353, 80);
             this.GroupBox_BleName.TabIndex = 15;
             this.GroupBox_BleName.TabStop = false;
             this.GroupBox_BleName.Text = "Bluetooth LE Advertising Name";
@@ -2336,29 +2485,39 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // groupBox_Device
             // 
+            this.groupBox_Device.Controls.Add(this.button_restore_fac_ref_warning);
             this.groupBox_Device.Controls.Add(this.Button_LockButton);
-            this.groupBox_Device.Controls.Add(this.label12);
             this.groupBox_Device.Controls.Add(this.Label_ButtonStatus);
-            this.groupBox_Device.Controls.Add(this.label11);
             this.groupBox_Device.Controls.Add(this.Button_UnlockButton);
             this.groupBox_Device.Controls.Add(this.button_DeviceRestoreFacRef);
-            this.groupBox_Device.Controls.Add(this.label121);
-            this.groupBox_Device.Controls.Add(this.button_DeviceBackUpFacRef);
-            this.groupBox_Device.Controls.Add(this.label120);
+            this.groupBox_Device.Controls.Add(this.label_RestoreFacRef);
             this.groupBox_Device.Controls.Add(this.button_DeviceUpdateRef);
             this.groupBox_Device.Controls.Add(this.label119);
             this.groupBox_Device.Controls.Add(this.button_DeviceResetSys);
             this.groupBox_Device.Controls.Add(this.label118);
             this.groupBox_Device.Location = new System.Drawing.Point(883, 353);
             this.groupBox_Device.Name = "groupBox_Device";
-            this.groupBox_Device.Size = new System.Drawing.Size(348, 253);
+            this.groupBox_Device.Size = new System.Drawing.Size(348, 141);
             this.groupBox_Device.TabIndex = 14;
             this.groupBox_Device.TabStop = false;
             this.groupBox_Device.Text = "Device";
             // 
+            // button_restore_fac_ref_warning
+            // 
+            this.button_restore_fac_ref_warning.FlatAppearance.BorderSize = 0;
+            this.button_restore_fac_ref_warning.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_restore_fac_ref_warning.Image = global::DLP_NIR_Win_SDK_WinForm_App_CS.Properties.Resources.warning;
+            this.button_restore_fac_ref_warning.Location = new System.Drawing.Point(160, 76);
+            this.button_restore_fac_ref_warning.Name = "button_restore_fac_ref_warning";
+            this.button_restore_fac_ref_warning.Size = new System.Drawing.Size(21, 23);
+            this.button_restore_fac_ref_warning.TabIndex = 17;
+            this.button_restore_fac_ref_warning.TabStop = false;
+            this.button_restore_fac_ref_warning.UseVisualStyleBackColor = true;
+            this.button_restore_fac_ref_warning.Click += new System.EventHandler(this.button_restore_fac_ref_warning_Click);
+            // 
             // Button_LockButton
             // 
-            this.Button_LockButton.Location = new System.Drawing.Point(183, 224);
+            this.Button_LockButton.Location = new System.Drawing.Point(183, 109);
             this.Button_LockButton.Name = "Button_LockButton";
             this.Button_LockButton.Size = new System.Drawing.Size(75, 23);
             this.Button_LockButton.TabIndex = 14;
@@ -2366,36 +2525,18 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.Button_LockButton.UseVisualStyleBackColor = true;
             this.Button_LockButton.Click += new System.EventHandler(this.Button_LockButton_Click);
             // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(6, 170);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(15, 14);
-            this.label12.TabIndex = 11;
-            this.label12.Text = "()";
-            // 
             // Label_ButtonStatus
             // 
             this.Label_ButtonStatus.AutoSize = true;
-            this.Label_ButtonStatus.Location = new System.Drawing.Point(6, 228);
+            this.Label_ButtonStatus.Location = new System.Drawing.Point(6, 113);
             this.Label_ButtonStatus.Name = "Label_ButtonStatus";
             this.Label_ButtonStatus.Size = new System.Drawing.Size(86, 14);
             this.Label_ButtonStatus.TabIndex = 12;
             this.Label_ButtonStatus.Text = "Button Status: ";
             // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 83);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(15, 14);
-            this.label11.TabIndex = 10;
-            this.label11.Text = "()";
-            // 
             // Button_UnlockButton
             // 
-            this.Button_UnlockButton.Location = new System.Drawing.Point(264, 224);
+            this.Button_UnlockButton.Location = new System.Drawing.Point(264, 109);
             this.Button_UnlockButton.Name = "Button_UnlockButton";
             this.Button_UnlockButton.Size = new System.Drawing.Size(78, 23);
             this.Button_UnlockButton.TabIndex = 13;
@@ -2405,7 +2546,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // button_DeviceRestoreFacRef
             // 
-            this.button_DeviceRestoreFacRef.Location = new System.Drawing.Point(264, 137);
+            this.button_DeviceRestoreFacRef.Location = new System.Drawing.Point(264, 78);
             this.button_DeviceRestoreFacRef.Name = "button_DeviceRestoreFacRef";
             this.button_DeviceRestoreFacRef.Size = new System.Drawing.Size(78, 23);
             this.button_DeviceRestoreFacRef.TabIndex = 7;
@@ -2413,37 +2554,18 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.button_DeviceRestoreFacRef.UseVisualStyleBackColor = true;
             this.button_DeviceRestoreFacRef.Click += new System.EventHandler(this.button_DeviceRestoreFacRef_Click);
             // 
-            // label121
+            // label_RestoreFacRef
             // 
-            this.label121.AutoSize = true;
-            this.label121.Location = new System.Drawing.Point(6, 141);
-            this.label121.Name = "label121";
-            this.label121.Size = new System.Drawing.Size(148, 14);
-            this.label121.TabIndex = 6;
-            this.label121.Text = "Restore Factory Reference";
-            // 
-            // button_DeviceBackUpFacRef
-            // 
-            this.button_DeviceBackUpFacRef.Location = new System.Drawing.Point(264, 50);
-            this.button_DeviceBackUpFacRef.Name = "button_DeviceBackUpFacRef";
-            this.button_DeviceBackUpFacRef.Size = new System.Drawing.Size(78, 23);
-            this.button_DeviceBackUpFacRef.TabIndex = 5;
-            this.button_DeviceBackUpFacRef.Text = "Backup";
-            this.button_DeviceBackUpFacRef.UseVisualStyleBackColor = true;
-            this.button_DeviceBackUpFacRef.Click += new System.EventHandler(this.button_DeviceBackUpFacRef_Click);
-            // 
-            // label120
-            // 
-            this.label120.AutoSize = true;
-            this.label120.Location = new System.Drawing.Point(6, 54);
-            this.label120.Name = "label120";
-            this.label120.Size = new System.Drawing.Size(145, 14);
-            this.label120.TabIndex = 4;
-            this.label120.Text = "Backup Factory Reference";
+            this.label_RestoreFacRef.AutoSize = true;
+            this.label_RestoreFacRef.Location = new System.Drawing.Point(6, 82);
+            this.label_RestoreFacRef.Name = "label_RestoreFacRef";
+            this.label_RestoreFacRef.Size = new System.Drawing.Size(148, 14);
+            this.label_RestoreFacRef.TabIndex = 6;
+            this.label_RestoreFacRef.Text = "Restore Factory Reference";
             // 
             // button_DeviceUpdateRef
             // 
-            this.button_DeviceUpdateRef.Location = new System.Drawing.Point(264, 108);
+            this.button_DeviceUpdateRef.Location = new System.Drawing.Point(264, 49);
             this.button_DeviceUpdateRef.Name = "button_DeviceUpdateRef";
             this.button_DeviceUpdateRef.Size = new System.Drawing.Size(78, 23);
             this.button_DeviceUpdateRef.TabIndex = 3;
@@ -2454,7 +2576,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // label119
             // 
             this.label119.AutoSize = true;
-            this.label119.Location = new System.Drawing.Point(6, 112);
+            this.label119.Location = new System.Drawing.Point(6, 53);
             this.label119.Name = "label119";
             this.label119.Size = new System.Drawing.Size(134, 14);
             this.label119.TabIndex = 2;
@@ -2481,12 +2603,10 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // groupBox_ActivationKey
             // 
-            this.groupBox_ActivationKey.Controls.Add(this.button_manage);
-            this.groupBox_ActivationKey.Controls.Add(this.button_KeyClear);
             this.groupBox_ActivationKey.Controls.Add(this.label_ActivateStatus);
             this.groupBox_ActivationKey.Controls.Add(this.Status);
             this.groupBox_ActivationKey.Controls.Add(this.button_KeySet);
-            this.groupBox_ActivationKey.Controls.Add(this.textBox_Key);
+            this.groupBox_ActivationKey.Controls.Add(this.TextBox_Key);
             this.groupBox_ActivationKey.Controls.Add(this.label117);
             this.groupBox_ActivationKey.Location = new System.Drawing.Point(883, 264);
             this.groupBox_ActivationKey.Name = "groupBox_ActivationKey";
@@ -2495,30 +2615,10 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.groupBox_ActivationKey.TabStop = false;
             this.groupBox_ActivationKey.Text = "Activation Key";
             // 
-            // button_manage
-            // 
-            this.button_manage.Location = new System.Drawing.Point(276, 48);
-            this.button_manage.Name = "button_manage";
-            this.button_manage.Size = new System.Drawing.Size(66, 23);
-            this.button_manage.TabIndex = 6;
-            this.button_manage.Text = "Manage";
-            this.button_manage.UseVisualStyleBackColor = true;
-            this.button_manage.Click += new System.EventHandler(this.button_manage_Click);
-            // 
-            // button_KeyClear
-            // 
-            this.button_KeyClear.Location = new System.Drawing.Point(276, 19);
-            this.button_KeyClear.Name = "button_KeyClear";
-            this.button_KeyClear.Size = new System.Drawing.Size(66, 23);
-            this.button_KeyClear.TabIndex = 5;
-            this.button_KeyClear.Text = "Clear";
-            this.button_KeyClear.UseVisualStyleBackColor = true;
-            this.button_KeyClear.Click += new System.EventHandler(this.button_KeyClear_Click);
-            // 
             // label_ActivateStatus
             // 
             this.label_ActivateStatus.AutoSize = true;
-            this.label_ActivateStatus.Location = new System.Drawing.Point(65, 55);
+            this.label_ActivateStatus.Location = new System.Drawing.Point(70, 55);
             this.label_ActivateStatus.Name = "label_ActivateStatus";
             this.label_ActivateStatus.Size = new System.Drawing.Size(82, 14);
             this.label_ActivateStatus.TabIndex = 4;
@@ -2527,7 +2627,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // Status
             // 
             this.Status.AutoSize = true;
-            this.Status.Location = new System.Drawing.Point(6, 55);
+            this.Status.Location = new System.Drawing.Point(22, 55);
             this.Status.Name = "Status";
             this.Status.Size = new System.Drawing.Size(47, 14);
             this.Status.TabIndex = 3;
@@ -2535,29 +2635,29 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             // button_KeySet
             // 
-            this.button_KeySet.Location = new System.Drawing.Point(204, 19);
+            this.button_KeySet.Location = new System.Drawing.Point(260, 20);
             this.button_KeySet.Name = "button_KeySet";
-            this.button_KeySet.Size = new System.Drawing.Size(66, 23);
+            this.button_KeySet.Size = new System.Drawing.Size(78, 23);
             this.button_KeySet.TabIndex = 2;
-            this.button_KeySet.Text = "Set";
+            this.button_KeySet.Text = "Set Key";
             this.button_KeySet.UseVisualStyleBackColor = true;
             this.button_KeySet.Click += new System.EventHandler(this.button_KeySet_Click);
             // 
-            // textBox_Key
+            // TextBox_Key
             // 
-            this.textBox_Key.Location = new System.Drawing.Point(68, 20);
-            this.textBox_Key.Name = "textBox_Key";
-            this.textBox_Key.Size = new System.Drawing.Size(130, 22);
-            this.textBox_Key.TabIndex = 1;
+            this.TextBox_Key.Location = new System.Drawing.Point(73, 20);
+            this.TextBox_Key.Name = "TextBox_Key";
+            this.TextBox_Key.Size = new System.Drawing.Size(173, 22);
+            this.TextBox_Key.TabIndex = 1;
             // 
             // label117
             // 
             this.label117.AutoSize = true;
             this.label117.Location = new System.Drawing.Point(6, 23);
             this.label117.Name = "label117";
-            this.label117.Size = new System.Drawing.Size(25, 14);
+            this.label117.Size = new System.Drawing.Size(63, 14);
             this.label117.TabIndex = 0;
-            this.label117.Text = "Key";
+            this.label117.Text = "Input Key :";
             // 
             // groupBox_DevInfo
             // 
@@ -2566,7 +2666,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.groupBox_DevInfo.Controls.Add(this.label_DevInfoUUID);
             this.groupBox_DevInfo.Controls.Add(this.label114);
             this.groupBox_DevInfo.Controls.Add(this.label_DevInfoManfacSerNum);
-            this.groupBox_DevInfo.Controls.Add(this.label116);
+            this.groupBox_DevInfo.Controls.Add(this.label_MFC_Seri_Num);
             this.groupBox_DevInfo.Controls.Add(this.label_DevInfoDevSerNum);
             this.groupBox_DevInfo.Controls.Add(this.label104);
             this.groupBox_DevInfo.Controls.Add(this.label_DevInfoModelName);
@@ -2627,14 +2727,14 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.label_DevInfoManfacSerNum.Size = new System.Drawing.Size(142, 14);
             this.label_DevInfoManfacSerNum.TabIndex = 17;
             // 
-            // label116
+            // label_MFC_Seri_Num
             // 
-            this.label116.AutoSize = true;
-            this.label116.Location = new System.Drawing.Point(6, 180);
-            this.label116.Name = "label116";
-            this.label116.Size = new System.Drawing.Size(167, 14);
-            this.label116.TabIndex = 16;
-            this.label116.Text = "Manufacturing Serial Number";
+            this.label_MFC_Seri_Num.AutoSize = true;
+            this.label_MFC_Seri_Num.Location = new System.Drawing.Point(6, 180);
+            this.label_MFC_Seri_Num.Name = "label_MFC_Seri_Num";
+            this.label_MFC_Seri_Num.Size = new System.Drawing.Size(167, 14);
+            this.label_MFC_Seri_Num.TabIndex = 16;
+            this.label_MFC_Seri_Num.Text = "Manufacturing Serial Number";
             // 
             // label_DevInfoDevSerNum
             // 
@@ -3002,7 +3102,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.GroupBox_Sensors.Controls.Add(this.Label_SensorLampVM1);
             this.GroupBox_Sensors.Controls.Add(this.label8);
             this.GroupBox_Sensors.Controls.Add(this.label5);
-            this.GroupBox_Sensors.Controls.Add(this.label16);
+            this.GroupBox_Sensors.Controls.Add(this.label_sys_humidity);
             this.GroupBox_Sensors.Controls.Add(this.label17);
             this.GroupBox_Sensors.Controls.Add(this.label18);
             this.GroupBox_Sensors.Location = new System.Drawing.Point(8, 182);
@@ -3139,14 +3239,14 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.label5.TabIndex = 3;
             this.label5.Text = "System Temp";
             // 
-            // label16
+            // label_sys_humidity
             // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(6, 68);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(97, 14);
-            this.label16.TabIndex = 2;
-            this.label16.Text = "System Humidity";
+            this.label_sys_humidity.AutoSize = true;
+            this.label_sys_humidity.Location = new System.Drawing.Point(6, 68);
+            this.label_sys_humidity.Name = "label_sys_humidity";
+            this.label_sys_humidity.Size = new System.Drawing.Size(97, 14);
+            this.label_sys_humidity.TabIndex = 2;
+            this.label_sys_humidity.Text = "System Humidity";
             // 
             // label17
             // 
@@ -3460,8 +3560,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             // 
             this.groupBox_About.Controls.Add(this.button_About);
             this.groupBox_About.Controls.Add(this.button_AboutLicense);
-            this.groupBox_About.Controls.Add(this.label123);
-            this.groupBox_About.Controls.Add(this.label122);
+            this.groupBox_About.Controls.Add(this.label_about_us);
+            this.groupBox_About.Controls.Add(this.label_license_agree);
             this.groupBox_About.Location = new System.Drawing.Point(8, 12);
             this.groupBox_About.Name = "groupBox_About";
             this.groupBox_About.Size = new System.Drawing.Size(348, 75);
@@ -3489,23 +3589,23 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.button_AboutLicense.UseVisualStyleBackColor = true;
             this.button_AboutLicense.Click += new System.EventHandler(this.button_AboutLicense_Click);
             // 
-            // label123
+            // label_about_us
             // 
-            this.label123.AutoSize = true;
-            this.label123.Location = new System.Drawing.Point(6, 47);
-            this.label123.Name = "label123";
-            this.label123.Size = new System.Drawing.Size(56, 14);
-            this.label123.TabIndex = 1;
-            this.label123.Text = "About Us";
+            this.label_about_us.AutoSize = true;
+            this.label_about_us.Location = new System.Drawing.Point(6, 47);
+            this.label_about_us.Name = "label_about_us";
+            this.label_about_us.Size = new System.Drawing.Size(56, 14);
+            this.label_about_us.TabIndex = 1;
+            this.label_about_us.Text = "About Us";
             // 
-            // label122
+            // label_license_agree
             // 
-            this.label122.AutoSize = true;
-            this.label122.Location = new System.Drawing.Point(6, 18);
-            this.label122.Name = "label122";
-            this.label122.Size = new System.Drawing.Size(110, 14);
-            this.label122.TabIndex = 0;
-            this.label122.Text = "License Agreement";
+            this.label_license_agree.AutoSize = true;
+            this.label_license_agree.Location = new System.Drawing.Point(6, 18);
+            this.label_license_agree.Name = "label_license_agree";
+            this.label_license_agree.Size = new System.Drawing.Size(110, 14);
+            this.label_license_agree.TabIndex = 0;
+            this.label_license_agree.Text = "License Agreement";
             // 
             // label_ErrorStatus
             // 
@@ -3522,7 +3622,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1264, 682);
             this.Controls.Add(this.label_ErrorStatus);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tabControl_MainFunctions);
             this.Controls.Add(this.statusStrip1);
             this.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -3532,7 +3632,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.tabControl1.ResumeLayout(false);
+            this.tabControl_MainFunctions.ResumeLayout(false);
             this.tabPage_Scan.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
@@ -3597,7 +3697,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         #endregion
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatus_DeviceStatus;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tabControl_MainFunctions;
         private System.Windows.Forms.TabPage tabPage_Utility;
         private System.Windows.Forms.GroupBox GroupBox_SerialNumber;
         private System.Windows.Forms.Button Button_SerialNumberGet;
@@ -3641,7 +3741,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private System.Windows.Forms.Label Label_SensorLampVM1;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label_sys_humidity;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.GroupBox GroupBox_DateTime;
@@ -3671,7 +3771,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private System.Windows.Forms.Label label_DevInfoUUID;
         private System.Windows.Forms.Label label114;
         private System.Windows.Forms.Label label_DevInfoManfacSerNum;
-        private System.Windows.Forms.Label label116;
+        private System.Windows.Forms.Label label_MFC_Seri_Num;
         private System.Windows.Forms.Label label_DevInfoDevSerNum;
         private System.Windows.Forms.Label label104;
         private System.Windows.Forms.Label label_DevInfoModelName;
@@ -3688,20 +3788,17 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private System.Windows.Forms.Label label95;
         private System.Windows.Forms.GroupBox groupBox_Device;
         private System.Windows.Forms.Button button_DeviceRestoreFacRef;
-        private System.Windows.Forms.Label label121;
-        private System.Windows.Forms.Button button_DeviceBackUpFacRef;
-        private System.Windows.Forms.Label label120;
+        private System.Windows.Forms.Label label_RestoreFacRef;
         private System.Windows.Forms.Button button_DeviceUpdateRef;
         private System.Windows.Forms.Label label119;
         private System.Windows.Forms.Button button_DeviceResetSys;
         private System.Windows.Forms.Label label118;
         private System.Windows.Forms.GroupBox groupBox_ActivationKey;
         private System.Windows.Forms.Button button_KeySet;
-        private System.Windows.Forms.TextBox textBox_Key;
+        private System.Windows.Forms.TextBox TextBox_Key;
         private System.Windows.Forms.Label label117;
         private System.Windows.Forms.Label label_ActivateStatus;
         private System.Windows.Forms.Label Status;
-        private System.Windows.Forms.Button button_KeyClear;
         private System.Windows.Forms.TextBox TextBox_ModelName;
         private System.Windows.Forms.TabPage tabPage_Scan;
         private System.Windows.Forms.SplitContainer splitContainer1;
@@ -3802,8 +3899,8 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private System.Windows.Forms.GroupBox groupBox_About;
         private System.Windows.Forms.Button button_About;
         private System.Windows.Forms.Button button_AboutLicense;
-        private System.Windows.Forms.Label label123;
-        private System.Windows.Forms.Label label122;
+        private System.Windows.Forms.Label label_about_us;
+        private System.Windows.Forms.Label label_license_agree;
         private System.Windows.Forms.Label label_ActiveConfig;
         private ComboBox comboBox_cfgNumSec;
         private Label label_ErrorStatus;
@@ -3856,7 +3953,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private Label label36;
         private Label label35;
         private Button Button_DisplayDirChange;
-        private TextBox TextBox_DisplayDirPath;
         private Label label79;
         private CheckBox Check_Overlay;
         private GroupBox GroupBox_ContScan;
@@ -3870,8 +3966,7 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private Button Button_CopyCfgT2L;
         private Button Button_CopyCfgL2T;
         private ListBox ListBox_LocalCfgs;
-        private Button button_manage;
-        private TextBox TextBox_FileNamePrefix;
+        private TextBox TextBox_FileNamePrefix1;
         private CheckBox CheckBox_FileNamePrefix;
         private CheckBox CheckBox_SaveRJDX;
         private CheckBox CheckBox_SaveAJDX;
@@ -3879,8 +3974,6 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private CheckBox CheckBox_SaveOneCSV;
         private Button Button_ClearAllErrors;
         private Label label_ref;
-        private Label label11;
-        private Label label12;
         private DataGridView dataGridView_savescan;
         private Button button_search;
         private TextBox textBox_filter;
@@ -3908,6 +4001,21 @@ namespace DLP_NIR_Win_SDK_WinForm_App_CS
         private Button Button_LockButton;
         private Button Button_UnlockButton;
         private Label Label_ButtonStatus;
+        private Button button_restore_fac_ref_warning;
+        private Label label_maxPattern5;
+        private Label label_maxPattern4;
+        private Label label_maxPattern3;
+        private Label label_maxPattern2;
+        private Label label_maxPattern1;
+        private Label label_totalPatterns;
+        private Label label7;
+        private CheckBox checkBox_StopOnError;
+        private Label label11;
+        private Label label10;
+        private TextBox TextBox_FileNamePrefix3;
+        private TextBox TextBox_FileNamePrefix2;
+        private ToolTip toolTip1;
+        private TextBox TextBox_SavedFileDirPath;
     }
 }
 

@@ -7,7 +7,7 @@
     <ProjectGuid>{40AFD57C-9180-4070-BCF3-FF08C67F348E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>DLP_NIR_Win_SDK_WinForm_App_CS</RootNamespace>
-    <AssemblyName>DLP-NIR-Win-SDK-WinForm-App-CS</AssemblyName>
+    <AssemblyName>ISC-WinForm-SDK-App</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -74,14 +74,6 @@
     <ApplicationIcon>ISC_Logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="isccpp, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>ISC-NIRScan-Library\isccpp.dll</HintPath>
-    </Reference>
-    <Reference Include="isccs, Version=2.1.3.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>ISC-NIRScan-Library\isccs.dll</HintPath>
-    </Reference>
     <Reference Include="LiveCharts">
       <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
     </Reference>
@@ -113,13 +105,13 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActiveKeyManageForm.cs">
+    <Compile Include="APIs.cs" />
+    <Compile Include="BleMsgForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ActiveKeyManageForm.Designer.cs">
-      <DependentUpon>ActiveKeyManageForm.cs</DependentUpon>
+    <Compile Include="BleMsgForm.Designer.cs">
+      <DependentUpon>BleMsgForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="APIs.cs" />
     <Compile Include="LicenseWindow.xaml.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,14 +132,14 @@
       <DependentUpon>ProgressBar.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ActiveKeyManageForm.resx">
-      <DependentUpon>ActiveKeyManageForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="LicenseWindow.xaml.resx">
       <DependentUpon>LicenseWindow.xaml.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BleMsgForm.resx">
+      <DependentUpon>BleMsgForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProgressBar.resx">
       <DependentUpon>ProgressBar.cs</DependentUpon>
@@ -211,6 +203,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>lmusbdll.dll</TargetPath>
     </ContentWithTargetPath>
+    <None Include="Images\warning.png" />
     <Content Include="ISC_Logo.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +217,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Win-SDK-CS-LIB\DLP-NIR-Win-SDK-CS\DLP-NIR-Win-SDK-CS.csproj">
+      <Project>{f6af7188-4478-463f-b7a4-8ac16c5fb8b6}</Project>
+      <Name>DLP-NIR-Win-SDK-CS</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 組件的一般資訊是由下列的屬性集控制。
 // 變更這些屬性的值即可修改組件的相關
 // 資訊。
-[assembly: AssemblyTitle("DLP-NIR-Win-SDK-WinForm-App-CS")]
+[assembly: AssemblyTitle("ISC-WinForm-SDK-App")]
 [assembly: AssemblyDescription("Inno-Spectra NIRScan GUI")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Inno-Spectra Corp.")]
-[assembly: AssemblyProduct("DLP-NIR-Win-SDK-WinForm-App-CS")]
+[assembly: AssemblyProduct("ISC-WinForm-SDK-App")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("Inno-Spectra Corp.")]
 [assembly: AssemblyCulture("")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // 您可以指定所有的值，或將組建編號或修訂編號設為預設值
 // 指定為預設值: 
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.4.0")]
-[assembly: AssemblyFileVersion("2.4.0")]
+[assembly: AssemblyVersion("2.4.4")]
+[assembly: AssemblyFileVersion("2.4.4")]
